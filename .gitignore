@@ -1,0 +1,27 @@
+# Dependencies and framework output
+node_modules/
+.next/
+out/
+build/
+coverage/
+.turbo/
+*.tsbuildinfo
+
+# Local secrets and environment configuration
+.env
+.env.*
+!.env.example
+
+# Deployment and editor state
+.netlify/
+.vercel/
+.vscode/
+.idea/
+
+# OS noise
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Superpowers private execution ledgers
+.superpowers/

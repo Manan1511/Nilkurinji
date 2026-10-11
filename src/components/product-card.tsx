@@ -1,0 +1,48 @@
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+import { formatMoney } from "@/lib/format";
+import { WishlistButton } from "@/components/wishlist-button";
+import { QuickAddButton } from "@/components/quick-add-button";
+import type { StorefrontProduct } from "@/lib/shopify/types";
+
+export function ProductCard({ product, purchasingEnabled = false }: { product: StorefrontProduct; purchasingEnabled?: boolean }) {
+  const image = product.featuredImage;
+  const price = product.priceRange?.minVariantPrice;
+  const isRange = Boolean(
+    product.priceRange && product.priceRange.minVariantPrice.amount !== product.priceRange.maxVariantPrice.amount,
+  );
+
+  return (
+    <article className="product-card">
+      <div className="product-card__image-wrap">
+        <Link href={`/products/${product.handle}`} className="product-card__image-link" aria-label={`View ${product.title}`}>
+          {image ? (
+            <Image
+              src={image.url}
+              alt={image.altText || product.title}
+              fill
+              sizes="(max-width: 640px) 46vw, (max-width: 1024px) 30vw, 23vw"
+              className="product-card__image"
+            />
+          ) : (
+            <div className="product-card__image-empty" aria-hidden="true"><span>Nilkurinji</span></div>
+          )}
+        </Link>
+        <WishlistButton handle={product.handle} compact />
+        {product.isPreview && <span className="product-card__badge">Preview</span>}
+      </div>
+      <div className="product-card__details">
+        <p className="eyebrow product-card__category">{product.productType || "Nilkurinji pantry"}</p>
+        <h3><Link href={`/products/${product.handle}`}>{product.title}</Link></h3>
+        {price ? (
+          <p className="product-card__price">{isRange ? "From " : ""}{formatMoney(price)}</p>
+        ) : (
+          <p className="product-card__preview-note">Product details pending</p>
+        )}
+        <Link href={`/products/${product.handle}`} className="product-card__link">View details <ArrowUpRight aria-hidden="true" size={14} /></Link>
+        <QuickAddButton product={product} purchasingEnabled={purchasingEnabled} />
+      </div>
+    </article>
+  );
+}
