@@ -6,7 +6,9 @@ Shopify is the authority for every live product, option, price, availability sta
 
 In Shopify Admin, install/open the **Headless** sales channel, select the storefront, and enable the Storefront API permissions needed to read products, collections, product metafields/metaobjects, pages, policies, search, recommendations, and to read/write carts. Publish the approved products and collections to that Headless storefront. If the store cannot use Headless or publish products, resolve eligibility or migrate to an eligible merchant store before live launch.
 
-Create a new private Storefront API token for this deployment. The private token previously shared in chat must be rotated in Shopify Admin and replaced everywhere before production. Never put either token in source code, `NEXT_PUBLIC_*`, client components, public build variables, screenshots, or a committed `.env` file. The public token can remain unused; this implementation uses the private server-side token.
+Create a least-privilege private Storefront API token for this deployment. The private-looking credential shared in chat has the `shpat_` format Shopify documents for Admin API access tokens. Shopify uses `X-Shopify-Access-Token` for the Admin API and `Shopify-Storefront-Private-Token` for Storefront API calls; an existing Admin token is suitable for Storefront use only when it has the required unauthenticated Storefront scopes. Prefer the private token issued by the Headless channel or a narrowly scoped delegate token. This implementation has not been given that credential locally and never places credentials in source. Because the shared value is an Admin API credential, revoke/rotate it promptly in Shopify Admin before any Shopify writes or production use.
+
+Never put either token in source code, `NEXT_PUBLIC_*`, client components, public build variables, screenshots, or a committed `.env` file. The public token can remain unused; this implementation uses a server-only private Storefront token.
 
 ## 2. Local environment and safe modes
 
@@ -107,6 +109,8 @@ Do not represent local cart mocks or an unupgraded development store as a real e
 ## Official references
 
 - [Shopify Storefront API authentication and private-token headers](https://shopify.dev/docs/api/storefront/latest)
+- [Shopify API authentication and API-specific headers](https://shopify.dev/docs/api/usage/authentication)
+- [Shopify access tokens and token types](https://shopify.dev/docs/apps/build/authentication-authorization/access-tokens)
 - [Set up the Storefront API](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/getting-started)
 - [Manage the Headless sales channel](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/manage-headless-channels)
 - [Shopify custom storefronts and hosted checkout](https://help.shopify.com/en/manual/custom-storefronts)
