@@ -7,6 +7,7 @@ export const CATEGORIES = [
 ] as const;
 
 export const PRIMARY_NAV = [
+  { label: "Home", href: "/" },
   { label: "Shop", href: "/shop" },
   { label: "Tea", href: "/collections/tea" },
   { label: "Our story", href: "/about" },

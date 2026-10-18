@@ -12,8 +12,9 @@ describe("Nilkurinji storefront navigation", () => {
     ]);
   });
 
-  it("provides shop and search paths without adding excluded editorial pages", () => {
+  it("provides the planned navigation without adding excluded editorial pages", () => {
     expect(PRIMARY_NAV.map(({ href }) => href)).toEqual([
+      "/",
       "/shop",
       "/collections/tea",
       "/about",

@@ -27,9 +27,9 @@ export type HomepageContent = {
 };
 
 export const DRAFT_HOMEPAGE_CONTENT: HomepageContent = {
-  eyebrow: "Nilkurinji · The pantry edit",
-  heading: "A little more thought, in every day.",
-  description: "Discover tea, rice, snacks and pantry favourites for the everyday table.",
+  eyebrow: "Pure · Authentic · Timeless",
+  heading: "The Finest Flavours of India",
+  description: "From the lush gardens to your table — experience the purest ingredients, crafted with care.",
   heroImage: null,
   secondaryEyebrow: "",
   secondaryHeading: "",

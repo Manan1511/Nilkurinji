@@ -22,14 +22,14 @@ export function BannerCarousel({ slides }: { slides: BannerSlide[] }) {
   const goTo = (index: number) => setActiveIndex((index + slides.length) % slides.length);
 
   return (
-    <section className="hero-carousel mx-auto w-full max-w-[1360px] px-5 md:px-10" aria-label="Featured stories">
-      <div className="hero-carousel__slide" aria-roledescription="slide" aria-label={`${activeIndex + 1} of ${slides.length}`}>
-        <div className="hero-carousel__copy">
+    <section className="hero-carousel hero-carousel--home" aria-label="Featured stories">
+      <div className="hero-carousel__slide" role="group" aria-roledescription="slide" aria-label={`${activeIndex + 1} of ${slides.length}`} aria-live="polite">
+        <div key={activeIndex} className="hero-carousel__copy">
           <p className="eyebrow hero-carousel__eyebrow">{active.eyebrow}</p>
           <h1>{active.heading}</h1>
           <p className="hero-carousel__description">{active.description}</p>
           <Link href={active.href} className="button button--dark">
-            Explore the shop <ArrowRight aria-hidden="true" size={17} />
+            Explore our range <ArrowRight aria-hidden="true" size={17} />
           </Link>
           {slides.length > 1 && <div className="hero-carousel__controls">
             <button type="button" className="carousel-arrow" aria-label="Previous banner" onClick={() => goTo(activeIndex - 1)}>
@@ -54,6 +54,7 @@ export function BannerCarousel({ slides }: { slides: BannerSlide[] }) {
         </div>
         <div className={`hero-carousel__visual ${active.image ? "" : "hero-carousel__visual--pending"}`}>
           {active.image && <Image
+            key={activeIndex}
             src={active.image}
             alt={active.imageAlt}
             fill
@@ -61,7 +62,6 @@ export function BannerCarousel({ slides }: { slides: BannerSlide[] }) {
             sizes="(max-width: 767px) 100vw, 55vw"
             className="hero-carousel__image"
           />}
-          {active.imageCaption && <span className="hero-carousel__image-caption">{active.imageCaption}</span>}
         </div>
       </div>
     </section>

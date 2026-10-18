@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Leaf } from "lucide-react";
+import { ArrowRight, BadgeCheck, Landmark, Leaf, Truck } from "lucide-react";
 import { BannerCarousel } from "@/components/banner-carousel";
-import { ProductGrid } from "@/components/product-grid";
+import { BotanicalFrame } from "@/components/botanical-frame";
+import { FeaturedProductsCarousel } from "@/components/featured-products-carousel";
 import { getProducts } from "@/lib/shopify/catalog";
 import { getHomepageContent } from "@/lib/shopify/content";
 import { getStorefrontMode } from "@/lib/shopify/mode";
@@ -38,54 +39,70 @@ export default async function HomePage() {
         </section>
       )}
 
-      <nav className="category-shelf mx-auto" aria-label="Shop by category">
-        {CATEGORIES.map((category, index) => (
-          <Link key={category.handle} href={category.href} className="category-shelf__tile">
-            <span className="category-shelf__image"><Image src={`/images/category-${category.handle}.png`} alt="" fill sizes="(max-width: 640px) 42vw, 18vw" priority={index === 0} /></span>
-            <span className="category-shelf__label">{category.label}<ArrowRight aria-hidden="true" size={15} /></span>
-          </Link>
-        ))}
-      </nav>
-
-      <section className="section section--wide">
-        <div className="section-heading">
-          <div>
-            <p className="eyebrow">{preview ? "A considered selection" : "Nilkurinji catalogue"}</p>
-            <h2>{preview ? "An early look" : content?.featuredProductsHeading || "Shop products"}</h2>
-          </div>
-          <Link href="/shop" className="text-link">View all <ArrowRight aria-hidden="true" size={16} /></Link>
+      <section className="category-section" aria-labelledby="home-categories-heading">
+        <BotanicalFrame className="botanical-frame--categories" />
+        <div className="category-section__heading">
+          <Leaf aria-hidden="true" className="category-section__mark" />
+          <div className="category-section__title-row"><span /><h2 id="home-categories-heading">Our Categories</h2><span /></div>
+          <p>A wholesome range of premium foods, inspired by nature.</p>
         </div>
-        {productsResult.source === "unavailable" ? (
-          <div className="notice-card" role="status">{productsResult.reason}</div>
-        ) : products.length ? (
-          <ProductGrid products={products.slice(0, 4)} emptyMessage="Nothing is on this shelf yet." allowCategoryFilter={false} showFilters={false} showToolbar={false} purchasingEnabled={isShopifyCheckoutEnabled()} />
-        ) : (
-          <div className="empty-state empty-state--catalog">
-            <span className="eyebrow">Shopify catalog</span>
-            <h2>Good things will be here soon.</h2>
-            <p>Publish approved products to the Nilkurinji Headless sales channel to show them here.</p>
-          </div>
-        )}
+        <nav className="category-shelf mx-auto" aria-label="Shop by category">
+          {CATEGORIES.map((category, index) => (
+            <Link key={category.handle} href={category.href} className="category-shelf__tile">
+              <span className="category-shelf__image"><Image src={`/images/category-${category.handle}.png`} alt="" fill sizes="(max-width: 640px) 72px, 100px" priority={index === 0} /></span>
+              <span className="category-shelf__label">{category.label}<ArrowRight aria-hidden="true" size={13} /></span>
+            </Link>
+          ))}
+        </nav>
       </section>
 
-      <section className="benefits-band" aria-label="How the shop works">
+      <section className="section section--wide home-featured" aria-labelledby="home-featured-heading">
+        <BotanicalFrame className="botanical-frame--featured" />
+        <div className="home-featured__intro">
+          <p className="eyebrow">{preview ? "Featured products" : "Nilkurinji catalogue"}</p>
+          <h2 id="home-featured-heading">{preview ? "Our Best Sellers" : content?.featuredProductsHeading || "Shop products"}</h2>
+          <p className="home-featured__description">{preview ? "Timeless classics, loved by many." : "Explore the foods and beverages in our pantry."}</p>
+          <Link href="/shop" className="home-featured__shop-all">Shop all <ArrowRight aria-hidden="true" size={15} /></Link>
+        </div>
+        <div className="home-featured__products">
+          {productsResult.source === "unavailable" ? (
+            <div className="notice-card" role="status">{productsResult.reason}</div>
+          ) : products.length ? (
+            <FeaturedProductsCarousel products={products.slice(0, 8)} purchasingEnabled={isShopifyCheckoutEnabled()} />
+          ) : (
+            <div className="empty-state empty-state--catalog">
+              <span className="eyebrow">Shopify catalog</span>
+              <h2>Good things will be here soon.</h2>
+              <p>Publish approved products to the Nilkurinji Headless sales channel to show them here.</p>
+            </div>
+          )}
+        </div>
+      </section>
+
+      <section className="benefits-band home-benefits" aria-label="Nilkurinji benefits">
         <div className="benefits-band__inner mx-auto w-full max-w-[1360px] px-5 md:px-10">
-          <article className="benefit"><span className="benefit__number">01</span><h2>Explore</h2><p>Five pantry categories, ready to browse.</p></article>
-          <article className="benefit"><span className="benefit__number">02</span><h2>Discover</h2><p>Product details and availability come from Shopify.</p></article>
-          <article className="benefit"><span className="benefit__number">03</span><h2>Save</h2><p>Keep a wishlist on the device you are using.</p></article>
-          <article className="benefit"><span className="benefit__number">04</span><h2>Checkout</h2><p>{isShopifyCheckoutEnabled() ? "Orders are completed through Shopify checkout." : "Purchases will open after Shopify setup is approved."}</p></article>
+          <article className="benefit">
+            <Leaf aria-hidden="true" className="benefit__icon" />
+            <h2>{preview ? "100% Natural Ingredients" : "Ingredients"}</h2>
+            <p>{preview ? "Pure, safe, wholesome." : "Find ingredients and product details on every listing."}</p>
+          </article>
+          <article className="benefit">
+            <Landmark aria-hidden="true" className="benefit__icon" />
+            <h2>{preview ? "Authentic Indian Heritage" : "Our story"}</h2>
+            <p>{preview ? "Tradition in every cup." : "Learn about Nilkurinji and the pantry we are building."}</p>
+          </article>
+          <article className="benefit">
+            <BadgeCheck aria-hidden="true" className="benefit__icon" />
+            <h2>{preview ? "Premium Quality" : "Product details"}</h2>
+            <p>{preview ? "Carefully sourced. Always." : "Review available product information before purchase."}</p>
+          </article>
+          <article className="benefit">
+            <Truck aria-hidden="true" className="benefit__icon" />
+            <h2>{preview ? "Pan India Delivery" : "Delivery"}</h2>
+            <p>{preview ? "Freshness at your doorstep." : "See delivery options for your address at checkout."}</p>
+          </article>
         </div>
       </section>
-
-      {(preview || (content?.closingHeading && content.closingDescription)) && <section className="closing-note mx-auto grid max-w-[1360px] items-center gap-10 px-5 py-16 md:grid-cols-[1fr_1.15fr] md:px-10 md:py-24">
-        <div className="closing-note__mark" aria-hidden="true"><Leaf /><span>n.</span></div>
-        <div>
-          <p className="eyebrow">{preview ? "The Nilkurinji point of view" : content?.closingEyebrow || "About Nilkurinji"}</p>
-          <h2>{preview ? "A good thing can be wonderfully simple." : content?.closingHeading}</h2>
-          {!preview && <p>{content?.closingDescription}</p>}
-          <Link className="text-link" href="/about">A little about us <ArrowRight aria-hidden="true" size={16} /></Link>
-        </div>
-      </section>}
     </>
   );
 }

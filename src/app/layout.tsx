@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Playfair_Display } from "next/font/google";
 import "@/app/globals.css";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -7,6 +8,12 @@ import { DEFAULT_DESCRIPTION, SITE_NAME } from "@/lib/site-config";
 import { getHomepageContent } from "@/lib/shopify/content";
 import { getStorefrontMode } from "@/lib/shopify/mode";
 import { isIndexableSite } from "@/lib/shopify/checkout-config";
+
+const displayFont = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair-display",
+  display: "swap",
+});
 
 function metadataBase(): URL | undefined {
   const configured = process.env.SITE_URL ?? process.env.URL;
@@ -19,7 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const base = metadataBase();
   const homepage = await getHomepageContent();
   const image = mode.mode === "preview"
-    ? "/images/hero-preview.png"
+    ? "/images/preview-hero-home.png"
     : homepage.source === "shopify" ? homepage.data.heroImage?.url : undefined;
   return {
     ...(base ? { metadataBase: base } : {}),
@@ -55,7 +62,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const mode = getStorefrontMode();
   const socialLinks = settings.source === "unavailable" ? [] : settings.data.socialLinks;
   return (
-    <html lang="en">
+    <html lang="en" className={displayFont.variable}>
       <body>
         <a className="skip-link" href="#main-content">Skip to content</a>
         <StoreNotice />

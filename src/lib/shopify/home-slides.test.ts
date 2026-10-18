@@ -21,9 +21,14 @@ describe("homepage carousel copy", () => {
     expect(slides[0]?.heading).not.toBe(DRAFT_HOMEPAGE_CONTENT.heading);
   });
 
-  it("keeps two clearly marked draft slides in the local preview", () => {
+  it("keeps the reference homepage hero as one clearly marked preview slide", () => {
     const slides = buildHomepageSlides(true, DRAFT_HOMEPAGE_CONTENT);
-    expect(slides).toHaveLength(2);
-    expect(slides.every((slide) => slide.imageCaption === "Generated concept image")).toBe(true);
+    expect(slides).toHaveLength(1);
+    expect(slides[0]).toMatchObject({
+      heading: "The Finest Flavours of India",
+      image: "/images/preview-hero-home.png",
+      imageCaption: "Generated concept image",
+      href: "/shop",
+    });
   });
 });

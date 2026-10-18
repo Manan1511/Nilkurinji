@@ -9,19 +9,10 @@ export function buildHomepageSlides(preview: boolean, content: HomepageContent |
         eyebrow: DRAFT_HOMEPAGE_CONTENT.eyebrow,
         heading: DRAFT_HOMEPAGE_CONTENT.heading,
         description: DRAFT_HOMEPAGE_CONTENT.description,
-        image: "/images/hero-preview.png",
-        imageAlt: "An unbranded tea tin and glass cup in a botanical still life, shown as concept artwork",
+        image: "/images/preview-hero-home.png",
+        imageAlt: "Illustrative Nilkurinji tea still life overlooking green Nilgiri hills",
         imageCaption: "Generated concept image",
         href: "/shop",
-      },
-      {
-        eyebrow: "Find your everyday",
-        heading: "A pantry for the moments that matter.",
-        description: "Explore the shelves: tea, rice, snacks and the good things in between.",
-        image: "/images/category-tea-bags.png",
-        imageAlt: "A cup of tea and an unbranded sachet in a sunlit still life",
-        imageCaption: "Generated concept image",
-        href: "/collections/other-foods",
       },
     ];
   }

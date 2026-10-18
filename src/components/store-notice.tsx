@@ -5,8 +5,8 @@ export function StoreNotice() {
   const mode = getStorefrontMode();
   if (mode.mode === "preview") {
     return (
-      <div className="store-notice" role="status">
-        Preview store <span aria-hidden="true">·</span> Illustrative imagery and draft copy <span aria-hidden="true">·</span> Purchases disabled
+      <div className="store-notice store-notice--visually-hidden" role="status">
+        Preview <span aria-hidden="true">·</span> Draft imagery and copy <span aria-hidden="true">·</span> Purchases disabled
       </div>
     );
   }

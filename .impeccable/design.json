@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-18T23:08:00+05:30",
+  "title": "Design System: Nilkurinji",
+  "extensions": {
+    "colorMeta": {
+      "cream": { "role": "neutral", "displayName": "Warm Cream", "canonical": "#f7f5ee", "tonalRamp": ["#24231f", "#45443e", "#66655d", "#88877e", "#aaa99e", "#c9c8bd", "#e3e1d7", "#f7f5ee"] },
+      "paper": { "role": "neutral", "displayName": "Soft Paper", "canonical": "#fbfaf6", "tonalRamp": ["#292823", "#4c4b44", "#6e6d65", "#908f87", "#b0afa7", "#cccbc2", "#e5e3da", "#fbfaf6"] },
+      "ink": { "role": "neutral", "displayName": "Pantry Ink", "canonical": "#242d24", "tonalRamp": ["#172019", "#263128", "#354137", "#465247", "#596458", "#727a71", "#989e97", "#c8ccc7"] },
+      "forest": { "role": "primary", "displayName": "Forest Green", "canonical": "#254434", "tonalRamp": ["#11231a", "#173023", "#1c3b2b", "#254434", "#345944", "#4e705d", "#779181", "#afbfaf"] },
+      "forest-deep": { "role": "primary", "displayName": "Deep Forest", "canonical": "#1c3327", "tonalRamp": ["#0c1a12", "#112319", "#162c20", "#1c3327", "#2d493a", "#46604f", "#718573", "#a8b4a6"] },
+      "sage": { "role": "secondary", "displayName": "Soft Sage", "canonical": "#e5e9dc", "tonalRamp": ["#252920", "#44493d", "#626858", "#818775", "#a0a692", "#bbc1ae", "#d2d8c8", "#e5e9dc"] },
+      "sage-ink": { "role": "secondary", "displayName": "Sage Ink", "canonical": "#536852", "tonalRamp": ["#182219", "#263327", "#354735", "#435944", "#536852", "#6d826c", "#91a18f", "#bdc8bb"] },
+      "line": { "role": "neutral", "displayName": "Olive Divider", "canonical": "#d9ded2", "tonalRamp": ["#262921", "#45483f", "#64685e", "#83877d", "#a2a69c", "#bdc1b7", "#d0d4ca", "#d9ded2"] },
+      "muted": { "role": "neutral", "displayName": "Muted Green Grey", "canonical": "#71786d", "tonalRamp": ["#252921", "#41473d", "#5a6256", "#71786d", "#8b9287", "#a9afa6", "#c8ccc6", "#e3e5e1"] },
+      "ochre": { "role": "tertiary", "displayName": "Muted Ochre", "canonical": "#b78049", "tonalRamp": ["#2b1a0c", "#4c2d15", "#70421f", "#925a2f", "#b78049", "#c99666", "#d9b28e", "#ead4bd"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Editorial Display", "purpose": "Playfair Display for the home hero and main editorial heading." },
+      "headline": { "displayName": "Section Headline", "purpose": "Playfair Display for homepage and editorial section titles." },
+      "title": { "displayName": "Product Title", "purpose": "Playfair Display for product-card titles." },
+      "body": { "displayName": "Utility Body", "purpose": "Arial for body text and product information." },
+      "label": { "displayName": "Tracked Label", "purpose": "Bold Arial eyebrow labels in uppercase." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "color-transition", "value": "0.18s ease", "purpose": "Navigation, link, and compact control color changes." },
+      { "name": "button-transition", "value": "0.2s ease", "purpose": "Button color and border changes." },
+      { "name": "image-transition", "value": "0.45s cubic-bezier(.2,.65,.25,1)", "purpose": "Subtle product-image zoom on hover." },
+      { "name": "hero-unfold", "value": "680ms cubic-bezier(.16,1,.3,1)", "purpose": "One-time image unfold and gentle crop settle for home and collection heroes." },
+      { "name": "action-feedback", "value": "150ms to 320ms", "purpose": "Fast menu, wishlist, cart, and button state feedback." },
+      { "name": "reduced-motion", "value": "prefers-reduced-motion: reduce", "purpose": "Reduce nonessential movement while preserving visible state changes." }
+    ],
+    "breakpoints": [
+      { "name": "compact", "value": "360px" },
+      { "name": "mobile", "value": "760px" },
+      { "name": "tablet", "value": "1000px" },
+      { "name": "wide", "value": "1440px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Forest-filled primary action with compact uppercase utility label.",
+      "html": "<button class=\"ds-button-primary\">Explore the shop</button>",
+      "css": ".ds-button-primary { min-height: 48px; display: inline-flex; align-items: center; justify-content: center; padding: 0 22px; border: 1px solid transparent; border-radius: 2px; background: var(--forest); color: var(--paper); font: 700 11px/1.2 Arial, Helvetica, sans-serif; letter-spacing: .08em; text-transform: uppercase; transition: background .2s ease; cursor: pointer; } .ds-button-primary:hover { background: var(--forest-deep); } .ds-button-primary:focus-visible { outline: 2px solid var(--ochre); outline-offset: 4px; } .ds-button-primary:active { background: var(--forest-deep); }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Unfilled secondary action with a forest border.",
+      "html": "<button class=\"ds-button-outline\">View details</button>",
+      "css": ".ds-button-outline { min-height: 48px; display: inline-flex; align-items: center; justify-content: center; padding: 0 22px; border: 1px solid var(--forest); border-radius: 2px; background: transparent; color: var(--forest); font: 700 11px/1.2 Arial, Helvetica, sans-serif; letter-spacing: .08em; text-transform: uppercase; transition: background .2s ease; cursor: pointer; } .ds-button-outline:hover { background: var(--sage); } .ds-button-outline:focus-visible { outline: 2px solid var(--ochre); outline-offset: 4px; } .ds-button-outline:active { background: var(--sage); }"
+    },
+    {
+      "name": "Centered Navigation",
+      "kind": "nav",
+      "description": "Centered editorial links, with a fine underline on the active page.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Primary navigation\"><a href=\"#shop\">Shop</a><a href=\"#about\">About</a><a href=\"#contact\">Contact</a></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; justify-content: center; gap: 28px; padding: 8px 0; } .ds-nav a { position: relative; padding: 4px 0; color: var(--forest-deep); font: 14px/1.4 Georgia, 'Times New Roman', serif; text-decoration: none; transition: color .18s ease; } .ds-nav a:hover { color: var(--ochre); } .ds-nav a:focus-visible { outline: 2px solid var(--ochre); outline-offset: 4px; } .ds-nav a[aria-current=page]::after { position: absolute; right: 0; bottom: 0; left: 0; height: 1px; background: var(--forest); content: ''; }"
+    },
+    {
+      "name": "Open Product Card",
+      "kind": "card",
+      "description": "Open image-and-copy catalog card, without a containing panel.",
+      "html": "<article class=\"ds-product-card\"><div class=\"ds-product-card__image\" aria-hidden=\"true\"></div><p class=\"ds-product-card__category\">Tea</p><h3>Nilkurinji Pantry</h3><a href=\"#details\">View details</a></article>",
+      "css": ".ds-product-card { min-width: 0; color: var(--ink); } .ds-product-card__image { aspect-ratio: .82; overflow: hidden; background: var(--sage); transition: background .18s ease; } .ds-product-card:hover .ds-product-card__image { background: var(--line); } .ds-product-card__category { margin: 13px 0 0; color: var(--muted); font: 9px/1.4 Arial, Helvetica, sans-serif; } .ds-product-card h3 { margin: 5px 0; color: var(--forest-deep); font: 400 21px/1.15 Georgia, 'Times New Roman', serif; } .ds-product-card a { color: var(--forest); font: 700 10px/1.4 Arial, Helvetica, sans-serif; letter-spacing: .08em; text-decoration: none; text-transform: uppercase; } .ds-product-card a:hover { color: var(--ochre); } .ds-product-card a:focus-visible { outline: 2px solid var(--ochre); outline-offset: 4px; }"
+    },
+    {
+      "name": "Circular Category Tile",
+      "kind": "custom",
+      "description": "One of five centered image links in the homepage category shelf.",
+      "html": "<a class=\"ds-category-tile\" href=\"#category\"><span class=\"ds-category-tile__image\"></span><span class=\"ds-category-tile__label\">Tea</span></a>",
+      "css": ".ds-category-tile { min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 2px; border-right: 1px solid var(--line); color: var(--forest-deep); text-align: center; text-decoration: none; } .ds-category-tile__image { width: 96px; aspect-ratio: 1; border-radius: 50%; background: var(--sage); transition: transform .45s cubic-bezier(.2,.65,.25,1); } .ds-category-tile:hover .ds-category-tile__image { transform: scale(1.035); } .ds-category-tile__label { padding-top: 6px; font: 14px/1.15 Georgia, 'Times New Roman', serif; } .ds-category-tile:focus-visible { outline: 2px solid var(--ochre); outline-offset: 4px; }"
+    },
+    {
+      "name": "Forest Benefits Band",
+      "kind": "custom",
+      "description": "Four compact benefit summaries over a full-width forest-green band.",
+      "html": "<section class=\"ds-benefits\"><article><h3>Product details</h3><p>Review available information.</p></article><article><h3>Our story</h3><p>Learn about the pantry.</p></article></section>",
+      "css": ".ds-benefits { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); background: var(--forest); color: var(--paper); } .ds-benefits article { min-height: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 15px 18px; border-right: 1px solid rgb(245 245 235 / 21%); text-align: center; } .ds-benefits article:last-child { border-right: 0; } .ds-benefits h3 { margin: 0 0 3px; font: 400 14px/1.3 Georgia, 'Times New Roman', serif; } .ds-benefits p { margin: 0; color: #d9dfd5; font: 9px/1.35 Arial, Helvetica, sans-serif; } @media (max-width: 760px) { .ds-benefits { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ds-benefits article { min-height: 106px; padding: 12px 7px; } }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Quiet Pantry Editorial",
+    "overview": "The storefront pairs warm paper and restrained botanical greens with food photography, clear product information, and a Playfair Display editorial voice. Spacious desktop framing gives way to compact mobile composition while retaining the centered wordmark, full-bleed landscape hero, five circular category images, best-seller carousel, and dark benefits band on the home page.\n\nThe implementation is deliberately light on surface effects. Hairline olive-toned borders, open product imagery, and tonal backgrounds provide structure. Utility and purchase information remains in Arial. The local storefront currently labels illustrative copy and imagery as preview content and disables purchases.",
+    "keyCharacteristics": ["Warm cream surfaces with deep green text and controls.", "Playfair Display for brand and editorial headings; Arial for utility text.", "Image-led catalog with flat cards and fine separators.", "Centered brand header and responsive manual home carousel."],
+    "rules": [
+      { "name": "The Paper-and-Botanical Rule", "body": "Use cream and green as the dominant field; keep ochre to small markers and status details.", "section": "colors" },
+      { "name": "The Serif-and-Utility Rule", "body": "Keep Playfair Display for the wordmark and editorial titles; use Arial for navigation, body copy, prices, and controls.", "section": "typography" },
+      { "name": "The Flat-by-Default Rule", "body": "Use background contrast and separators for grouping; do not introduce resting shadows.", "section": "elevation" }
+    ],
+    "dos": ["Use the CSS variables in src/app/globals.css as the canonical color source.", "Preserve the centered wordmark and homepage section order.", "Respect prefers-reduced-motion for scrolling and transitions.", "Label preview imagery and copy; keep purchases disabled in preview mode."],
+    "donts": ["Do not add resting shadows.", "Do not wrap open product cards in heavy panels or oversized rounded cards.", "Do not treat preview copy or imagery as verified product, ingredient, quality, or shipping claims.", "Do not enable checkout in local preview mode."]
+  }
+}

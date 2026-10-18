@@ -6,7 +6,9 @@ import { WishlistButton } from "@/components/wishlist-button";
 import { QuickAddButton } from "@/components/quick-add-button";
 import type { StorefrontProduct } from "@/lib/shopify/types";
 
-export function ProductCard({ product, purchasingEnabled = false }: { product: StorefrontProduct; purchasingEnabled?: boolean }) {
+export function ProductCard({ product, purchasingEnabled = false, variant = "standard" }: { product: StorefrontProduct; purchasingEnabled?: boolean; variant?: "standard" | "featured" | "collection" }) {
+  const featured = variant === "featured";
+  const collection = variant === "collection";
   const image = product.featuredImage;
   const price = product.priceRange?.minVariantPrice;
   const isRange = Boolean(
@@ -14,7 +16,7 @@ export function ProductCard({ product, purchasingEnabled = false }: { product: S
   );
 
   return (
-    <article className="product-card">
+    <article className={`product-card product-card--${variant}`}>
       <div className="product-card__image-wrap">
         <Link href={`/products/${product.handle}`} className="product-card__image-link" aria-label={`View ${product.title}`}>
           {image ? (
@@ -35,13 +37,14 @@ export function ProductCard({ product, purchasingEnabled = false }: { product: S
       <div className="product-card__details">
         <p className="eyebrow product-card__category">{product.productType || "Nilkurinji pantry"}</p>
         <h3><Link href={`/products/${product.handle}`}>{product.title}</Link></h3>
+        {collection && <p className="product-card__description">{product.description}</p>}
         {price ? (
           <p className="product-card__price">{isRange ? "From " : ""}{formatMoney(price)}</p>
         ) : (
           <p className="product-card__preview-note">Product details pending</p>
         )}
-        <Link href={`/products/${product.handle}`} className="product-card__link">View details <ArrowUpRight aria-hidden="true" size={14} /></Link>
-        <QuickAddButton product={product} purchasingEnabled={purchasingEnabled} />
+        {!featured && !collection && <Link href={`/products/${product.handle}`} className="product-card__link">View details <ArrowUpRight aria-hidden="true" size={14} /></Link>}
+        <QuickAddButton product={product} purchasingEnabled={purchasingEnabled} compact={featured} />
       </div>
     </article>
   );
