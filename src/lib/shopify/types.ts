@@ -37,6 +37,7 @@ export type StorefrontProduct = {
   vendor: string;
   tags: string[];
   featuredImage: ShopifyImage | null;
+  cardImage?: ShopifyImage | null;
   images: ShopifyImage[];
   variants: StorefrontVariant[];
   priceRange: { minVariantPrice: ShopifyMoney; maxVariantPrice: ShopifyMoney } | null;

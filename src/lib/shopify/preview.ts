@@ -7,6 +7,7 @@ type PreviewProductSeed = {
   category: string;
   price: string;
   image: string;
+  cardImage?: string;
   alt: string;
   collectionHandles: string[];
   description?: string;
@@ -28,6 +29,7 @@ const PREVIEW_SEEDS: PreviewProductSeed[] = [
     category: "Tea",
     price: "320.00",
     image: "/images/preview-product-assam-gold.png",
+    cardImage: "/images/preview-product-assam-gold-wide.webp",
     alt: "Illustrative Assam Gold Tea package for storefront preview",
     collectionHandles: ["tea"],
     description: "Bold, malty and full of character.",
@@ -39,6 +41,7 @@ const PREVIEW_SEEDS: PreviewProductSeed[] = [
     category: "Tea",
     price: "420.00",
     image: "/images/preview-product-darjeeling.png",
+    cardImage: "/images/preview-product-darjeeling-wide.webp",
     alt: "Illustrative Darjeeling Tea package for storefront preview",
     collectionHandles: ["tea"],
     description: "Light, floral and exquisitely smooth.",
@@ -50,6 +53,7 @@ const PREVIEW_SEEDS: PreviewProductSeed[] = [
     category: "Rice",
     price: "550.00",
     image: "/images/preview-product-basmati.png",
+    cardImage: "/images/preview-product-basmati-wide.webp",
     alt: "Illustrative basmati rice package for storefront preview",
     collectionHandles: ["rice"],
   },
@@ -59,6 +63,7 @@ const PREVIEW_SEEDS: PreviewProductSeed[] = [
     category: "Snacks",
     price: "180.00",
     image: "/images/preview-product-snacks.png",
+    cardImage: "/images/preview-product-snacks-wide.webp",
     alt: "Illustrative snack package for storefront preview",
     collectionHandles: ["snacks"],
   },
@@ -68,6 +73,7 @@ const PREVIEW_SEEDS: PreviewProductSeed[] = [
     category: "Tea Bags",
     price: "280.00",
     image: "/images/preview-product-tea-bags.png",
+    cardImage: "/images/preview-product-tea-bags-wide.webp",
     alt: "Illustrative tea bag package for storefront preview",
     collectionHandles: [],
   },
@@ -77,6 +83,7 @@ const PREVIEW_SEEDS: PreviewProductSeed[] = [
     category: "Tea",
     price: "350.00",
     image: "/images/preview-product-green-tea.png",
+    cardImage: "/images/preview-product-green-tea-wide.webp",
     alt: "Illustrative Green Tea package for storefront preview",
     collectionHandles: ["tea"],
     description: "Fresh, clean and naturally calming.",
@@ -88,6 +95,7 @@ const PREVIEW_SEEDS: PreviewProductSeed[] = [
     category: "Tea",
     price: "280.00",
     image: "/images/preview-product-premium-black-tea.png",
+    cardImage: "/images/preview-product-premium-black-tea-wide.webp",
     alt: "Illustrative Premium Black Tea package for storefront preview",
     collectionHandles: ["tea"],
     description: "Rich, smooth and timeless.",
@@ -99,6 +107,7 @@ const PREVIEW_SEEDS: PreviewProductSeed[] = [
     category: "Tea",
     price: "300.00",
     image: "/images/preview-product-masala-chai.png",
+    cardImage: "/images/preview-product-masala-chai-wide.webp",
     alt: "Illustrative Masala Chai package for storefront preview",
     collectionHandles: ["tea"],
     description: "A traditional blend with a spicy kick.",
@@ -110,6 +119,7 @@ const PREVIEW_SEEDS: PreviewProductSeed[] = [
     category: "Tea",
     price: "380.00",
     image: "/images/preview-product-jasmine-tea.png",
+    cardImage: "/images/preview-product-jasmine-tea-wide.webp",
     alt: "Illustrative Jasmine Tea package for storefront preview",
     collectionHandles: ["tea"],
     description: "Fragrant, delicate and soothing.",
@@ -121,6 +131,7 @@ const PREVIEW_SEEDS: PreviewProductSeed[] = [
     category: "Tea",
     price: "360.00",
     image: "/images/preview-product-earl-grey.png",
+    cardImage: "/images/preview-product-earl-grey-wide.webp",
     alt: "Illustrative Earl Grey package for storefront preview",
     collectionHandles: ["tea"],
     description: "Citrus notes with a smooth finish.",
@@ -132,6 +143,7 @@ const PREVIEW_SEEDS: PreviewProductSeed[] = [
     category: "Tea",
     price: "320.00",
     image: "/images/preview-product-hibiscus-tea.png",
+    cardImage: "/images/preview-product-hibiscus-tea-wide.webp",
     alt: "Illustrative Hibiscus Tea package for storefront preview",
     collectionHandles: ["tea"],
     description: "Tangy, vibrant and refreshing.",
@@ -143,6 +155,7 @@ const PREVIEW_SEEDS: PreviewProductSeed[] = [
     category: "Tea Bags",
     price: "320.00",
     image: "/images/preview-product-tea-bags.png",
+    cardImage: "/images/preview-product-assam-gold-tea-bags-wide.webp",
     alt: "Illustrative Assam Gold Tea Bags package for storefront preview",
     collectionHandles: ["tea-bags"],
     description: "Bold, malty and full of character.",
@@ -154,6 +167,7 @@ const PREVIEW_SEEDS: PreviewProductSeed[] = [
     category: "Tea Bags",
     price: "420.00",
     image: "/images/preview-product-darjeeling-tea-bags.png",
+    cardImage: "/images/preview-product-darjeeling-tea-bags-wide.webp",
     alt: "Illustrative Darjeeling Tea Bags package for storefront preview",
     collectionHandles: ["tea-bags"],
     description: "Light, floral and exquisitely smooth.",
@@ -165,6 +179,7 @@ const PREVIEW_SEEDS: PreviewProductSeed[] = [
     category: "Tea Bags",
     price: "350.00",
     image: "/images/preview-product-green-tea-bags.png",
+    cardImage: "/images/preview-product-green-tea-bags-wide.webp",
     alt: "Illustrative Green Tea Bags package for storefront preview",
     collectionHandles: ["tea-bags"],
     description: "Fresh, clean and naturally calming.",
@@ -176,6 +191,9 @@ const previewCopy = "Preview listing only. Confirm product details, pack size, s
 
 export const PREVIEW_PRODUCTS: StorefrontProduct[] = PREVIEW_SEEDS.map((seed) => {
   const image: ShopifyImage = { url: seed.image, altText: seed.alt, width: 1448, height: 1086 };
+  const cardImage: ShopifyImage | null = seed.cardImage
+    ? { url: seed.cardImage, altText: seed.alt, width: 1586, height: 992 }
+    : null;
   const price = { amount: seed.price, currencyCode: "INR" };
   return {
     id: `preview-${seed.handle}`,
@@ -186,6 +204,7 @@ export const PREVIEW_PRODUCTS: StorefrontProduct[] = PREVIEW_SEEDS.map((seed) =>
     vendor: "",
     tags: seed.tags ?? [],
     featuredImage: image,
+    cardImage,
     images: [image],
     variants: [],
     priceRange: { minVariantPrice: price, maxVariantPrice: price },

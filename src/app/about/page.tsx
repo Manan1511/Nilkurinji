@@ -66,7 +66,7 @@ export default async function AboutPage() {
         <section className="about-origin" id="about-journey" aria-labelledby="about-origin-title">
           <BotanicalFrame className="botanical-frame--about-origin" />
           <div className="about-origin__copy" data-scroll-reveal="rise">
-            <p className="eyebrow">Where it begins</p>
+            <p className="eyebrow">The Beginning</p>
             <h2 id="about-origin-title">From the Misty Hills of Nilkurinji</h2>
             <div className="content-page__body" dangerouslySetInnerHTML={{ __html: html }} />
             <p className="about-origin__script-note">Pure by Nature,<br />Crafted for You.</p>

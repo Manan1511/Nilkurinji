@@ -9,7 +9,8 @@ import type { StorefrontProduct } from "@/lib/shopify/types";
 export function ProductCard({ product, purchasingEnabled = false, variant = "standard", revealDelayMs = 0 }: { product: StorefrontProduct; purchasingEnabled?: boolean; variant?: "standard" | "featured" | "collection"; revealDelayMs?: number }) {
   const featured = variant === "featured";
   const collection = variant === "collection";
-  const image = product.featuredImage;
+  const cardImage = featured || collection ? product.cardImage : null;
+  const image = cardImage ?? product.featuredImage;
   const price = product.priceRange?.minVariantPrice;
   const isRange = Boolean(
     product.priceRange && product.priceRange.minVariantPrice.amount !== product.priceRange.maxVariantPrice.amount,
@@ -25,7 +26,7 @@ export function ProductCard({ product, purchasingEnabled = false, variant = "sta
               alt={image.altText || product.title}
               fill
               sizes="(max-width: 640px) 46vw, (max-width: 1024px) 30vw, 23vw"
-              className="product-card__image"
+              className={`product-card__image${cardImage ? " product-card__image--wide" : ""}`}
             />
           ) : (
             <div className="product-card__image-empty" aria-hidden="true"><span>Nilkurinji</span></div>
