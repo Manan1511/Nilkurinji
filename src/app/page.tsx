@@ -48,8 +48,8 @@ export default async function HomePage() {
         </div>
         <nav className="category-shelf mx-auto" aria-label="Shop by category">
           {CATEGORIES.map((category, index) => (
-            <Link key={category.handle} href={category.href} className="category-shelf__tile">
-              <span className="category-shelf__image"><Image src={`/images/category-${category.handle}.png`} alt="" fill sizes="(max-width: 640px) 72px, 100px" priority={index === 0} /></span>
+            <Link key={category.handle} href={category.href} className={`category-shelf__tile category-shelf__tile--${category.handle}`} data-scroll-reveal="category" data-scroll-reveal-delay={index * 42}>
+              <span className="category-shelf__image"><Image src={category.handle === "tea" ? "/images/preview-hero-tea.webp" : `/images/category-${category.handle}.png`} alt="" fill sizes="(max-width: 640px) 72px, 100px" priority={index === 0} /></span>
               <span className="category-shelf__label">{category.label}<ArrowRight aria-hidden="true" size={13} /></span>
             </Link>
           ))}
@@ -58,7 +58,7 @@ export default async function HomePage() {
 
       <section className="section section--wide home-featured" aria-labelledby="home-featured-heading">
         <BotanicalFrame className="botanical-frame--featured" />
-        <div className="home-featured__intro">
+        <div className="home-featured__intro" data-scroll-reveal="rise">
           <p className="eyebrow">{preview ? "Featured products" : "Nilkurinji catalogue"}</p>
           <h2 id="home-featured-heading">{preview ? "Our Best Sellers" : content?.featuredProductsHeading || "Shop products"}</h2>
           <p className="home-featured__description">{preview ? "Timeless classics, loved by many." : "Explore the foods and beverages in our pantry."}</p>
@@ -81,22 +81,22 @@ export default async function HomePage() {
 
       <section className="benefits-band home-benefits" aria-label="Nilkurinji benefits">
         <div className="benefits-band__inner mx-auto w-full max-w-[1360px] px-5 md:px-10">
-          <article className="benefit">
+          <article className="benefit" data-scroll-reveal="benefit" data-scroll-reveal-delay="0">
             <Leaf aria-hidden="true" className="benefit__icon" />
             <h2>{preview ? "100% Natural Ingredients" : "Ingredients"}</h2>
             <p>{preview ? "Pure, safe, wholesome." : "Find ingredients and product details on every listing."}</p>
           </article>
-          <article className="benefit">
+          <article className="benefit" data-scroll-reveal="benefit" data-scroll-reveal-delay="55">
             <Landmark aria-hidden="true" className="benefit__icon" />
             <h2>{preview ? "Authentic Indian Heritage" : "Our story"}</h2>
             <p>{preview ? "Tradition in every cup." : "Learn about Nilkurinji and the pantry we are building."}</p>
           </article>
-          <article className="benefit">
+          <article className="benefit" data-scroll-reveal="benefit" data-scroll-reveal-delay="110">
             <BadgeCheck aria-hidden="true" className="benefit__icon" />
             <h2>{preview ? "Premium Quality" : "Product details"}</h2>
             <p>{preview ? "Carefully sourced. Always." : "Review available product information before purchase."}</p>
           </article>
-          <article className="benefit">
+          <article className="benefit" data-scroll-reveal="benefit" data-scroll-reveal-delay="165">
             <Truck aria-hidden="true" className="benefit__icon" />
             <h2>{preview ? "Pan India Delivery" : "Delivery"}</h2>
             <p>{preview ? "Freshness at your doorstep." : "See delivery options for your address at checkout."}</p>

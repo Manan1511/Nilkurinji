@@ -3,7 +3,7 @@ import reactHooks from "eslint-plugin-react-hooks";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: [".next/**", "node_modules/**", "coverage/**", "docs/**", ".superpowers/**"] },
+  { ignores: [".next/**", "node_modules/**", "coverage/**", "docs/**", ".superpowers/**", ".impeccable/**"] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {

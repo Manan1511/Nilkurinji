@@ -6,7 +6,7 @@ import { WishlistButton } from "@/components/wishlist-button";
 import { QuickAddButton } from "@/components/quick-add-button";
 import type { StorefrontProduct } from "@/lib/shopify/types";
 
-export function ProductCard({ product, purchasingEnabled = false, variant = "standard" }: { product: StorefrontProduct; purchasingEnabled?: boolean; variant?: "standard" | "featured" | "collection" }) {
+export function ProductCard({ product, purchasingEnabled = false, variant = "standard", revealDelayMs = 0 }: { product: StorefrontProduct; purchasingEnabled?: boolean; variant?: "standard" | "featured" | "collection"; revealDelayMs?: number }) {
   const featured = variant === "featured";
   const collection = variant === "collection";
   const image = product.featuredImage;
@@ -16,7 +16,7 @@ export function ProductCard({ product, purchasingEnabled = false, variant = "sta
   );
 
   return (
-    <article className={`product-card product-card--${variant}`}>
+    <article className={`product-card product-card--${variant}`} data-scroll-reveal="product" data-scroll-reveal-delay={revealDelayMs || undefined}>
       <div className="product-card__image-wrap">
         <Link href={`/products/${product.handle}`} className="product-card__image-link" aria-label={`View ${product.title}`}>
           {image ? (

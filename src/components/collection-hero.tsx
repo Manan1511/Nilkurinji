@@ -11,6 +11,8 @@ export function CollectionHero({
   ctaLabel,
   ctaHref = "#collection-products",
   className = "",
+  sideNote,
+  annotation,
 }: {
   eyebrow: string;
   heading: string;
@@ -20,6 +22,8 @@ export function CollectionHero({
   ctaLabel: string;
   ctaHref?: string;
   className?: string;
+  sideNote?: string;
+  annotation?: string;
 }) {
   return (
     <section className={`collection-hero ${className}`} aria-labelledby="collection-hero-heading">
@@ -34,6 +38,8 @@ export function CollectionHero({
           {ctaLabel} <ArrowRight aria-hidden="true" size={17} />
         </Link>
       </div>
+      {sideNote && <span className="collection-hero__side-note" aria-hidden="true">{sideNote}</span>}
+      {annotation && <span className="collection-hero__annotation" aria-hidden="true">{annotation}</span>}
     </section>
   );
 }

@@ -35,9 +35,9 @@ export function FeaturedProductsCarousel({
         </button>
       </div>
       <div id="featured-products" ref={trackRef} className="home-product-carousel__track" aria-label="Featured products">
-        {products.map((product) => (
+        {products.map((product, index) => (
           <div className="home-product-carousel__item" key={product.id}>
-            <ProductCard product={product} purchasingEnabled={purchasingEnabled} variant="featured" />
+            <ProductCard product={product} purchasingEnabled={purchasingEnabled} variant="featured" revealDelayMs={Math.min(index * 34, 238)} />
           </div>
         ))}
       </div>

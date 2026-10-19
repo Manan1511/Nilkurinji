@@ -21,12 +21,12 @@ describe("homepage carousel copy", () => {
     expect(slides[0]?.heading).not.toBe(DRAFT_HOMEPAGE_CONTENT.heading);
   });
 
-  it("keeps the reference homepage hero as one clearly marked preview slide", () => {
+  it("uses one reference-matched hero in the preview storefront", () => {
     const slides = buildHomepageSlides(true, DRAFT_HOMEPAGE_CONTENT);
     expect(slides).toHaveLength(1);
     expect(slides[0]).toMatchObject({
       heading: "The Finest Flavours of India",
-      image: "/images/preview-hero-home.png",
+      image: "/images/preview-hero-home-v3.png",
       imageCaption: "Generated concept image",
       href: "/shop",
     });

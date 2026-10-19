@@ -111,7 +111,10 @@ export default async function CollectionPage({ params }: PageProps) {
       {result.source === "unavailable" ? (
         <div className="notice-card" role="status">{result.reason}</div>
       ) : (
-        <section id="collection-products" className={`collection-page ${isReferenceCollection ? "collection-page--reference" : ""}`}>
+        <section
+          id="collection-products"
+          className={["collection-page", isReferenceCollection && "collection-page--reference", isTea && "collection-page--tea"].filter(Boolean).join(" ")}
+        >
           {isTeaBags && <header className="collection-heading">
             <Leaf aria-hidden="true" />
             <h2>Our Tea Bag Collection</h2>

@@ -155,7 +155,7 @@ export function ProductGrid({
 
         {visibleProducts.length ? (
           <div className="product-grid">
-            {visibleProducts.map((product) => <ProductCard key={product.id} product={product} purchasingEnabled={purchasingEnabled} variant={cardVariant} />)}
+            {visibleProducts.map((product, index) => <ProductCard key={product.id} product={product} purchasingEnabled={purchasingEnabled} variant={cardVariant} revealDelayMs={(index % 2) * 60} />)}
           </div>
         ) : (
           <div className="empty-state empty-state--catalog">

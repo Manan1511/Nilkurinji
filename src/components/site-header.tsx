@@ -52,7 +52,11 @@ export function SiteHeader() {
         </Link>
 
         <Link href="/" className="wordmark" aria-label="Nilkurinji home">
-          <Leaf className="wordmark__mark" aria-hidden="true" />
+          <span className="wordmark__mark" aria-hidden="true">
+            <Leaf className="wordmark__leaf wordmark__leaf--left" />
+            <Leaf className="wordmark__leaf wordmark__leaf--center" />
+            <Leaf className="wordmark__leaf wordmark__leaf--right" />
+          </span>
           <span className="wordmark__name">NILKURINJI</span>
           <span className="wordmark__tagline">Premium food &amp; beverages</span>
         </Link>
@@ -83,7 +87,7 @@ export function SiteHeader() {
           <Link href="/wishlist" className="icon-button site-tools__wishlist" aria-label="Your wishlist"><Heart aria-hidden="true" /></Link>
           <Link href="/cart" className="icon-button site-tools__cart" aria-label={`Shopping cart${cartCount ? `, ${cartCount} items` : ""}`}>
             <ShoppingBag aria-hidden="true" />
-            {cartCount > 0 && <span className="cart-count" aria-hidden="true">{cartCount > 99 ? "99+" : cartCount}</span>}
+            {cartCount > 0 && <span key={cartCount} className="cart-count" aria-hidden="true">{cartCount > 99 ? "99+" : cartCount}</span>}
           </Link>
         </div>
       </div>

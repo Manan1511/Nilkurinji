@@ -17,12 +17,17 @@ export type BannerSlide = {
 
 export function BannerCarousel({ slides }: { slides: BannerSlide[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
+
   if (!slides.length) return null;
   const active = slides[activeIndex];
   const goTo = (index: number) => setActiveIndex((index + slides.length) % slides.length);
 
   return (
-    <section className="hero-carousel hero-carousel--home" aria-label="Featured stories">
+    <section
+      className="hero-carousel hero-carousel--home"
+      aria-label="Featured stories"
+      aria-roledescription="carousel"
+    >
       <div className="hero-carousel__slide" role="group" aria-roledescription="slide" aria-label={`${activeIndex + 1} of ${slides.length}`} aria-live="polite">
         <div key={activeIndex} className="hero-carousel__copy">
           <p className="eyebrow hero-carousel__eyebrow">{active.eyebrow}</p>
@@ -62,6 +67,7 @@ export function BannerCarousel({ slides }: { slides: BannerSlide[] }) {
             sizes="(max-width: 767px) 100vw, 55vw"
             className="hero-carousel__image"
           />}
+          {active.imageCaption && <span className="hero-carousel__image-caption">{active.imageCaption}</span>}
         </div>
       </div>
     </section>
