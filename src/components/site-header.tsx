@@ -13,13 +13,6 @@ export function SiteHeader() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
-  const headerVariant = pathname === "/"
-    ? "site-header--home"
-    : pathname === "/collections/tea"
-      ? "site-header--compact site-header--tea"
-      : pathname === "/collections/tea-bags"
-        ? "site-header--compact site-header--tea-bags"
-        : "site-header--compact";
 
   useEffect(() => {
     let active = true;
@@ -41,7 +34,7 @@ export function SiteHeader() {
   }, []);
 
   return (
-    <header className={`site-header ${headerVariant}`}>
+    <header className="site-header">
       <div className="site-header__utility-row mx-auto w-full max-w-[1360px] px-5 md:px-10">
         <button
           className="icon-button site-header__menu"
