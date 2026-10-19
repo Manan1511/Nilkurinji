@@ -102,6 +102,7 @@ export default async function CollectionPage({ params }: PageProps) {
           imageAlt={collection?.image?.altText || `${label} collection still life in the Nilgiri hills`}
           ctaLabel={isTea ? "Explore all teas" : "Explore tea bags"}
           className={`collection-hero--${handle}`}
+          annotation={isTea ? "Good Tea\nBetter Days" : undefined}
         />
       ) : <header className="page-header">
           <p className="eyebrow">The Nilkurinji pantry</p>

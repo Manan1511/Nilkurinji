@@ -62,7 +62,6 @@ export default async function HomePage() {
           <p className="eyebrow">{preview ? "Featured products" : "Nilkurinji catalogue"}</p>
           <h2 id="home-featured-heading">{preview ? "Our Best Sellers" : content?.featuredProductsHeading || "Shop products"}</h2>
           <p className="home-featured__description">{preview ? "Timeless classics, loved by many." : "Explore the foods and beverages in our pantry."}</p>
-          <Link href="/shop" className="home-featured__shop-all">Shop all <ArrowRight aria-hidden="true" size={15} /></Link>
         </div>
         <div className="home-featured__products">
           {productsResult.source === "unavailable" ? (

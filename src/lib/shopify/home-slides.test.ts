@@ -27,7 +27,7 @@ describe("homepage carousel copy", () => {
     expect(slides[0]).toMatchObject({
       heading: "The Finest Flavours of India",
       image: "/images/preview-hero-home-v3.png",
-      imageCaption: "Generated concept image",
+      imageCaption: "",
       href: "/shop",
     });
   });

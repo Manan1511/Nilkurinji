@@ -11,7 +11,7 @@ export function buildHomepageSlides(preview: boolean, content: HomepageContent |
         description: DRAFT_HOMEPAGE_CONTENT.description,
         image: "/images/preview-hero-home-v3.png",
         imageAlt: "Illustrative Nilkurinji tea still life overlooking green Nilgiri hills",
-        imageCaption: "Generated concept image",
+        imageCaption: "",
         href: "/shop",
       },
     ];
