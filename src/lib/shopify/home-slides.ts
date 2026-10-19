@@ -9,7 +9,7 @@ export function buildHomepageSlides(preview: boolean, content: HomepageContent |
         eyebrow: DRAFT_HOMEPAGE_CONTENT.eyebrow,
         heading: DRAFT_HOMEPAGE_CONTENT.heading,
         description: DRAFT_HOMEPAGE_CONTENT.description,
-        image: "/images/preview-hero-home-v3.png",
+        image: "/images/preview-hero-home-v4.png",
         imageAlt: "Illustrative Nilkurinji tea still life overlooking green Nilgiri hills",
         imageCaption: "",
         href: "/shop",

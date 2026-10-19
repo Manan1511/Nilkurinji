@@ -26,7 +26,7 @@ describe("homepage carousel copy", () => {
     expect(slides).toHaveLength(1);
     expect(slides[0]).toMatchObject({
       heading: "The Finest Flavours of India",
-      image: "/images/preview-hero-home-v3.png",
+      image: "/images/preview-hero-home-v4.png",
       imageCaption: "",
       href: "/shop",
     });

@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, BadgeCheck, Landmark, Leaf, Truck } from "lucide-react";
+import { ArrowRight, Landmark, Leaf, ShieldCheck, Truck } from "lucide-react";
 import { BannerCarousel } from "@/components/banner-carousel";
+import { BrandMark } from "@/components/brand-mark";
 import { BotanicalFrame } from "@/components/botanical-frame";
 import { FeaturedProductsCarousel } from "@/components/featured-products-carousel";
 import { getProducts } from "@/lib/shopify/catalog";
@@ -42,14 +43,14 @@ export default async function HomePage() {
       <section className="category-section" aria-labelledby="home-categories-heading">
         <BotanicalFrame className="botanical-frame--categories" />
         <div className="category-section__heading">
-          <Leaf aria-hidden="true" className="category-section__mark" />
+          <BrandMark className="category-section__mark" />
           <div className="category-section__title-row"><span /><h2 id="home-categories-heading">Our Categories</h2><span /></div>
           <p>A wholesome range of premium foods, inspired by nature.</p>
         </div>
         <nav className="category-shelf mx-auto" aria-label="Shop by category">
           {CATEGORIES.map((category, index) => (
             <Link key={category.handle} href={category.href} className={`category-shelf__tile category-shelf__tile--${category.handle}`} data-scroll-reveal="category" data-scroll-reveal-delay={index * 42}>
-              <span className="category-shelf__image"><Image src={category.handle === "tea" ? "/images/preview-hero-tea.webp" : `/images/category-${category.handle}.png`} alt="" fill sizes="(max-width: 640px) 72px, 100px" priority={index === 0} /></span>
+              <span className="category-shelf__image"><Image src={`/images/category-icon-${category.handle}.png`} alt="" fill sizes="(max-width: 640px) 72px, 100px" priority={index === 0} /></span>
               <span className="category-shelf__label">{category.label}<ArrowRight aria-hidden="true" size={13} /></span>
             </Link>
           ))}
@@ -62,6 +63,9 @@ export default async function HomePage() {
           <p className="eyebrow">{preview ? "Featured products" : "Nilkurinji catalogue"}</p>
           <h2 id="home-featured-heading">{preview ? "Our Best Sellers" : content?.featuredProductsHeading || "Shop products"}</h2>
           <p className="home-featured__description">{preview ? "Timeless classics, loved by many." : "Explore the foods and beverages in our pantry."}</p>
+          <Link href="/shop" className="button button--outline home-featured__shop">
+            Shop all <ArrowRight aria-hidden="true" size={15} />
+          </Link>
         </div>
         <div className="home-featured__products">
           {productsResult.source === "unavailable" ? (
@@ -83,7 +87,7 @@ export default async function HomePage() {
           <article className="benefit" data-scroll-reveal="benefit" data-scroll-reveal-delay="0">
             <Leaf aria-hidden="true" className="benefit__icon" />
             <h2>{preview ? "100% Natural Ingredients" : "Ingredients"}</h2>
-            <p>{preview ? "Pure, safe, wholesome." : "Find ingredients and product details on every listing."}</p>
+            <p>{preview ? "Pure, Safe, Wholesome." : "Find ingredients and product details on every listing."}</p>
           </article>
           <article className="benefit" data-scroll-reveal="benefit" data-scroll-reveal-delay="55">
             <Landmark aria-hidden="true" className="benefit__icon" />
@@ -91,9 +95,9 @@ export default async function HomePage() {
             <p>{preview ? "Tradition in every cup." : "Learn about Nilkurinji and the pantry we are building."}</p>
           </article>
           <article className="benefit" data-scroll-reveal="benefit" data-scroll-reveal-delay="110">
-            <BadgeCheck aria-hidden="true" className="benefit__icon" />
+            <ShieldCheck aria-hidden="true" className="benefit__icon" />
             <h2>{preview ? "Premium Quality" : "Product details"}</h2>
-            <p>{preview ? "Carefully sourced. Always." : "Review available product information before purchase."}</p>
+            <p>{preview ? "Carefully sourced, Always." : "Review available product information before purchase."}</p>
           </article>
           <article className="benefit" data-scroll-reveal="benefit" data-scroll-reveal-delay="165">
             <Truck aria-hidden="true" className="benefit__icon" />

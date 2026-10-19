@@ -1,14 +1,18 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { CATEGORIES } from "@/lib/site-config";
+import { BrandMark } from "@/components/brand-mark";
 import type { SocialLink } from "@/lib/shopify/social-links";
 
 export function SiteFooter({ socialLinks = [], preview = false }: { socialLinks?: SocialLink[]; preview?: boolean }) {
   return (
     <footer className="site-footer">
-      <div className="mx-auto grid w-full max-w-[1360px] gap-12 px-5 py-14 md:grid-cols-[1.4fr_1fr_1fr] md:px-10 md:py-20">
+      <div className="site-footer__inner mx-auto grid w-full max-w-[1360px] gap-12 px-5 py-14 md:grid-cols-[1.4fr_1fr_1fr] md:px-10 md:py-20">
         <div className="site-footer__brand">
-          <Link href="/" className="wordmark wordmark--footer">Nilkurinji<span className="wordmark__period">.</span></Link>
+          <Link href="/" className="site-footer__wordmark" aria-label="Nilkurinji home">
+            <BrandMark className="site-footer__brand-mark" />
+            <span>NILKURINJI<span className="wordmark__period">.</span></span>
+          </Link>
           <p>{preview ? "A thoughtful pantry for the everyday table." : "Tea, tea bags, rice, snacks and other foods."}</p>
           {preview && <p className="site-footer__note">Illustrative imagery is used in the storefront preview.</p>}
           {socialLinks.length > 0 && (
@@ -20,7 +24,7 @@ export function SiteFooter({ socialLinks = [], preview = false }: { socialLinks?
           )}
         </div>
 
-        <div>
+        <div className="site-footer__column">
           <h2 className="site-footer__heading">Explore</h2>
           <ul className="site-footer__links">
             <li><Link href="/shop">Shop all</Link></li>
@@ -28,7 +32,7 @@ export function SiteFooter({ socialLinks = [], preview = false }: { socialLinks?
           </ul>
         </div>
 
-        <div>
+        <div className="site-footer__column">
           <h2 className="site-footer__heading">The essentials</h2>
           <ul className="site-footer__links">
             <li><Link href="/about">About Nilkurinji</Link></li>

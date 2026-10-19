@@ -31,7 +31,7 @@ export function BannerCarousel({ slides }: { slides: BannerSlide[] }) {
       <div className="hero-carousel__slide" role="group" aria-roledescription="slide" aria-label={`${activeIndex + 1} of ${slides.length}`} aria-live="polite">
         <div key={activeIndex} className="hero-carousel__copy">
           <p className="eyebrow hero-carousel__eyebrow">{active.eyebrow}</p>
-          <h1>{active.heading}</h1>
+          <h1>{active.heading === "The Finest Flavours of India" ? <>The Finest<br />Flavours of India</> : active.heading}</h1>
           <p className="hero-carousel__description">{active.description}</p>
           <Link href={active.href} className="button button--dark">
             Explore our range <ArrowRight aria-hidden="true" size={17} />
@@ -64,7 +64,7 @@ export function BannerCarousel({ slides }: { slides: BannerSlide[] }) {
             alt={active.imageAlt}
             fill
             priority={activeIndex === 0}
-            sizes="(max-width: 767px) 100vw, 55vw"
+            sizes="100vw"
             className="hero-carousel__image"
           />}
           {active.imageCaption && <span className="hero-carousel__image-caption">{active.imageCaption}</span>}

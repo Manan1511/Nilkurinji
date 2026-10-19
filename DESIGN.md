@@ -70,15 +70,15 @@ components:
 
 **Creative North Star: “The Quiet Pantry Editorial”**
 
-The storefront pairs warm paper and restrained botanical greens with food photography, clear product information, and a Playfair Display editorial voice. Spacious desktop framing gives way to compact mobile composition while retaining the centered wordmark, full-bleed landscape hero, five circular category images, best-seller carousel, and dark benefits band on the home page.
+The storefront pairs warm paper and restrained botanical greens with food photography, clear product information, and a Playfair Display editorial voice. The home page moves from its landscape hero and five circular category images into a left-aligned Best Sellers introduction beside a horizontal product carousel, then a dark benefits band. The wide-desktop carousel presents four compact product cards in its first view.
 
-The implementation is deliberately light on surface effects. Hairline olive-toned borders, open product imagery, and tonal backgrounds provide structure. Utility and purchase information remains in Arial. The local storefront currently labels illustrative copy and imagery as preview content and disables purchases.
+The implementation is deliberately light on surface effects. Hairline olive-toned borders, open catalog imagery, and tonal backgrounds provide structure; the homepage featured cards use a small paper panel as a surface-specific exception. Utility and purchase information remains in Arial. Product cards pair type, title, INR-formatted price, and a compact cart control. The local storefront currently labels illustrative copy and imagery as preview content and disables purchases.
 
 **Key Characteristics:**
 - Warm cream surfaces with deep green text and controls.
 - Playfair Display for brand and editorial headings; Arial for utility text.
-- Image-led catalog with flat cards and fine separators.
-- A centered brand header and responsive, manually controlled home carousel.
+- Image-led catalog with flat cards and fine separators; homepage featured cards use a restrained bordered paper surface.
+- A centered brand header and responsive, manually controlled four-card home carousel.
 
 ## Colors
 
@@ -123,7 +123,7 @@ The palette centers on warm cream and layered forest greens, with muted sage and
 
 ## Layout
 
-The main content frame caps at `1360px`, with `40px` desktop gutters in wide sections. The homepage hero spans the viewport, layers its copy over the left side of a Nilgiri landscape, and ranges from `340px` to `430px` tall on desktop. Tea and tea-bag collections use matching landscape banners. The category shelf is five equal columns; the home carousel shows four cards at desktop widths, and collection listings use three cards beside a filter rail. At `760px` and below, the header becomes a compact menu/wordmark/tools row, the hero keeps its landscape image beneath a cream copy veil, categories remain five across, product browsing narrows to two cards, and benefits form a two-by-two grid. At `360px`, spacing and wordmark sizing tighten again. The overall spacing is generous on long-form sections (`clamp(58px, 8vw, 106px)`) and intentionally compact on the homepage reference composition.
+The main content frame caps at `1360px`, with `40px` desktop gutters in wide sections. The homepage hero spans the viewport, layers its copy over the left side of a Nilgiri landscape, and ranges from `240px` to `290px` tall on desktop and `400px` to `470px` on mobile. Tea and tea-bag collections use matching landscape banners. The category shelf is five equal columns; below it, the Best Sellers intro occupies a narrow left column while the product carousel shows four cards in its desktop first view. Collection listings use three cards beside a filter rail. At `760px` and below, the header becomes a compact menu/wordmark/tools row, categories remain five across, the carousel shows two cards, product browsing narrows to two cards, and benefits form a two-by-two grid. The footer uses a compact forest-green field with botanical line art; the excluded newsletter is not shown. At `360px`, spacing and wordmark sizing tighten again. The overall spacing is generous on long-form sections (`clamp(58px, 8vw, 106px)`) and intentionally compact on the homepage reference composition.
 
 ## Elevation & Depth
 
@@ -138,7 +138,7 @@ The home and collection banners make one authored entrance: the copy settles upw
 
 ## Shapes
 
-Most controls and form fields are square or nearly square (`2px` button radius and zero-radius selects). The hero’s main action and category imagery are deliberate exceptions: the action is pill-shaped, category images are circular, and icon controls are circular. Borders are thin and muted; image containers clip their contents.
+Most controls and form fields are square or nearly square (`2px` button radius and zero-radius selects). The hero’s main action and category imagery are deliberate exceptions: the action is pill-shaped, category images are circular, and icon controls are circular. Homepage featured product cards have a small `5px` corner radius, unlike open catalog cards. Borders are thin and muted; image containers clip their contents.
 
 ## Components
 
@@ -149,11 +149,11 @@ Most controls and form fields are square or nearly square (`2px` button radius a
 - **Secondary / Ghost:** Outline buttons retain a forest border and transparent fill; icon controls remain transparent until a sage hover surface.
 
 ### Cards / Containers
-- **Corner Style:** Product and category image frames are square-cornered except the circular home-category thumbnails.
+- **Corner Style:** Catalog product cards and image frames are square-cornered except the circular home-category thumbnails; homepage featured cards use a small `5px` radius.
 - **Background:** Cream page ground; sage fallbacks; subtle warm neutral behind image and cart surfaces.
 - **Shadow Strategy:** Flat; no shadows.
-- **Border:** Thin separators structure sections and lists; product cards stay open without a surrounding border.
-- **Internal Padding:** Product details begin with `13px` top padding; homepage feature and category sections use dedicated tighter spacing.
+- **Border:** Thin separators structure sections and lists; catalog cards stay open without a surrounding border. Homepage featured cards use a fine warm border.
+- **Internal Padding:** Catalog product details begin with `13px` top padding; homepage featured-card details use compact `8px 9px 7px` padding.
 
 ### Inputs / Fields
 - **Style:** Paper-filled selects and fields use a thin line border, square corners, and ink text.
@@ -164,10 +164,10 @@ Most controls and form fields are square or nearly square (`2px` button radius a
 - **Style:** A centered Playfair wordmark and a centered lower navigation row, with search at left and shop tools at right on desktop. Current links use forest color and a fine underline. On mobile the nav becomes a collapsible full-width vertical list beneath the compact utility row.
 
 ### Homepage Editorial Stack
-The homepage signature is the centered logo header, full-bleed landscape hero, centered five-image category shelf, best-seller introduction beside a horizontal product carousel, and a full-width forest benefits strip. Keep this sequence for the home surface; do not impose it on catalog or policy pages.
+The homepage signature is the centered logo header, full-bleed landscape hero, centered five-image category shelf, left-side Best Sellers introduction beside a horizontal product carousel, and a full-width benefits strip. At wide desktop widths, show four cards in the first view; the carousel shows three cards at intermediate widths and two on mobile. Each card places product type, title, and INR price beside a compact circular cart control. On mobile, center the introduction. Keep this sequence for the home surface; do not impose it on catalog or policy pages.
 
 ### Image and Product Cards
-Product cards keep imagery open and text directly beneath it. Preview items have a small paper badge, image zoom is restrained, and their purchase action remains disabled until live commerce is configured.
+Catalog cards keep imagery open and text directly beneath it. Homepage featured cards use a restrained bordered paper panel with a wide image and compact product details. Product type, title, and localized INR price remain legible, with the cart action aligned beside the details. Preview items have a small paper badge, image zoom is restrained, and purchase actions remain disabled until live commerce is configured.
 
 ## Do's and Don'ts
 
@@ -180,6 +180,6 @@ Product cards keep imagery open and text directly beneath it. Preview items have
 
 ### Don't:
 - **Don't** add resting shadows; the system uses tonal fields and hairline rules for depth.
-- **Don't** wrap open product cards in heavy panels or oversized rounded cards.
+- **Don't** wrap catalog product cards in heavy panels or oversized rounded cards; reserve the small paper panel for the homepage featured-card variant.
 - **Don't** use preview copy or imagery as verified product, ingredient, quality, or shipping claims.
 - **Don't** enable checkout in local preview mode.

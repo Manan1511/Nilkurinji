@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Heart, Leaf, Menu, Search, ShoppingBag, UserRound, X } from "lucide-react";
+import { Heart, Menu, Search, ShoppingBag, UserRound, X } from "lucide-react";
+import { BrandMark } from "@/components/brand-mark";
 import { PRIMARY_NAV } from "@/lib/site-config";
 
 type CartResponse = { cart?: { totalQuantity?: number } | null };
@@ -12,6 +13,13 @@ export function SiteHeader() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+  const headerVariant = pathname === "/"
+    ? "site-header--home"
+    : pathname === "/collections/tea"
+      ? "site-header--compact site-header--tea"
+      : pathname === "/collections/tea-bags"
+        ? "site-header--compact site-header--tea-bags"
+        : "site-header--compact";
 
   useEffect(() => {
     let active = true;
@@ -33,7 +41,7 @@ export function SiteHeader() {
   }, []);
 
   return (
-    <header className="site-header">
+    <header className={`site-header ${headerVariant}`}>
       <div className="site-header__utility-row mx-auto w-full max-w-[1360px] px-5 md:px-10">
         <button
           className="icon-button site-header__menu"
@@ -52,11 +60,7 @@ export function SiteHeader() {
         </Link>
 
         <Link href="/" className="wordmark" aria-label="Nilkurinji home">
-          <span className="wordmark__mark" aria-hidden="true">
-            <Leaf className="wordmark__leaf wordmark__leaf--left" />
-            <Leaf className="wordmark__leaf wordmark__leaf--center" />
-            <Leaf className="wordmark__leaf wordmark__leaf--right" />
-          </span>
+          <BrandMark className="wordmark__mark" />
           <span className="wordmark__name">NILKURINJI</span>
           <span className="wordmark__tagline">Premium food &amp; beverages</span>
         </Link>

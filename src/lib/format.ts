@@ -7,9 +7,10 @@ export function formatMoney(money: ShopifyMoney): string {
     return new Intl.NumberFormat("en-IN", {
       style: "currency",
       currency: money.currencyCode,
+      minimumFractionDigits: Number.isInteger(amount) ? 0 : 2,
       maximumFractionDigits: 2,
     }).format(amount);
   } catch {
-    return `${money.currencyCode} ${amount.toFixed(2)}`;
+    return `${money.currencyCode} ${Number.isInteger(amount) ? amount : amount.toFixed(2)}`;
   }
 }

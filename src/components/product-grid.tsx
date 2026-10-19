@@ -80,18 +80,6 @@ export function ProductGrid({
 
   return (
     <div className="catalog-page">
-      {topFilters && <nav className="collection-type-nav" aria-label="Filter teas by type">
-        {topFilters.map((filter) => {
-          const Icon = FILTER_ICON[filter.icon];
-          const active = filter.value === "all" ? !(selectedFacets.type?.length) : selectedFacets.type?.includes(filter.value) ?? false;
-          return (
-            <button key={filter.value} type="button" aria-pressed={active} className={active ? "is-active" : ""} onClick={() => setSelectedFacets((current) => ({ ...current, type: filter.value === "all" ? [] : [filter.value] }))}>
-              <Icon aria-hidden="true" size={22} />
-              <span>{filter.label}</span>
-            </button>
-          );
-        })}
-      </nav>}
       <div className={`catalog-layout ${showFilters ? "" : "catalog-layout--unfiltered"}`}>
       {showFilters && (
         <aside className={`catalog-filter ${filtersOpen ? "catalog-filter--open" : ""}`}>
@@ -141,6 +129,18 @@ export function ProductGrid({
       )}
 
       <div className="catalog-results">
+        {topFilters && <nav className="collection-type-nav" aria-label="Filter teas by type">
+          {topFilters.map((filter) => {
+            const Icon = FILTER_ICON[filter.icon];
+            const active = filter.value === "all" ? !(selectedFacets.type?.length) : selectedFacets.type?.includes(filter.value) ?? false;
+            return (
+              <button key={filter.value} type="button" aria-pressed={active} className={active ? "is-active" : ""} onClick={() => setSelectedFacets((current) => ({ ...current, type: filter.value === "all" ? [] : [filter.value] }))}>
+                <Icon aria-hidden="true" size={22} />
+                <span>{filter.label}</span>
+              </button>
+            );
+          })}
+        </nav>}
         {showToolbar && <div className="catalog-toolbar">
           <p>{visibleProducts.length ? `${visibleProducts.length} ${visibleProducts.length === 1 ? "item" : "items"}` : "A quieter shelf"}</p>
           <label className="sort-control">Sort by

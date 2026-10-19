@@ -33,7 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const base = metadataBase();
   const homepage = await getHomepageContent();
   const image = mode.mode === "preview"
-    ? "/images/preview-hero-home-v3.png"
+    ? "/images/preview-hero-home-v4.png"
     : homepage.source === "shopify" ? homepage.data.heroImage?.url : undefined;
   return {
     ...(base ? { metadataBase: base } : {}),

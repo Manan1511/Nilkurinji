@@ -55,9 +55,9 @@ function TeaBenefits() {
   return (
     <section className="benefits-band home-benefits collection-benefits" aria-label="Nilkurinji tea benefits">
       <div className="benefits-band__inner mx-auto w-full max-w-[1360px] px-5 md:px-10">
-        <article className="benefit"><Leaf aria-hidden="true" className="benefit__icon" /><h2>100% Natural Ingredients</h2><p>Pure. Safe. Wholesome.</p></article>
+        <article className="benefit"><Leaf aria-hidden="true" className="benefit__icon" /><h2>100% Natural Ingredients</h2><p>Pure, Safe, Wholesome.</p></article>
         <article className="benefit"><Landmark aria-hidden="true" className="benefit__icon" /><h2>Authentic Indian Heritage</h2><p>Tradition in every cup.</p></article>
-        <article className="benefit"><BadgeCheck aria-hidden="true" className="benefit__icon" /><h2>Premium Quality</h2><p>Carefully sourced. Always.</p></article>
+        <article className="benefit"><BadgeCheck aria-hidden="true" className="benefit__icon" /><h2>Premium Quality</h2><p>Carefully sourced, Always.</p></article>
       </div>
     </section>
   );

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-18T23:08:00+05:30",
+  "generatedAt": "2026-10-19T00:00:00+05:30",
   "title": "Design System: Nilkurinji",
   "extensions": {
     "colorMeta": {
@@ -70,6 +70,13 @@
       "css": ".ds-product-card { min-width: 0; color: var(--ink); } .ds-product-card__image { aspect-ratio: .82; overflow: hidden; background: var(--sage); transition: background .18s ease; } .ds-product-card:hover .ds-product-card__image { background: var(--line); } .ds-product-card__category { margin: 13px 0 0; color: var(--muted); font: 9px/1.4 Arial, Helvetica, sans-serif; } .ds-product-card h3 { margin: 5px 0; color: var(--forest-deep); font: 400 21px/1.15 Georgia, 'Times New Roman', serif; } .ds-product-card a { color: var(--forest); font: 700 10px/1.4 Arial, Helvetica, sans-serif; letter-spacing: .08em; text-decoration: none; text-transform: uppercase; } .ds-product-card a:hover { color: var(--ochre); } .ds-product-card a:focus-visible { outline: 2px solid var(--ochre); outline-offset: 4px; }"
     },
     {
+      "name": "Homepage Featured Product Card",
+      "kind": "card",
+      "description": "Compact bordered paper card with product type, title, localized price, and a circular cart action.",
+      "html": "<article class=\"ds-featured-card\"><div class=\"ds-featured-card__image\" aria-hidden=\"true\"></div><div class=\"ds-featured-card__details\"><div><p>Tea</p><h3>Nilkurinji Pantry</h3><strong>₹1,250</strong></div><button type=\"button\" aria-label=\"Add to cart\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 5v14M5 12h14\"/></svg></button></div></article>",
+      "css": ".ds-featured-card { overflow: hidden; border: 1px solid #ddd5c2; border-radius: 5px; background: #f8f5ed; color: var(--ink); } .ds-featured-card__image { aspect-ratio: 1.7; background: #eee9dc; } .ds-featured-card__details { display: grid; grid-template-columns: minmax(0, 1fr) 33px; align-items: center; gap: 2px 6px; padding: 8px 9px 7px; } .ds-featured-card p { margin: 0; color: var(--muted); font: 8px/1.4 Arial, Helvetica, sans-serif; } .ds-featured-card h3 { margin: 2px 0; color: var(--forest-deep); font: 400 14px/1.15 Georgia, 'Times New Roman', serif; } .ds-featured-card strong { color: var(--forest); font: 600 11px/1.3 Arial, Helvetica, sans-serif; } .ds-featured-card button { width: 32px; height: 32px; display: grid; place-items: center; border: 1px solid var(--forest); border-radius: 50%; background: var(--forest); color: var(--paper); cursor: pointer; transition: background .18s ease, transform .15s ease; } .ds-featured-card button svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.7; } .ds-featured-card button:hover { background: var(--forest-deep); } .ds-featured-card button:focus-visible { outline: 2px solid var(--ochre); outline-offset: 4px; } .ds-featured-card button:active { transform: scale(.985); }"
+    },
+    {
       "name": "Circular Category Tile",
       "kind": "custom",
       "description": "One of five centered image links in the homepage category shelf.",
@@ -86,14 +93,14 @@
   ],
   "narrative": {
     "northStar": "The Quiet Pantry Editorial",
-    "overview": "The storefront pairs warm paper and restrained botanical greens with food photography, clear product information, and a Playfair Display editorial voice. Spacious desktop framing gives way to compact mobile composition while retaining the centered wordmark, full-bleed landscape hero, five circular category images, best-seller carousel, and dark benefits band on the home page.\n\nThe implementation is deliberately light on surface effects. Hairline olive-toned borders, open product imagery, and tonal backgrounds provide structure. Utility and purchase information remains in Arial. The local storefront currently labels illustrative copy and imagery as preview content and disables purchases.",
-    "keyCharacteristics": ["Warm cream surfaces with deep green text and controls.", "Playfair Display for brand and editorial headings; Arial for utility text.", "Image-led catalog with flat cards and fine separators.", "Centered brand header and responsive manual home carousel."],
+    "overview": "The storefront pairs warm paper and restrained botanical greens with food photography, clear product information, and a Playfair Display editorial voice. The home page moves from its landscape hero and five circular category images into a left-aligned Best Sellers introduction beside a horizontal product carousel, then a dark benefits band. The wide-desktop carousel presents four compact product cards in its first view. The hero is 240 to 290px tall on desktop and 400 to 470px on mobile.\n\nThe implementation is deliberately light on surface effects. Hairline olive-toned borders, open catalog imagery, and tonal backgrounds provide structure; homepage featured cards use a small paper panel as a surface-specific exception. The shared footer uses a compact forest-green field and botanical line art, without the excluded newsletter. Utility and purchase information remains in Arial. Product cards pair type, title, INR-formatted price, and a compact cart control. The local storefront currently labels illustrative copy and imagery as preview content and disables purchases.",
+    "keyCharacteristics": ["Warm cream surfaces with deep green text and controls.", "Playfair Display for brand and editorial headings; Arial for utility text.", "Open catalog cards with a restrained bordered featured-card variant on the homepage.", "Centered brand header and responsive four-card home carousel."],
     "rules": [
       { "name": "The Paper-and-Botanical Rule", "body": "Use cream and green as the dominant field; keep ochre to small markers and status details.", "section": "colors" },
       { "name": "The Serif-and-Utility Rule", "body": "Keep Playfair Display for the wordmark and editorial titles; use Arial for navigation, body copy, prices, and controls.", "section": "typography" },
       { "name": "The Flat-by-Default Rule", "body": "Use background contrast and separators for grouping; do not introduce resting shadows.", "section": "elevation" }
     ],
     "dos": ["Use the CSS variables in src/app/globals.css as the canonical color source.", "Preserve the centered wordmark and homepage section order.", "Respect prefers-reduced-motion for scrolling and transitions.", "Label preview imagery and copy; keep purchases disabled in preview mode."],
-    "donts": ["Do not add resting shadows.", "Do not wrap open product cards in heavy panels or oversized rounded cards.", "Do not treat preview copy or imagery as verified product, ingredient, quality, or shipping claims.", "Do not enable checkout in local preview mode."]
+    "donts": ["Do not add resting shadows.", "Do not wrap catalog product cards in heavy panels or oversized rounded cards; reserve the small paper panel for the homepage featured-card variant.", "Do not treat preview copy or imagery as verified product, ingredient, quality, or shipping claims.", "Do not enable checkout in local preview mode."]
   }
 }
