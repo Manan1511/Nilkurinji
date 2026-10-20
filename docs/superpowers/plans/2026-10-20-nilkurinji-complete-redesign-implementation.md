@@ -1,8 +1,8 @@
 # Nilkurinji Complete Redesign Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans for the previously chosen native implementation method. Use superpowers:subagent-driven-development only if the owner changes that method. Steps use checkbox syntax for tracking.
+> **For agentic workers:** The owner requested implementation on 20 October 2026. Use superpowers:executing-plans for the chosen native method. Steps use checkbox syntax for traceability; see the handover and review matrix for what is implemented and what still needs rendered-owner review.
 
-**Status:** detailed proposed plan, not an instruction to start building. The owner requested more planning detail. Visual direction and the chosen comps still need review before production UI implementation.
+**Status:** source implementation is complete on `codex/storefront-redesign`. The supplied direction was implemented as the editorial tea shop described in the spec. Automated source checks and the production build pass. Rendered desktop/mobile review, fresh local preview startup, performance measurement, Shopify Admin setup, payment tests, and launch gates remain open. Do not treat this status as visual sign-off.
 
 **Goal:** replace the complete storefront presentation with a compact, contemporary premium tea experience while preserving the logo, green identity and working Shopify commerce boundaries.
 
@@ -10,7 +10,7 @@
 
 **Tech stack:** installed Next.js 16.4, React 19, TypeScript, Tailwind 4, CSS Modules, lucide-react, Vitest and the existing jsdom environment. Netlify remains the deployment target. No platform migration or dependency upgrade is part of this plan.
 
-**Spec:** [complete design contract](../specs/2026-10-20-nilkurinji-complete-redesign-design.md). Read it with this plan; it owns the appearance, page sequence and state behavior.
+**Spec:** [complete design contract](../specs/2026-10-20-nilkurinji-complete-redesign-design.md). Read it with this plan; it owns the appearance, page sequence and state behavior. Implementation evidence is recorded in [the review matrix](../../design/redesign-v2/review-matrix.md) and [the handover](../../design/redesign-v2/handover.md).
 
 Read the spec's visual concepts, page blueprints and rendered review matrix before the task list. The engineering contracts below support that design; they are not a substitute for choosing its composition.
 
@@ -28,7 +28,7 @@ Read the spec's visual concepts, page blueprints and rendered review matrix befo
 - Keep Tea Guide, Recipes, Journal and newsletter excluded. Contact stays link-based; accounts stay Shopify-hosted.
 - Read applicable installed guides in node_modules/next/dist/docs before changing Next APIs. This project does not opt into a new caching model as part of the redesign.
 - Respect the existing CUA/Playwright/CDP restriction. Plan native-browser evidence with the owner; do not quietly introduce browser automation.
-- No production source, dependency install, deployment, DNS change or Shopify configuration change during this planning task.
+- The original planning turn made no production source, dependency, deployment, DNS, or Shopify configuration changes. The owner later explicitly authorized the storefront source implementation; external deployment, DNS, Shopify Admin, and payment operations remain outside that authorization.
 - Commit verified milestones locally and only stage their exact files. Push/deploy only with the applicable authorization. Preserve unrelated dirty changes.
 
 ## 2. Review focus

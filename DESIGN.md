@@ -1,185 +1,189 @@
 ---
-name: Nilkurinji
-description: A quiet pantry editorial in warm paper, botanical greens, and Playfair serif.
+name: Nilkurinji Storefront
+description: An editorial tea and pantry storefront with a restrained green identity.
 colors:
-  cream: "#f7f5ee"
-  paper: "#fbfaf6"
-  ink: "#242d24"
   forest: "#254434"
-  forest-deep: "#1c3327"
-  sage: "#e5e9dc"
-  sage-ink: "#536852"
-  line: "#d9ded2"
-  muted: "#71786d"
-  ochre: "#b78049"
+  forest-hover: "#1c3327"
+  paper: "#fafbf8"
+  paper-soft: "#f4f6f1"
+  ink: "#242d24"
+  ink-secondary: "#526356"
+  divider: "#d7ded7"
+  error: "#9f3434"
 typography:
   display:
-    fontFamily: "Playfair Display, Georgia, Iowan Old Style, Times New Roman, serif"
-    fontSize: "clamp(38px, 3.7vw, 49px)"
+    fontFamily: "Newsreader, Georgia, serif"
+    fontSize: "clamp(48px, 4.6vw, 68px)"
     fontWeight: 400
-    lineHeight: 0.98
-    letterSpacing: "-0.027em"
+    lineHeight: 1.08
+    letterSpacing: "-0.025em"
   headline:
-    fontFamily: "Playfair Display, Georgia, Iowan Old Style, Times New Roman, serif"
-    fontSize: "clamp(34px, 3.1vw, 42px)"
-    fontWeight: 400
-    lineHeight: 1.03
-  title:
-    fontFamily: "Playfair Display, Georgia, Iowan Old Style, Times New Roman, serif"
-    fontSize: "21px"
+    fontFamily: "Newsreader, Georgia, serif"
+    fontSize: "clamp(32px, 3vw, 44px)"
     fontWeight: 400
     lineHeight: 1.15
-  body:
-    fontFamily: "Arial, Helvetica, sans-serif"
-    fontSize: "15px"
+  title:
+    fontFamily: "Newsreader, Georgia, serif"
+    fontSize: "22px"
     fontWeight: 400
-    lineHeight: 1.55
+    lineHeight: 1.3
+  body:
+    fontFamily: "Manrope, Arial, sans-serif"
+    fontSize: "16px"
+    fontWeight: 400
+    lineHeight: 1.6
+  input:
+    fontFamily: "Manrope, Arial, sans-serif"
+    fontSize: "16px"
+    fontWeight: 400
+    lineHeight: 1.5
   label:
-    fontFamily: "Arial, Helvetica, sans-serif"
-    fontSize: "10px"
-    fontWeight: 700
-    letterSpacing: "0.16em"
+    fontFamily: "Manrope, Arial, sans-serif"
+    fontSize: "14px"
+    fontWeight: 500
+    lineHeight: 1.4
+  action:
+    fontFamily: "Manrope, Arial, sans-serif"
+    fontSize: "14px"
+    fontWeight: 600
+    lineHeight: 1.4
 rounded:
-  sm: "2px"
-  pill: "999px"
-  circle: "50%"
+  control: "2px"
 spacing:
-  page-gutter: "40px"
-  section-wide: "clamp(58px, 8vw, 106px)"
+  page-gutter: "20px"
 components:
   button-primary:
     backgroundColor: "{colors.forest}"
     textColor: "{colors.paper}"
-    typography: "{typography.label}"
-    rounded: "{rounded.sm}"
-    padding: "0 22px"
-    height: "48px"
-  button-primary-hover:
-    backgroundColor: "{colors.forest-deep}"
-  button-outline:
+    typography: "{typography.action}"
+    rounded: "{rounded.control}"
+    padding: "12px 22px"
+  button-secondary:
     backgroundColor: "transparent"
     textColor: "{colors.forest}"
-    rounded: "{rounded.sm}"
-    padding: "0 22px"
-    height: "48px"
+    typography: "{typography.action}"
+    rounded: "{rounded.control}"
+    padding: "12px 22px"
+  input-search:
+    backgroundColor: "transparent"
+    textColor: "{colors.ink}"
+    typography: "{typography.input}"
+    rounded: "{rounded.control}"
+    padding: "8px 4px"
+  navigation-primary:
+    textColor: "{colors.ink}"
+    typography: "{typography.label}"
+  product-card:
+    textColor: "{colors.ink}"
+    typography: "{typography.title}"
 ---
 
-# Design System: Nilkurinji
+# Design System: Nilkurinji Storefront
 
 ## Overview
 
-**Creative North Star: “The Quiet Pantry Editorial”**
+**Creative North Star: "The Considered Cup"**
 
-The storefront pairs warm paper and restrained botanical greens with food photography, clear product information, and a Playfair Display editorial voice. The home page moves from its landscape hero and five circular category images into a left-aligned Best Sellers introduction beside a horizontal product carousel, then a dark benefits band. The wide-desktop carousel presents four compact product cards in its first view.
+Nilkurinji keeps its existing logo and forest-green identity. The interface uses editorial type for the product story, clear sans-serif controls for shopping, quiet surfaces, and product imagery as the main visual material. The storefront should feel deliberate through proportion, hierarchy, and alignment rather than ornamental volume.
 
-The implementation is deliberately light on surface effects. Hairline olive-toned borders, open catalog imagery, and tonal backgrounds provide structure; the homepage featured cards use a small paper panel as a surface-specific exception. Utility and purchase information remains in Arial. Product cards pair type, title, INR-formatted price, and a compact cart control. The local storefront currently labels illustrative copy and imagery as preview content and disables purchases.
+The header is compact and consistent across routes. Search opens over the page in a desktop popover and in a mobile sheet. Shop, collections, product detail, and recommendations share the same open card language. Repeated botanical framing, a large masthead, and the circular category shelf were rejected for this redesign. Product packaging and preview prices remain illustrative until approved by the owner.
 
 **Key Characteristics:**
-- Warm cream surfaces with deep green text and controls.
-- Playfair Display for brand and editorial headings; Arial for utility text.
-- Image-led catalog with flat cards and fine separators; homepage featured cards use a restrained bordered paper surface.
-- A centered brand header and responsive, manually controlled four-card home carousel.
+- Keep the existing Nilkurinji mark and forest-green identity.
+- Pair editorial Newsreader headings with Manrope shopping controls and body copy.
+- Use calm, near-white surfaces, light dividers, and consistent product frames.
+- Keep the shell compact and let search open without pushing the page down.
+- Use merchant-approved photography and content when the live catalog is ready.
 
 ## Colors
 
-The palette centers on warm cream and layered forest greens, with muted sage and ochre reserved for secondary detail and interaction.
+The palette centers on forest green, clean near-white surfaces, and quiet green-grey text and dividers. Error red is reserved for actionable failures.
 
 ### Primary
-- **Forest** (`#254434`): Primary buttons, benefits surface, links, and brand accents.
-- **Deep Forest** (`#1c3327`): Strong heading and wordmark ink; primary-button hover.
-
-### Secondary
-- **Sage** (`#e5e9dc`): Soft hover and fallback image surfaces.
-- **Sage Ink** (`#536852`): Eyebrows, muted green labels, and supporting detail.
-- **Ochre** (`#b78049`): Small status and saved-wishlist accents, including the cart count.
+- **Forest Green:** Main actions, active links, focus indicators, and brand accents.
+- **Deep Forest:** Pressed and hover states for primary actions.
 
 ### Neutral
-- **Warm Cream** (`#f7f5ee`): Page background and light text on dark surfaces.
-- **Paper** (`#fbfaf6`): Light surface and primary-button text.
-- **Ink** (`#242d24`): Default body text.
-- **Divider** (`#d9ded2`): Header, form, and content separators.
-- **Muted** (`#71786d`): Supporting and secondary copy.
+- **Paper:** Main page and component surface.
+- **Soft Paper:** Quiet secondary surfaces and image frames.
+- **Pantry Ink:** Main body and heading color.
+- **Sage Ink:** Supporting copy, secondary prices, and subdued labels.
+- **Fine Divider:** Borders and separators.
 
 ### Named Rules
-**The Paper-and-Botanical Rule.** Use cream and green as the dominant field; keep ochre to small markers and status details.
+**The Product-First Rule.** Use product, place, and people imagery to carry the brand story. Add decoration only when the approved direction gives it a clear role.
 
 ## Typography
 
-**Display Font:** Playfair Display (Georgia, Iowan Old Style, Times New Roman, serif fallback)
-**Body Font:** Arial (Helvetica, sans-serif fallback)
-**Label/Mono Font:** Arial; no mono face is used.
+**Display Font:** Newsreader (with Georgia and serif fallbacks); **Body Font:** Manrope (with Arial and sans-serif fallbacks); **Logo Font:** Playfair Display, kept inside the existing Nilkurinji lockup.
 
-**Character:** Playfair Display supplies a calm, literary brand voice, while Arial keeps navigation, labels, prices, and controls compact and direct.
+**Character:** Newsreader gives the page an editorial voice. Manrope keeps controls, filters, product details, and status messages easy to scan. The logo remains visually separate from both roles.
 
 ### Hierarchy
-- **Display** (400, `clamp(38px, 3.7vw, 49px)`, `0.98` line-height): Home hero heading.
-- **Headline** (400, `clamp(34px, 3.1vw, 42px)`, `1.03` line-height): Home featured-products heading and other editorial section headings.
-- **Title** (400, `21px`, `1.15` line-height): Product-card titles.
-- **Body** (400, `15px`, `1.55` line-height): Base copy; individual supporting copy scales down in compact layouts.
-- **Label** (700, `10px`, `0.16em` tracking, uppercase): Eyebrows and utility labels.
+- **Display:** Fluid Newsreader hero heading with a close line height and a restrained negative tracking.
+- **Headline:** Newsreader section and editorial headings.
+- **Title:** Newsreader product names, with a smaller setting at mobile widths.
+- **Body:** Manrope for paragraphs, descriptions, prices, and transactional details.
+- **Label:** Manrope for controls and functional labels. Keep the interface readable at its rendered size; do not shrink labels to imitate luxury packaging.
 
 ### Named Rules
-**The Serif-and-Utility Rule.** Keep Playfair Display for the wordmark and editorial titles; use Arial for navigation, body copy, prices, and controls.
+**The One Logo Rule.** Preserve the supplied wordmark as its own lockup. Do not restyle its lettering independently on individual routes.
 
 ## Layout
 
-The main content frame caps at `1360px`, with `40px` desktop gutters in wide sections. The homepage hero spans the viewport, layers its copy over the left side of a Nilgiri landscape, and ranges from `240px` to `290px` tall on desktop and `400px` to `470px` on mobile. Tea and tea-bag collections use matching landscape banners. The category shelf is five equal columns; below it, the Best Sellers intro occupies a narrow left column while the product carousel shows four cards in its desktop first view. Collection listings use three cards beside a filter rail. At `760px` and below, the header becomes a compact menu/wordmark/tools row, categories remain five across, the carousel shows two cards, product browsing narrows to two cards, and benefits form a two-by-two grid. The footer uses a compact forest-green field with botanical line art; the excluded newsletter is not shown. At `360px`, spacing and wordmark sizing tighten again. The overall spacing is generous on long-form sections (`clamp(58px, 8vw, 106px)`) and intentionally compact on the homepage reference composition.
+The page shell uses a shared centered container and a single responsive gutter. Gutter space increases from compact phones to tablet and wide desktop layouts. The header row is shorter below the desktop breakpoint; the preview notice is also reduced there. The product grid uses four columns at wide desktop, three at standard desktop, and two at compact widths.
+
+The desktop homepage pairs copy with a tea image. On compact layouts, copy and its action come before the image. Product listing pages keep the same card proportions across Shop, collection, search, and related-product views. Mobile filters use a draft-and-apply sheet. Search is outside normal document flow so opening it does not add header height.
 
 ## Elevation & Depth
 
-The interface is flat at rest and does not use a box-shadow vocabulary. Depth comes from cream/sage/forest tonal blocks, image crops, and fine borders. Image cards may enlarge their image slightly on hover; small icon controls lift by one pixel as feedback.
+The system is flat at rest. Borders and subtle surface changes group content. The desktop search popover is the limited raised surface and uses a soft shadow; other sections do not gain elevation for decoration.
 
 ### Named Rules
-**The Flat-by-Default Rule.** Use background contrast and separators for grouping; do not introduce resting shadows.
-
-## Motion & Feedback
-
-The home and collection banners make one authored entrance: the copy settles upward by `8px`, while the image unfolds over `680ms` and eases into its resting crop. Category and product lists use short staggered entrances, capped at `280ms`. Mobile navigation fades and shifts into place; routine color, arrow, and control feedback stays between `150ms` and `220ms`. Saving a product gives the heart a brief pulse, and cart updates scale into view. No banner autoplay runs. `prefers-reduced-motion` collapses nonessential movement and transitions to `0.01ms` while keeping saved, selected, and cart states visible.
+**The Quiet Surface Rule.** Use contrast, spacing, and a fine divider before adding a shadow or enclosing every item in a card.
 
 ## Shapes
 
-Most controls and form fields are square or nearly square (`2px` button radius and zero-radius selects). The hero’s main action and category imagery are deliberate exceptions: the action is pill-shaped, category images are circular, and icon controls are circular. Homepage featured product cards have a small `5px` corner radius, unlike open catalog cards. Borders are thin and muted; image containers clip their contents.
+Controls and panels use a small, consistent corner radius. Product cards remain open rather than pill-shaped or heavily boxed. Images keep the product frame they need, while interactive icon controls use a consistent square target. Do not put circles behind transparent imagery by default; use a circle only when the component itself needs circular geometry.
 
 ## Components
 
 ### Buttons
-- **Shape:** Square-cornered utility buttons (`2px`); the homepage hero action overrides to a pill (`999px`).
-- **Primary:** Forest fill with paper text, `48px` minimum height, `0 22px` padding, uppercase bold labels, and expanded tracking.
-- **Hover / Focus:** Primary shifts to deep forest; outline shifts to sage. Keyboard focus uses a visible `2px` ochre outline with `4px` offset.
-- **Secondary / Ghost:** Outline buttons retain a forest border and transparent fill; icon controls remain transparent until a sage hover surface.
+- **Character:** Compact, direct actions with a clear primary/secondary distinction.
+- **Shape:** Lightly softened control corners.
+- **Primary:** Forest fill with paper text. Use the same sizing and label role across routes.
+- **Secondary:** Clear background with forest text and a fine forest outline.
+- **Text:** Use for lower-priority navigation with an underline or arrow only where it improves recognition.
+- **Hover / Focus:** Darken the primary action on hover. Keep a visible focus outline on keyboard focus.
 
 ### Cards / Containers
-- **Corner Style:** Catalog product cards and image frames are square-cornered except the circular home-category thumbnails; homepage featured cards use a small `5px` radius.
-- **Background:** Cream page ground; sage fallbacks; subtle warm neutral behind image and cart surfaces.
-- **Shadow Strategy:** Flat; no shadows.
-- **Border:** Thin separators structure sections and lists; catalog cards stay open without a surrounding border. Homepage featured cards use a fine warm border.
-- **Internal Padding:** Catalog product details begin with `13px` top padding; homepage featured-card details use compact `8px 9px 7px` padding.
+- **Character:** Open image-and-copy product tiles with shared spacing and alignment.
+- **Image:** Keep a stable portrait frame and contain product packaging so labels are not cropped.
+- **Details:** Product name and price remain readable, even at narrow widths. Do not use sample prices without an explicit preview label.
+- **Actions:** Keep wishlist and purchase controls aligned to the card content. Hide purchase controls in preview mode.
 
 ### Inputs / Fields
-- **Style:** Paper-filled selects and fields use a thin line border, square corners, and ink text.
-- **Focus:** Global `:focus-visible` treatment is an ochre outline with `2px` stroke and `4px` offset.
-- **Disabled:** Disabled purchase controls reduce opacity and use a disabled cursor; preview commerce remains unavailable.
+- **Character:** Quiet fields with one visible edge, legible text, and a clear focus state.
+- **Search:** Preserve the query on close. Show predictive results and collection routes in an overlay rather than moving the page content.
+- **Focus / Error:** Keep the global visible focus treatment. Explain recoverable search and form errors with text.
 
 ### Navigation
-- **Style:** A centered Playfair wordmark and a centered lower navigation row, with search at left and shop tools at right on desktop. Current links use forest color and a fine underline. On mobile the nav becomes a collapsible full-width vertical list beneath the compact utility row.
-
-### Homepage Editorial Stack
-The homepage signature is the centered logo header, full-bleed landscape hero, centered five-image category shelf, left-side Best Sellers introduction beside a horizontal product carousel, and a full-width benefits strip. At wide desktop widths, show four cards in the first view; the carousel shows three cards at intermediate widths and two on mobile. Each card places product type, title, and INR price beside a compact circular cart control. On mobile, center the introduction. Keep this sequence for the home surface; do not impose it on catalog or policy pages.
-
-### Image and Product Cards
-Catalog cards keep imagery open and text directly beneath it. Homepage featured cards use a restrained bordered paper panel with a wide image and compact product details. Product type, title, and localized INR price remain legible, with the cart action aligned beside the details. Preview items have a small paper badge, image zoom is restrained, and purchase actions remain disabled until live commerce is configured.
+- **Desktop:** One compact row with a stable logo width, restrained active underline, and consistent utility controls.
+- **Mobile:** Menu, centered identity, search, and cart remain within the compact row. Account and wishlist remain reachable through the menu.
+- **Search:** Use a bounded desktop popover and a top-aligned mobile sheet sized to the visual viewport.
 
 ## Do's and Don'ts
 
-### Do:
-- **Do** use the CSS variables in `src/app/globals.css` as the canonical color source.
-- **Do** preserve the centered wordmark and homepage section order.
-- **Do** keep the home categories circular and all five visible across on narrow screens, matching the implementation.
-- **Do** respect `prefers-reduced-motion` for scrolling and transitions.
-- **Do** label preview imagery/copy and keep purchase controls disabled in preview mode.
+### Do
+- **Do** preserve the existing logo and forest-green identity.
+- **Do** correct alignment at the shared component or token when the same defect appears on multiple routes.
+- **Do** review the header at rest and with search open, on desktop and mobile.
+- **Do** use clear product imagery, readable copy, and consistent product frames.
+- **Do** keep reduced-motion support and visible keyboard focus.
 
-### Don't:
-- **Don't** add resting shadows; the system uses tonal fields and hairline rules for depth.
-- **Don't** wrap catalog product cards in heavy panels or oversized rounded cards; reserve the small paper panel for the homepage featured-card variant.
-- **Don't** use preview copy or imagery as verified product, ingredient, quality, or shipping claims.
-- **Don't** enable checkout in local preview mode.
+### Don't
+- **Don't** repeat leaf illustrations as a border or frame around page sections.
+- **Don't** add a circle or oval behind transparent product/category imagery unless the approved composition calls for it.
+- **Don't** let header, logo, or navigation sizing drift between routes.
+- **Don't** use tiny copy, misaligned action icons, or inconsistent card geometry as decorative styling.
+- **Don't** present concept images, sample prices, reviews, origin stories, or product claims as merchant-approved facts.

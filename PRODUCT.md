@@ -8,9 +8,11 @@ The intended audience appears to be shoppers in India; this is an inference from
 
 ## Experience
 
-The site includes a home page, all-products shop, Tea, Tea Bags, Rice, Snacks, and Other Foods collections, product detail, cart, search, wishlist, About, Contact, Privacy, Refund, and Terms pages. Product pages support galleries, variants, quantity, add-to-cart, buy-now, details, FAQs, approved reviews, and related-product recommendations. Search, filtering, sorting, recommendations, inventory, price, and checkout are Shopify-backed.
+The site includes Home, Shop, Tea, Tea Bags, Rice, Snacks, and Other Foods collections, product detail, Cart, predictive Search, Wishlist, About, Contact, and Shopify policy pages. Product pages support galleries, variants, quantity, add-to-cart, buy-now, approved details, FAQs and reviews, and related-product recommendations. Search, filtering, sorting, recommendations, inventory, price, and checkout use Shopify data when the storefront is live.
 
-The home design follows the supplied PDFs: warm cream surfaces, deep botanical green, editorial serif headings, restrained sans-serif UI, natural food photography, centered brand mark, an editorial hero, category links, best sellers, and a benefits band. Preserve the supplied layout's order and proportions at desktop; collapse it cleanly for mobile. There is no Tea Guide, Recipe, Journal, newsletter, or separate custom customer-account system.
+The redesign keeps the supplied logo and forest-green identity, with warm near-white surfaces, Newsreader editorial headings, Manrope controls and body text, and open product frames. A compact header opens search in a desktop popover or a mobile sheet without moving the page. The homepage leads with a tea-focused hero and selected tea, then links to Tea, Tea Bags, the brand story, and pantry collections. Shop, collection, search, and recommendation cards share one system. Layouts adapt to mobile, tablet, and desktop widths. The site excludes Tea Guide, Recipes, Journal, newsletter, and a custom customer-account system.
+
+The current local storefront is a design preview. Preview catalog names, sample prices, packaging, and selected imagery are illustrative. Those values do not establish merchant facts or production catalog content. Purchases and indexing stay disabled in preview mode. See [DESIGN.md](DESIGN.md) for the implemented visual system and [the redesign handover](docs/design/redesign-v2/handover.md) for evidence and remaining launch gates.
 
 ## Commerce and operations
 
