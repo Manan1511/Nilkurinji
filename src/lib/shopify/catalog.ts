@@ -1,4 +1,5 @@
 import { headers } from "next/headers";
+import { normalizeSearchQuery } from "@/lib/search/query";
 import { CATEGORIES } from "@/lib/site-config";
 import { getStorefrontMode } from "@/lib/shopify/mode";
 import {
@@ -98,7 +99,7 @@ export async function getProduct(handle: string): Promise<StorefrontData<Storefr
 }
 
 export async function searchProducts(term: string): Promise<StorefrontData<StorefrontProduct[]>> {
-  const query = term.trim().slice(0, 120);
+  const query = normalizeSearchQuery(term);
   const mode = getStorefrontMode();
   if (!query) {
     if (mode.mode === "preview") return { source: "preview", data: [] };

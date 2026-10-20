@@ -1,0 +1,14 @@
+:root {
+  --brand: #254434; --brand-hover: #1c3327; --surface: #fafbf8; --surface-subtle: #f4f6f1;
+  --ink: #242d24; --ink-secondary: #526356; --rule: #d7ded7; --error: #9f3434;
+  --radius-control: 2px; --page-gutter: 20px; --header-height: 64px; --notice-height: 0px;
+  --shell-height: calc(var(--header-height) + var(--notice-height));
+  --font-body: var(--font-manrope), Arial, sans-serif;
+  --font-editorial: var(--font-newsreader), Georgia, serif;
+  --font-logo: var(--font-playfair-display), Georgia, serif;
+}
+body[data-notice="true"] { --notice-height: 36px; }
+@media (max-width: 359px) { :root { --page-gutter: 16px; } }
+@media (min-width: 768px) { :root { --page-gutter: 32px; } }
+@media (min-width: 1024px) { :root { --header-height: 76px; } body[data-notice="true"] { --notice-height: 24px; } }
+@media (min-width: 1280px) { :root { --page-gutter: 48px; } }
