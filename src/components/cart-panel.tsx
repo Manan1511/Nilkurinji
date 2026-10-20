@@ -6,6 +6,7 @@ import { ArrowRight, Minus, Plus, Trash2 } from "lucide-react";
 import { formatMoney } from "@/lib/format";
 import type { ShopifyCart } from "@/lib/shopify/cart";
 import styles from "./cart-panel.module.css";
+import { postCartAction, waitForCartMutations } from "@/lib/cart-client";
 type CartApiResponse = { cart?: ShopifyCart | null; preview?: boolean; purchasingEnabled?: boolean; expired?: boolean; error?: string; checkoutUrl?: string };
 export function CartPanel() {
   const [cart, setCart] = useState<ShopifyCart | null>(null);
@@ -23,6 +24,8 @@ export function CartPanel() {
     const generation = ++readGeneration.current;
     readPending.current = true;
     try {
+      await waitForCartMutations();
+      if (signal?.aborted || generation !== readGeneration.current) return;
       const response = await fetch("/api/cart", { cache: "no-store", signal }); const body = await response.json() as CartApiResponse;
       if (signal?.aborted || generation !== readGeneration.current) return;
       if (!response.ok) throw new Error("Your cart is temporarily unavailable. Please try again.");
@@ -36,14 +39,17 @@ export function CartPanel() {
     void Promise.resolve().then(() => { if (!controller.signal.aborted) return readCart(controller.signal); });
     return () => controller.abort();
   }, [readCart]);
+  useEffect(() => {
+    const refresh = () => { void readCart(); };
+    window.addEventListener("nilkurinji:cart-updated", refresh);
+    return () => window.removeEventListener("nilkurinji:cart-updated", refresh);
+  }, [readCart]);
   async function mutate(action: "update" | "remove" | "checkout", lineId?: string, quantity?: number) {
     if (lock.current || readPending.current || preview || !cart || !enabled) return;
     if (action === "checkout" && (!cart.lines.nodes.length || cart.lines.nodes.some((line) => !line.merchandise.availableForSale))) return;
     lock.current = true; setBusy(true); setMessage("");
     try {
-      const response = await fetch("/api/cart", { method: "POST", headers: { "Content-Type": "application/json" }, cache: "no-store", body: JSON.stringify({ action, ...(lineId ? { lineId } : {}), ...(quantity ? { quantity } : {}) }) });
-      const result = await response.json() as CartApiResponse;
-      if (!response.ok) throw new Error(result.error || "The cart could not be updated. Refresh your cart and try again.");
+      const result = await postCartAction(action === "checkout" ? { action } : action === "remove" ? { action, lineId: lineId! } : { action, lineId: lineId!, quantity: quantity! });
       if (action === "checkout") { if (!result.checkoutUrl) throw new Error("Checkout is temporarily unavailable. Please try again."); window.location.assign(result.checkoutUrl); return; }
       setCart(result.cart ?? null); window.dispatchEvent(new Event("nilkurinji:cart-updated"));
     } catch (error) { setMessage(error instanceof Error ? error.message : "The cart could not be updated. Please try again."); }

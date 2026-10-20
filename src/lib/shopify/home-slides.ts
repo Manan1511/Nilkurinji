@@ -10,9 +10,9 @@ export function buildHomepageSlides(preview: boolean, content: HomepageContent |
         heading: DRAFT_HOMEPAGE_CONTENT.heading,
         description: DRAFT_HOMEPAGE_CONTENT.description,
         image: "/images/preview-hero-home-v4.png",
-        imageAlt: "Illustrative Nilkurinji tea still life overlooking green Nilgiri hills",
+        imageAlt: "Illustrative Nilkurinji tea scene with a tin and glass cup",
         imageCaption: "",
-        href: "/shop",
+        href: "/collections/tea",
       },
     ];
   }
@@ -25,17 +25,17 @@ export function buildHomepageSlides(preview: boolean, content: HomepageContent |
     image: content.heroImage?.url ?? null,
     imageAlt: content.heroImage?.altText || "",
     imageCaption: content.heroImage ? "Featured image" : "",
-    href: "/shop",
+    href: "/collections/tea",
   }];
-  if (content.secondaryEyebrow && content.secondaryHeading && content.secondaryDescription) {
+  if (content.secondaryHeading && content.secondaryDescription) {
     slides.push({
-      eyebrow: content.secondaryEyebrow,
+      eyebrow: content.secondaryEyebrow ?? "",
       heading: content.secondaryHeading,
       description: content.secondaryDescription,
       image: content.secondaryImage?.url ?? null,
       imageAlt: content.secondaryImage?.altText || "",
       imageCaption: content.secondaryImage ? "Featured image" : "",
-      href: "/shop",
+      href: "/collections/tea",
     });
   }
   return slides;

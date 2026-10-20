@@ -95,4 +95,15 @@ describe("header search interaction", () => {
     await act(async () => shop.click());
     expect(element<HTMLElement>("#header-search-panel").hidden).toBe(true);
   });
+
+  it("returns focus to the visible search trigger when crossing to compact layout", async () => {
+    await act(async () => root.unmount());
+    let matches = false; const listeners = new Set<() => void>();
+    vi.stubGlobal("matchMedia", () => ({ get matches() { return matches; }, addEventListener: (_: string, callback: () => void) => listeners.add(callback), removeEventListener: (_: string, callback: () => void) => listeners.delete(callback) }));
+    root = createRoot(container); await act(async () => root.render(createElement(SiteHeader)));
+    const trigger = element<HTMLButtonElement>('[aria-label="Search products"]');
+    await act(async () => trigger.click()); expect(document.activeElement).toBe(element("#header-product-search"));
+    await act(async () => { matches = true; listeners.forEach((listener) => listener()); });
+    expect(document.activeElement).toBe(trigger); expect(trigger.getAttribute("aria-expanded")).toBe("false"); expect(document.body.style.overflow).not.toBe("hidden");
+  });
 });

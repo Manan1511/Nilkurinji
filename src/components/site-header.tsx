@@ -21,7 +21,10 @@ export function SiteHeader() {
   useEffect(() => {
     const media = window.matchMedia?.("(max-width: 1023px)");
     if (!media) return;
-    const sync = () => { setCompact(media.matches); setPanel(null); };
+    const sync = () => {
+      if (document.activeElement?.closest("#header-search-panel")) searchRef.current?.focus({ preventScroll: true });
+      setCompact(media.matches); setPanel(null);
+    };
     sync(); media.addEventListener("change", sync);
     return () => media.removeEventListener("change", sync);
   }, []);

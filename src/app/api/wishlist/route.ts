@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getProducts } from "@/lib/shopify/catalog";
+import { getProduct } from "@/lib/shopify/catalog";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -12,10 +12,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   const headers = { "Cache-Control": "private, no-store, max-age=0, must-revalidate" };
   if (handles.length === 0) return NextResponse.json({ products: [], source: "empty" }, { headers });
 
-  const result = await getProducts();
-  if (result.source === "unavailable") return NextResponse.json({ error: result.reason }, { status: 503, headers });
+  const results = await Promise.all(handles.map((handle) => getProduct(handle)));
+  if (results.some((result) => result.source === "unavailable")) {
+    return NextResponse.json({ error: "Your wishlist is temporarily unavailable." }, { status: 503, headers });
+  }
   return NextResponse.json({
-    source: result.source,
-    products: result.data.filter((product) => handles.includes(product.handle)),
+    source: results.some((result) => result.source === "preview") ? "preview" : "shopify",
+    products: results.flatMap((result) => result.source !== "unavailable" && result.data ? [result.data] : []),
   }, { headers });
 }

@@ -27,9 +27,9 @@ export type HomepageContent = {
 };
 
 export const DRAFT_HOMEPAGE_CONTENT: HomepageContent = {
-  eyebrow: "Pure · Authentic · Timeless",
-  heading: "The Finest Flavours of India",
-  description: "From the lush gardens to your table — experience the purest ingredients, crafted with care.",
+  eyebrow: "",
+  heading: "A considered cup, every day.",
+  description: "Explore Nilkurinji tea and tea bags for the moments that make a day.",
   heroImage: null,
   secondaryEyebrow: "",
   secondaryHeading: "",
@@ -61,24 +61,24 @@ export async function getHomepageContent(): Promise<StorefrontData<HomepageConte
     const rawFields = result.metaobject?.fields ?? [];
     const fields = Object.fromEntries(rawFields.map(({ key, value }) => [key, value ?? ""]));
     const images = Object.fromEntries(rawFields.map(({ key, reference }) => [key, reference?.image ?? null]));
-    if (!fields.eyebrow?.trim() || !fields.heading?.trim() || !fields.description?.trim()) {
+    if (!fields.heading?.trim() || !fields.description?.trim()) {
       return { source: "unavailable", data: null, reason: "Homepage content is incomplete in Shopify." };
     }
     return {
       source: "shopify",
       data: {
-        eyebrow: fields.eyebrow.trim(),
+        eyebrow: fields.eyebrow?.trim() ?? "",
         heading: fields.heading.trim(),
         description: fields.description.trim(),
-        heroImage: images.hero_image,
-        secondaryEyebrow: fields.secondary_eyebrow.trim(),
-        secondaryHeading: fields.secondary_heading.trim(),
-        secondaryDescription: fields.secondary_description.trim(),
-        secondaryImage: images.secondary_image,
-        closingEyebrow: fields.closing_eyebrow.trim(),
-        closingHeading: fields.closing_heading.trim(),
-        closingDescription: fields.closing_description.trim(),
-        featuredProductsHeading: fields.featured_products_heading.trim(),
+        heroImage: images.hero_image ?? null,
+        secondaryEyebrow: fields.secondary_eyebrow?.trim() ?? "",
+        secondaryHeading: fields.secondary_heading?.trim() ?? "",
+        secondaryDescription: fields.secondary_description?.trim() ?? "",
+        secondaryImage: images.secondary_image ?? null,
+        closingEyebrow: fields.closing_eyebrow?.trim() ?? "",
+        closingHeading: fields.closing_heading?.trim() ?? "",
+        closingDescription: fields.closing_description?.trim() ?? "",
+        featuredProductsHeading: fields.featured_products_heading?.trim() ?? "",
         socialLinks: getSocialLinks(fields),
       },
     };

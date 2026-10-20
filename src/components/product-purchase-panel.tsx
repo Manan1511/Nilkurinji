@@ -5,6 +5,7 @@ import { Minus, Plus, ShoppingBag } from "lucide-react";
 import { formatMoney } from "@/lib/format";
 import type { StorefrontProduct, StorefrontVariant } from "@/lib/shopify/types";
 import styles from "./product-purchase-panel.module.css";
+import { postCartAction } from "@/lib/cart-client";
 
 function variantOptions(variants: StorefrontVariant[]): { name: string; values: string[] }[] {
   const values = new Map<string, Set<string>>();
@@ -69,14 +70,7 @@ export function ProductPurchasePanel({
     setBusy(true);
     setMessage("");
     try {
-      const response = await fetch("/api/cart", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        cache: "no-store",
-        body: JSON.stringify({ action, variantId: selectedVariant.id, quantity }),
-      });
-      const result = await response.json() as { error?: string; checkoutUrl?: string; cart?: { totalQuantity?: number } };
-      if (!response.ok) throw new Error(result.error || "The cart could not be updated.");
+      const result = await postCartAction({ action, variantId: selectedVariant.id, quantity });
       if (action === "buy-now") {
         if (!result.checkoutUrl) throw new Error("Shopify did not return a checkout address.");
         window.location.assign(result.checkoutUrl);
