@@ -7,7 +7,7 @@ export type PredictiveSearchPayload =
 const record = (value: unknown): value is Record<string, unknown> => value !== null && typeof value === "object" && !Array.isArray(value);
 function isSuggestion(value: unknown, preview: boolean): value is SearchSuggestion {
   if (!record(value) || typeof value.id !== "string" || typeof value.handle !== "string" || !/^[a-z0-9-]{1,120}$/.test(value.handle) || typeof value.title !== "string" || value.isPreview !== preview) return false;
-  if (value.price !== null && (!record(value.price) || typeof value.price.amount !== "string" || !Number.isFinite(Number(value.price.amount)) || Number(value.price.amount) < 0 || typeof value.price.currencyCode !== "string" || !/^[A-Z]{3}$/.test(value.price.currencyCode))) return false;
+  if (value.price !== null && (!record(value.price) || typeof value.price.amount !== "string" || value.price.amount.trim() === "" || !Number.isFinite(Number(value.price.amount)) || Number(value.price.amount) < 0 || typeof value.price.currencyCode !== "string" || !/^[A-Z]{3}$/.test(value.price.currencyCode))) return false;
   if (value.image !== null && (!record(value.image) || typeof value.image.url !== "string" || !(value.image.url.startsWith("/images/") || value.image.url.startsWith("https://cdn.shopify.com/")) || !(value.image.altText === null || typeof value.image.altText === "string") || ![value.image.width, value.image.height].every((n) => n === null || (typeof n === "number" && Number.isFinite(n) && n > 0)))) return false;
   return true;
 }

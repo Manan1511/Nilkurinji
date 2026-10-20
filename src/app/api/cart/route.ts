@@ -69,7 +69,7 @@ function safeCheckoutUrl(url: string, storeDomain: string): string | null {
 export async function GET(request: NextRequest): Promise<NextResponse> {
   const mode = getStorefrontMode();
   if (mode.mode === "preview") return jsonNoStore({ cart: null, preview: true, purchasingEnabled: false });
-  if (mode.mode === "unavailable") return jsonNoStore({ cart: null, error: mode.reason, purchasingEnabled: false }, 503);
+  if (mode.mode === "unavailable") return jsonNoStore({ cart: null, error: "The cart is temporarily unavailable. Try again shortly.", purchasingEnabled: false }, 503);
   if (COOKIE_SECRET().length < 32) return jsonNoStore({ cart: null, purchasingEnabled: false });
 
   const signedCart = readCartCookie(request.cookies.get(CART_COOKIE_NAME)?.value, COOKIE_SECRET());
@@ -98,7 +98,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
   const mode = getStorefrontMode();
   if (mode.mode === "preview") return jsonNoStore({ error: "Checkout is disabled for this preview storefront." }, 409);
-  if (mode.mode === "unavailable") return jsonNoStore({ error: mode.reason }, 503);
+  if (mode.mode === "unavailable") return jsonNoStore({ error: "The cart is temporarily unavailable. Try again shortly." }, 503);
   if (!isShopifyCheckoutEnabled()) return jsonNoStore({ error: "Shopify checkout is not enabled yet." }, 503);
 
   let body: unknown;

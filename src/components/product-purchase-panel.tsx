@@ -1,9 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Minus, Plus, ShoppingBag } from "lucide-react";
 import { formatMoney } from "@/lib/format";
 import type { StorefrontProduct, StorefrontVariant } from "@/lib/shopify/types";
+import styles from "./product-purchase-panel.module.css";
 
 function variantOptions(variants: StorefrontVariant[]): { name: string; values: string[] }[] {
   const values = new Map<string, Set<string>>();
@@ -15,6 +16,29 @@ function variantOptions(variants: StorefrontVariant[]): { name: string; values: 
     }
   }
   return [...values.entries()].map(([name, options]) => ({ name, values: [...options] }));
+}
+
+export function findSelectedVariant(
+  variants: StorefrontVariant[],
+  selectedOptions: Record<string, string>,
+): StorefrontVariant | undefined {
+  return variants.find((variant) =>
+    variant.selectedOptions.every((option) => selectedOptions[option.name] === option.value),
+  );
+}
+
+export function getPurchaseNotice(
+  product: StorefrontProduct,
+  purchasingEnabled: boolean,
+  selectedVariant: StorefrontVariant | undefined,
+): string | null {
+  if (product.variants.length > 0 && !selectedVariant) {
+    return "This option combination is not available. Choose another combination.";
+  }
+  if (selectedVariant && !selectedVariant.availableForSale) return "This option is currently unavailable.";
+  if (product.isPreview) return "This is a visual preview. No product is available to purchase.";
+  if (!purchasingEnabled) return "Purchasing will open after Shopify inventory and checkout are approved.";
+  return null;
 }
 
 export function ProductPurchasePanel({
@@ -32,14 +56,16 @@ export function ProductPurchasePanel({
   const [quantity, setQuantity] = useState(1);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
+  const mutationLock = useRef(false);
 
-  const selectedVariant = product.variants.find((variant) =>
-    variant.selectedOptions.every((option) => selectedOptions[option.name] === option.value),
-  ) ?? (options.length === 0 ? firstVariant : undefined);
+  const selectedVariant = findSelectedVariant(product.variants, selectedOptions)
+    ?? (options.length === 0 ? firstVariant : undefined);
   const purchasable = purchasingEnabled && !product.isPreview && Boolean(selectedVariant?.availableForSale);
+  const purchaseNotice = getPurchaseNotice(product, purchasingEnabled, selectedVariant);
 
   async function sendCartAction(action: "add" | "buy-now"): Promise<void> {
-    if (!selectedVariant || !purchasable || busy) return;
+    if (!selectedVariant || !purchasable || mutationLock.current) return;
+    mutationLock.current = true;
     setBusy(true);
     setMessage("");
     try {
@@ -61,21 +87,23 @@ export function ProductPurchasePanel({
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "The cart could not be updated.");
     } finally {
+      mutationLock.current = false;
       setBusy(false);
     }
   }
 
-  const price = selectedVariant?.price ?? product.priceRange?.minVariantPrice;
+  const price = product.variants.length ? selectedVariant?.price : product.priceRange?.minVariantPrice;
 
   return (
-    <div className="purchase-panel">
-      {price && <p className="purchase-panel__price">{formatMoney(price)}</p>}
+    <div className={styles.panel}>
+      {price && <p className="purchase-panel__price">{product.isPreview ? "Sample price: " : ""}{formatMoney(price)}</p>}
       {product.variants.length > 0 && options.map((option) => (
         <label className="form-field" key={option.name}>
           <span>{option.name}</span>
           <select
             value={selectedOptions[option.name] ?? option.values[0]}
-            onChange={(event) => setSelectedOptions((current) => ({ ...current, [option.name]: event.target.value }))}
+            disabled={busy}
+            onChange={(event) => { setSelectedOptions((current) => ({ ...current, [option.name]: event.target.value })); setMessage(""); }}
           >
             {option.values.map((value) => <option key={value} value={value}>{value}</option>)}
           </select>
@@ -97,23 +125,17 @@ export function ProductPurchasePanel({
         </div>
       )}
 
-      {product.isPreview ? (
-        <p className="purchase-panel__notice" role="status">This is a visual preview. No product is available to purchase.</p>
-      ) : !purchasingEnabled ? (
-        <p className="purchase-panel__notice" role="status">Purchasing will open after Shopify inventory and checkout are approved.</p>
-      ) : selectedVariant && !selectedVariant.availableForSale ? (
-        <p className="purchase-panel__notice" role="status">This option is currently unavailable.</p>
-      ) : null}
+      {purchaseNotice && <p className="purchase-panel__notice" role="status">{purchaseNotice}</p>}
 
-      <div className="purchase-panel__buttons">
+      {!product.isPreview && <div className="purchase-panel__buttons">
         <button type="button" className="button button--dark" disabled={!purchasable || busy || !selectedVariant} onClick={() => void sendCartAction("add")}>
           <ShoppingBag aria-hidden="true" size={17} /> {busy ? "Updating…" : "Add to cart"}
         </button>
         <button type="button" className="button button--outline" disabled={!purchasable || busy || !selectedVariant} onClick={() => void sendCartAction("buy-now")}>
           Buy now
         </button>
-      </div>
-      <p className="purchase-panel__fine">Prices, options and availability are confirmed by Shopify.</p>
+      </div>}
+      <p className="purchase-panel__fine">{product.isPreview ? "Sample prices are shown for layout review only." : "Prices, options and availability are confirmed by Shopify."}</p>
       <p className="purchase-panel__message" role="status" aria-live="polite">{message}</p>
     </div>
   );

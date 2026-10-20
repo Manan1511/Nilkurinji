@@ -1,4 +1,6 @@
+import styles from "@/app/reading.module.css";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPublishedPolicies } from "@/lib/shopify/content";
 import { getStorefrontMode } from "@/lib/shopify/mode";
@@ -30,18 +32,21 @@ export default async function PolicyPage({ params }: PageProps) {
 
   return (
     <>
-      <header className="page-header">
-        <p className="eyebrow">The essentials</p>
-        <h1 className="page-title">{pageConfig.title}</h1>
+      <header className={styles.heading}>
+        <h1 >{policy?.title || pageConfig.title}</h1>
       </header>
-      <article className="content-page">
+      <article className={styles.body}>
         {result.source === "unavailable" ? (
-          <div className="notice-card" role="status">{result.reason}</div>
+          <div  role="status">
+            <p>This policy page is temporarily unavailable. Please check back soon.</p>
+            <Link href="/shop" className="button button--outline">Browse the shop</Link>
+          </div>
         ) : body ? (
-          <div className="content-page__body" dangerouslySetInnerHTML={{ __html: body }} />
+          <div  dangerouslySetInnerHTML={{ __html: body }} />
         ) : (
-          <div className="notice-card" role="status">
-            {isPreview ? "This policy will be supplied and published from Shopify Admin before checkout opens." : `Publish the ${pageConfig.title.toLowerCase()} in Shopify Admin to show it here.`}
+          <div  role="status">
+            <p>{isPreview ? "This policy is being prepared. Please check back soon." : "This policy is not available yet. Please check back soon."}</p>
+            <Link href="/shop" className="button button--outline">Browse the shop</Link>
           </div>
         )}
       </article>

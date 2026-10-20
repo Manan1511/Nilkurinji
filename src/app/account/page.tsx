@@ -1,3 +1,4 @@
+import styles from "@/app/reading.module.css";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -11,10 +12,9 @@ export default function AccountPage() {
   if (accountUrl) redirect(accountUrl);
 
   return (
-    <div className="empty-state">
-      <span className="eyebrow">Shopify customer accounts</span>
-      <h1 className="page-title">Account access is being prepared.</h1>
-      <p>The secure account link will appear here after the Shopify customer account experience is configured.</p>
+    <div className={styles.empty}>
+      <h1 >Account sign-in is not available yet.</h1>
+      <p>Customer account sign-in is not available right now. Continue browsing the shop.</p>
       <Link href="/shop" className="button button--dark">Continue browsing</Link>
     </div>
   );

@@ -2,53 +2,15 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { CATEGORIES } from "@/lib/site-config";
 import { BrandMark } from "@/components/brand-mark";
+import { getStorefrontMode } from "@/lib/shopify/mode";
 import type { SocialLink } from "@/lib/shopify/social-links";
-
-export function SiteFooter({ socialLinks = [], preview = false }: { socialLinks?: SocialLink[]; preview?: boolean }) {
-  return (
-    <footer className="site-footer">
-      <div className="site-footer__inner mx-auto grid w-full max-w-[1360px] gap-12 px-5 py-14 md:grid-cols-[1.4fr_1fr_1fr] md:px-10 md:py-20">
-        <div className="site-footer__brand">
-          <Link href="/" className="site-footer__wordmark" aria-label="Nilkurinji home">
-            <BrandMark className="site-footer__brand-mark" />
-            <span>NILKURINJI<span className="wordmark__period">.</span></span>
-          </Link>
-          <p>{preview ? "A thoughtful pantry for the everyday table." : "Tea, tea bags, rice, snacks and other foods."}</p>
-          {preview && <p className="site-footer__note">Illustrative imagery is used in the storefront preview.</p>}
-          {socialLinks.length > 0 && (
-            <div className="site-footer__socials" aria-label="Nilkurinji social media">
-              {socialLinks.map(({ label, href }) => {
-                return <a href={href} key={label} aria-label={`Nilkurinji on ${label}`} target="_blank" rel="noopener noreferrer">{label}<ArrowUpRight aria-hidden="true" size={13} /></a>;
-              })}
-            </div>
-          )}
-        </div>
-
-        <div className="site-footer__column">
-          <h2 className="site-footer__heading">Explore</h2>
-          <ul className="site-footer__links">
-            <li><Link href="/shop">Shop all</Link></li>
-            {CATEGORIES.map((category) => <li key={category.handle}><Link href={category.href}>{category.label}</Link></li>)}
-          </ul>
-        </div>
-
-        <div className="site-footer__column">
-          <h2 className="site-footer__heading">The essentials</h2>
-          <ul className="site-footer__links">
-            <li><Link href="/about">About Nilkurinji</Link></li>
-            <li><Link href="/contact">Contact <ArrowUpRight aria-hidden="true" size={13} /></Link></li>
-            <li><Link href="/pages/privacy-policy">Privacy policy</Link></li>
-            <li><Link href="/pages/refund-policy">Refund policy</Link></li>
-            <li><Link href="/pages/terms-and-conditions">Terms &amp; conditions</Link></li>
-          </ul>
-        </div>
-      </div>
-      <div className="site-footer__bottom">
-        <div className="mx-auto flex w-full max-w-[1360px] flex-col gap-2 px-5 py-4 md:flex-row md:items-center md:justify-between md:px-10">
-          <p>© {new Date().getFullYear()} Nilkurinji</p>
-          <p>{preview ? "Design preview · Purchases disabled" : "Shopify-hosted storefront"}</p>
-        </div>
-      </div>
-    </footer>
-  );
+import styles from "./site-footer.module.css";
+export function SiteFooter({ socialLinks = [] }: { socialLinks?: SocialLink[] }) {
+  const preview = getStorefrontMode().mode === "preview";
+  return <footer className={styles.footer}><div className={styles.inner}>
+    <div className={styles.brand}><Link href="/" aria-label="Nilkurinji home" className={styles.logo}><BrandMark /><span>NILKURINJI</span><small>Food &amp; beverages</small></Link><p>Tea for everyday moments.</p>{socialLinks.length > 0 && <nav className={styles.socials} aria-label="Nilkurinji social media">{socialLinks.map(({ href, label }) => <a href={href} key={label} target="_blank" rel="noopener noreferrer">{label}<ArrowUpRight size={14} aria-hidden="true" /></a>)}</nav>}</div>
+    <div><h2>Shop</h2><ul><li><Link href="/shop">Shop all</Link></li>{CATEGORIES.map((item) => <li key={item.href}><Link href={item.href}>{item.label}</Link></li>)}</ul></div>
+    <div><h2>Information</h2><ul><li><Link href="/about">Our story</Link></li><li><Link href="/contact">Contact</Link></li><li><Link href="/search">Search</Link></li><li><Link href="/account">Your account</Link></li><li><Link href="/wishlist">Wishlist</Link></li></ul></div>
+    <div><h2>The essentials</h2><ul><li><Link href="/pages/privacy-policy">Privacy policy</Link></li><li><Link href="/pages/refund-policy">Refund policy</Link></li><li><Link href="/pages/terms-and-conditions">Terms &amp; conditions</Link></li></ul></div>
+  </div><div className={styles.bottom}><p>© {new Date().getFullYear()} Nilkurinji</p>{preview && <p>Preview catalog. Draft copy, sample prices and concept imagery. Purchases disabled.</p>}</div></footer>;
 }

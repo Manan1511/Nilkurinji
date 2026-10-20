@@ -1,0 +1,14 @@
+.panel { display: grid; gap: 20px; padding-block: 24px; }
+.panel :global(.purchase-panel__price) { font: 500 24px/1.4 var(--font-body); font-variant-numeric: tabular-nums; }
+.panel label { display: flex; flex-direction: column; gap: 10px; font-size: 14px; }
+.panel select { min-height: 48px; max-width: 100%; padding: 10px 12px; background: var(--surface); border: 1px solid var(--rule); border-radius: 2px; font-size: 16px; color: var(--ink); }
+.panel :global(.quantity-control) { display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 14px; }
+.panel :global(.quantity-control) > div { display: flex; align-items: center; border: 1px solid var(--rule); }
+.panel :global(.quantity-control) button { width: 44px; height: 44px; display: grid; place-items: center; padding: 0; border: 0; background: transparent; color: var(--brand); }
+.panel :global(.quantity-control) output { min-width: 40px; text-align: center; font-variant-numeric: tabular-nums; }
+.panel :global(.quantity-control) button:disabled { opacity: .4; }
+.panel :global(.purchase-panel__buttons) { display: grid; gap: 12px; }
+.panel :global(.purchase-panel__notice) { padding: 16px; background: var(--surface-subtle); font-size: 14px; color: var(--ink-secondary); }
+.panel :global(.purchase-panel__fine) { color: var(--ink-secondary); font-size: 14px; }
+.panel :global(.purchase-panel__message):empty { display: none; }
+.panel :global(.purchase-panel__message) { font-size: 14px; }

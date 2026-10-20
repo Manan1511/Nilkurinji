@@ -1,4 +1,6 @@
+import styles from "@/app/reading.module.css";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { getPublishedPage } from "@/lib/shopify/content";
 import { getStorefrontMode } from "@/lib/shopify/mode";
 import { sanitizeMerchantHtml } from "@/lib/shopify/sanitize";
@@ -13,19 +15,22 @@ export default async function ContactPage() {
 
   return (
     <>
-      <header className="page-header">
-        <p className="eyebrow">We are here to help</p>
-        <h1 className="page-title">Contact</h1>
-        <p className="page-header__description">Get in touch using the contact links published in Shopify.</p>
+      <header className={styles.heading}>
+        <h1 >Contact</h1>
+        {html && <p >Use the contact details below to get in touch.</p>}
       </header>
-      <article className="content-page">
+      <article className={styles.body}>
         {result.source === "unavailable" ? (
-          <div className="notice-card" role="status">{result.reason}</div>
+          <div  role="status">
+            <p>Contact information is temporarily unavailable. Please check back soon.</p>
+            <Link href="/shop" className="button button--outline">Browse the shop</Link>
+          </div>
         ) : html ? (
-          <div className="content-page__body" dangerouslySetInnerHTML={{ __html: html }} />
+          <div  dangerouslySetInnerHTML={{ __html: html }} />
         ) : (
-          <div className="notice-card" role="status">
-            {isPreview ? "Approved email, phone and social links will appear here before launch." : "Add approved contact links to the Shopify Contact page to show them here."}
+          <div  role="status">
+            <p>{isPreview ? "Contact information is being prepared. Please check back soon." : "Contact information is not available yet."}</p>
+            <Link href="/shop" className="button button--outline">Browse the shop</Link>
           </div>
         )}
       </article>

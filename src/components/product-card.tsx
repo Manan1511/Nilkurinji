@@ -1,52 +1,28 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
 import { formatMoney } from "@/lib/format";
 import { WishlistButton } from "@/components/wishlist-button";
 import { QuickAddButton } from "@/components/quick-add-button";
 import type { StorefrontProduct } from "@/lib/shopify/types";
-
-export function ProductCard({ product, purchasingEnabled = false, variant = "standard", revealDelayMs = 0 }: { product: StorefrontProduct; purchasingEnabled?: boolean; variant?: "standard" | "featured" | "collection"; revealDelayMs?: number }) {
-  const featured = variant === "featured";
-  const collection = variant === "collection";
-  const cardImage = featured || collection ? product.cardImage : null;
-  const image = cardImage ?? product.featuredImage;
+import styles from "./product-card.module.css";
+export function ProductCard({ product, purchasingEnabled = false }: { product: StorefrontProduct; purchasingEnabled?: boolean; variant?: "standard" | "featured" | "collection"; compactQuickAdd?: boolean; revealDelayMs?: number }) {
+  const image = product.featuredImage;
   const price = product.priceRange?.minVariantPrice;
-  const isRange = Boolean(
-    product.priceRange && product.priceRange.minVariantPrice.amount !== product.priceRange.maxVariantPrice.amount,
-  );
-
-  return (
-    <article className={`product-card product-card--${variant}`} data-scroll-reveal="product" data-scroll-reveal-delay={revealDelayMs || undefined}>
-      <div className="product-card__image-wrap">
-        <Link href={`/products/${product.handle}`} className="product-card__image-link" aria-label={`View ${product.title}`}>
-          {image ? (
-            <Image
-              src={image.url}
-              alt={image.altText || product.title}
-              fill
-              sizes="(max-width: 640px) 46vw, (max-width: 1024px) 30vw, 23vw"
-              className={`product-card__image${cardImage ? " product-card__image--wide" : ""}`}
-            />
-          ) : (
-            <div className="product-card__image-empty" aria-hidden="true"><span>Nilkurinji</span></div>
-          )}
-        </Link>
-        <WishlistButton handle={product.handle} compact />
-        {product.isPreview && <span className="product-card__badge">Preview</span>}
-      </div>
-      <div className="product-card__details">
-        <p className="eyebrow product-card__category">{product.productType || "Nilkurinji pantry"}</p>
-        <h3><Link href={`/products/${product.handle}`}>{product.title}</Link></h3>
-        {collection && <p className="product-card__description">{product.description}</p>}
-        {price ? (
-          <p className="product-card__price">{isRange ? "From " : ""}{formatMoney(price)}</p>
-        ) : (
-          <p className="product-card__preview-note">Product details pending</p>
-        )}
-        {!featured && !collection && <Link href={`/products/${product.handle}`} className="product-card__link">View details <ArrowUpRight aria-hidden="true" size={14} /></Link>}
-        <QuickAddButton product={product} purchasingEnabled={purchasingEnabled} compact={featured} />
-      </div>
-    </article>
-  );
+  const range = product.priceRange && product.priceRange.minVariantPrice.amount !== product.priceRange.maxVariantPrice.amount;
+  const available = product.variants.some((variant) => variant.availableForSale);
+  return <article className={styles.card}>
+    <div className={styles.frame}>
+      <Link href={`/products/${product.handle}`} className={styles.imageLink} aria-label={`View ${product.title}`}>
+        {image ? <Image src={image.url} alt={image.altText || product.title} fill sizes="(max-width: 767px) 46vw, (max-width: 1023px) 45vw, (max-width: 1279px) 30vw, 23vw" className={styles.image} /> : <span className={styles.fallback}>Image coming soon</span>}
+      </Link>
+      <WishlistButton handle={product.handle} title={product.title} compact />
+    </div>
+    <div className={styles.details}>
+      <h3><Link href={`/products/${product.handle}`}>{product.title}</Link></h3>
+      {product.productType && <p className={styles.type}>{product.productType}</p>}
+      <p className={styles.price}>{price ? <>{product.isPreview ? "Sample price: " : range ? "From " : ""}{formatMoney(price)}</> : "Price unavailable"}</p>
+      {!product.isPreview && !available && <p className={styles.unavailable}>Currently unavailable</p>}
+      {!product.isPreview && purchasingEnabled && available ? (product.variants.length > 1 ? <Link href={`/products/${product.handle}`} className={styles.link}>Choose options</Link> : <QuickAddButton product={product} purchasingEnabled={purchasingEnabled} />) : <Link href={`/products/${product.handle}`} className={styles.link}>View details</Link>}
+    </div>
+  </article>;
 }

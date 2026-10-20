@@ -1,0 +1,9 @@
+.gallery { min-width: 0; }
+.main { position: relative; aspect-ratio: 1; background: var(--surface-subtle); }
+.main img { object-fit: contain; }
+.thumbs { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
+.thumbs button { width: 64px; height: 64px; position: relative; border: 1px solid var(--rule); background: var(--surface-subtle); padding: 0; }
+.thumbs button[aria-pressed="true"] { border-color: var(--brand); outline: 1px solid var(--brand); }
+.thumbs img { object-fit: contain; }
+.empty { aspect-ratio: 1; display: flex; flex-direction: column; gap: 12px; align-items: center; justify-content: center; padding: 24px; text-align: center; background: var(--surface-subtle); color: var(--ink-secondary); }
+.empty small { font-size: 14px; }

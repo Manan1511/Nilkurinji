@@ -1,20 +1,21 @@
 import { getStorefrontMode } from "@/lib/shopify/mode";
 import { isShopifyCheckoutEnabled } from "@/lib/shopify/checkout-config";
+import styles from "./store-notice.module.css";
 
 export function StoreNotice() {
   const mode = getStorefrontMode();
   if (mode.mode === "preview") {
     return (
-      <div className="store-notice store-notice--visually-hidden" role="status">
-        Preview <span aria-hidden="true">·</span> Draft imagery and copy <span aria-hidden="true">·</span> Purchases disabled
+      <div className={styles.notice} role="status">
+        Preview storefront · Purchases disabled
       </div>
     );
   }
   if (mode.mode === "unavailable") {
-    return <div className="store-notice store-notice--quiet" role="status">Shopify is being connected. Purchases are disabled.</div>;
+    return <div className={styles.notice} role="status">The store is being prepared. Purchases disabled.</div>;
   }
   if (!isShopifyCheckoutEnabled()) {
-    return <div className="store-notice store-notice--quiet" role="status">Catalog connection ready <span aria-hidden="true">·</span> Checkout will open after Shopify setup is approved</div>;
+    return <div className={styles.notice} role="status">Browse the collection · Checkout currently closed</div>;
   }
   return null;
 }

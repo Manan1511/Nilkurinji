@@ -1,65 +1,25 @@
 "use client";
-
-import { useState } from "react";
-import { Check, ShoppingCart } from "lucide-react";
+import { useRef, useState } from "react";
 import type { StorefrontProduct } from "@/lib/shopify/types";
 import { getQuickAddVariant } from "@/lib/shopify/cart-ui";
-
-export function QuickAddButton({ product, purchasingEnabled, compact = false }: { product: StorefrontProduct; purchasingEnabled: boolean; compact?: boolean }) {
+import styles from "./quick-add-button.module.css";
+export function QuickAddButton({ product, purchasingEnabled }: { product: StorefrontProduct; purchasingEnabled: boolean; compact?: boolean }) {
   const variant = getQuickAddVariant(product, purchasingEnabled);
+  const lock = useRef(false);
   const [pending, setPending] = useState(false);
-  const [added, setAdded] = useState(false);
   const [message, setMessage] = useState("");
-  if (!variant) {
-    if (!product.isPreview) return null;
-    return (
-      <div className={`quick-add ${compact ? "quick-add--compact" : ""}`}>
-        <button className={`product-card__quick-add product-card__quick-add--preview ${compact ? "product-card__quick-add--compact" : ""}`} type="button" disabled aria-label="Purchases are disabled in the preview store" title="Purchases are disabled in the preview store">
-          <ShoppingCart aria-hidden="true" size={14} />
-          {!compact && "Add to cart"}
-        </button>
-      </div>
-    );
-  }
-
-  const addToCart = async () => {
-    setPending(true);
-    setAdded(false);
-    setMessage("");
+  const [added, setAdded] = useState(false);
+  if (!variant) return null;
+  async function add() {
+    if (!variant || lock.current) return;
+    lock.current = true; setPending(true); setMessage(""); setAdded(false);
     try {
-      const response = await fetch("/api/cart", {
-        method: "POST",
-        cache: "no-store",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "add", variantId: variant.id, quantity: 1 }),
-      });
+      const response = await fetch("/api/cart", { method: "POST", cache: "no-store", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "add", variantId: variant.id, quantity: 1 }) });
       const result = await response.json() as { error?: string };
-      if (!response.ok) throw new Error(result.error || "The item could not be added.");
-      setMessage("Added to your cart.");
-      setAdded(true);
-      window.dispatchEvent(new Event("nilkurinji:cart-updated"));
-    } catch (error) {
-      setMessage(error instanceof Error ? error.message : "The item could not be added.");
-    } finally {
-      setPending(false);
-    }
-  };
-
-  return (
-    <div className="quick-add">
-      {!compact && <p className="quick-add__option">Option: {variant.title}</p>}
-      <button
-        className={`product-card__quick-add ${compact ? "product-card__quick-add--compact" : ""} ${added ? "is-added" : ""}`}
-        type="button"
-        onClick={addToCart}
-        disabled={pending}
-        aria-busy={pending}
-        aria-label={compact ? (added ? `${product.title} added to cart` : `Add ${product.title} to cart`) : undefined}
-      >
-        {compact ? (added ? <Check aria-hidden="true" size={17} /> : <ShoppingCart aria-hidden="true" size={17} />) : (pending ? "Adding…" : added ? "Added to cart" : "Quick add")}
-        {compact && <span className="sr-only">{pending ? "Adding to cart" : added ? "Added to cart" : "Add to cart"}</span>}
-      </button>
-      <span className="sr-only" role="status" aria-live="polite">{message}</span>
-    </div>
-  );
+      if (!response.ok) throw new Error(result.error || "The item could not be added. Please try again.");
+      setAdded(true); setMessage("Added to your cart."); window.dispatchEvent(new Event("nilkurinji:cart-updated"));
+    } catch (error) { setMessage(error instanceof Error ? error.message : "The item could not be added. Please try again."); }
+    finally { lock.current = false; setPending(false); }
+  }
+  return <div><button className={styles.button} type="button" disabled={pending} aria-label={`Add ${product.title} to cart`} aria-busy={pending} onClick={() => void add()}>{pending ? "Adding…" : added ? "Added" : "Add to cart"}</button>{message && <p className={styles.message} role="status">{message}</p>}</div>;
 }

@@ -1,26 +1,22 @@
 import type { Metadata, Viewport } from "next";
-import { Caveat, Playfair_Display } from "next/font/google";
+import { Manrope, Newsreader, Playfair_Display } from "next/font/google";
 import "@/app/globals.css";
+import "@/app/storefront-tokens.css";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { StoreNotice } from "@/components/store-notice";
-import { ScrollRevealObserver } from "@/components/scroll-reveal-observer";
 import { DEFAULT_DESCRIPTION, SITE_NAME } from "@/lib/site-config";
 import { getHomepageContent } from "@/lib/shopify/content";
 import { getStorefrontMode } from "@/lib/shopify/mode";
-import { isIndexableSite } from "@/lib/shopify/checkout-config";
+import { isIndexableSite, isShopifyCheckoutEnabled } from "@/lib/shopify/checkout-config";
 
 const displayFont = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-playfair-display",
   display: "swap",
 });
-const handwrittenFont = Caveat({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-caveat",
-  display: "swap",
-});
+const editorialFont = Newsreader({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-newsreader", display: "swap" });
+const bodyFont = Manrope({ subsets: ["latin"], variable: "--font-manrope", display: "swap" });
 
 function metadataBase(): URL | undefined {
   const configured = process.env.SITE_URL ?? process.env.URL;
@@ -37,7 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
     : homepage.source === "shopify" ? homepage.data.heroImage?.url : undefined;
   return {
     ...(base ? { metadataBase: base } : {}),
-    title: { default: `${SITE_NAME} · The everyday pantry`, template: `%s · ${SITE_NAME}` },
+    title: { default: `${SITE_NAME} · Tea and pantry`, template: `%s · ${SITE_NAME}` },
     description: DEFAULT_DESCRIPTION,
     robots: { index: isIndexableSite(), follow: isIndexableSite() },
     applicationName: SITE_NAME,
@@ -45,13 +41,13 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
       locale: "en_IN",
       siteName: SITE_NAME,
-      title: `${SITE_NAME} · The everyday pantry`,
+      title: `${SITE_NAME} · Tea and pantry`,
       description: DEFAULT_DESCRIPTION,
-      ...(base && image ? { images: [{ url: image, alt: mode.mode === "preview" ? "Illustrative Nilkurinji pantry concept artwork" : "Nilkurinji homepage" }] } : {}),
+      ...(base && image ? { images: [{ url: image, alt: mode.mode === "preview" ? "Illustrative Nilkurinji tea concept artwork" : "Nilkurinji homepage" }] } : {}),
     },
     twitter: {
       card: image ? "summary_large_image" : "summary",
-      title: `${SITE_NAME} · The everyday pantry`,
+      title: `${SITE_NAME} · Tea and pantry`,
       description: DEFAULT_DESCRIPTION,
       ...(base && image ? { images: [image] } : {}),
     },
@@ -61,22 +57,20 @@ export async function generateMetadata(): Promise<Metadata> {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#f7f5ee",
+  themeColor: "#fafbf8",
 };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const settings = await getHomepageContent();
-  const mode = getStorefrontMode();
   const socialLinks = settings.source === "unavailable" ? [] : settings.data.socialLinks;
+  const notice = getStorefrontMode().mode !== "live" || !isShopifyCheckoutEnabled();
   return (
-    <html lang="en" className={`${displayFont.variable} ${handwrittenFont.variable}`}>
-      <body>
+    <html lang="en" className={`${displayFont.variable} ${editorialFont.variable} ${bodyFont.variable}`}>
+      <body data-notice={String(notice)}>
         <a className="skip-link" href="#main-content">Skip to content</a>
-        <StoreNotice />
-        <SiteHeader />
+        <div className="site-shell"><StoreNotice /><SiteHeader /></div>
         <main id="main-content" className="page-main">{children}</main>
-        <SiteFooter socialLinks={socialLinks} preview={mode.mode === "preview"} />
-        <ScrollRevealObserver />
+        <SiteFooter socialLinks={socialLinks} />
       </body>
     </html>
   );

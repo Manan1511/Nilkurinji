@@ -1,0 +1,21 @@
+.header { background: var(--surface); border-bottom: 1px solid var(--rule); }
+.row { height: var(--header-height); max-width: 1440px; padding-inline: var(--page-gutter); margin-inline: auto; display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+.logo { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 160px; flex: 0 0 160px; text-decoration: none; color: var(--brand); }
+.mark { width: 21px; height: 17px; margin-bottom: 1px; }
+.name { font: 400 20px/1.2 var(--font-logo); letter-spacing: .14em; white-space: nowrap; }
+.tagline { display: flex; align-items: center; gap: 6px; font: 600 7px/1.8 var(--font-body); letter-spacing: .14em; text-transform: uppercase; white-space: nowrap; }
+.tagline::before,.tagline::after { content: ""; width: 13px; height: 1px; background: currentColor; opacity: .4; }
+.nav { display: flex; align-items: center; justify-content: center; gap: 28px; }
+.nav a { min-height: 44px; display: inline-flex; align-items: center; text-decoration: none; font-size: 14px; font-weight: 500; position: relative; white-space: nowrap; }
+.nav a::after { content: ""; height: 1px; background: var(--brand); position: absolute; inset: auto 0 7px; transform: scaleX(0); transform-origin: left; transition: transform 180ms; }
+.nav a:hover::after,.nav a[aria-current="page"]::after { transform: scaleX(1); }
+.tools { display: flex; gap: 2px; }
+.tool { width: 44px; height: 44px; position: relative; display: inline-grid; place-items: center; background: transparent; border: 0; color: var(--brand); text-decoration: none; border-radius: 2px; flex-shrink: 0; }
+.tool:hover { background: var(--surface-subtle); }
+.tool svg { width: 21px; height: 21px; stroke-width: 1.5; }
+.count { position: absolute; right: 0; top: 0; font: 600 11px/18px var(--font-body); background: var(--brand); color: var(--surface); min-width: 18px; height: 18px; padding-inline: 3px; border-radius: 50%; text-align: center; }
+.menu { display: none; }
+.mobileNav { display: flex; flex-direction: column; }
+.mobileNav a { padding-block: 16px; text-decoration: none; border-bottom: 1px solid var(--rule); font: 400 28px/1.3 var(--font-editorial); }
+@media (max-width: 1023px) { .row { gap: 0; } .nav,.desktopUtility { display: none; } .menu { display: inline-grid; } .logo { width: 138px; flex-basis: 138px; margin-right: auto; margin-left: 8px; } .name { font-size: 18px; } .tagline { font-size: 6.5px; } .mark { width: 18px; height: 15px; } .tools { gap: 0; } }
+@media (max-width: 359px) { .logo { margin-left: 0; } }

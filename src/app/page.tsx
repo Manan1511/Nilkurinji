@@ -1,111 +1,37 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Landmark, Leaf, ShieldCheck, Truck } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { BannerCarousel } from "@/components/banner-carousel";
-import { BrandMark } from "@/components/brand-mark";
-import { BotanicalFrame } from "@/components/botanical-frame";
-import { FeaturedProductsCarousel } from "@/components/featured-products-carousel";
+import { ProductCard } from "@/components/product-card";
 import { getProducts } from "@/lib/shopify/catalog";
-import { getHomepageContent } from "@/lib/shopify/content";
+import { getHomepageContent, getPublishedPage } from "@/lib/shopify/content";
 import { getStorefrontMode } from "@/lib/shopify/mode";
 import { buildHomepageSlides } from "@/lib/shopify/home-slides";
 import { isShopifyCheckoutEnabled } from "@/lib/shopify/checkout-config";
+import { sanitizeMerchantHtml } from "@/lib/shopify/sanitize";
 import { CATEGORIES } from "@/lib/site-config";
+import styles from "@/components/home/home.module.css";
 import type { Metadata } from "next";
-
 export const revalidate = 60;
 export const metadata: Metadata = { alternates: { canonical: "/" } };
-
 export default async function HomePage() {
-  const [productsResult, homepageResult] = await Promise.all([getProducts(), getHomepageContent()]);
-  const mode = getStorefrontMode();
-  const products = productsResult.source === "unavailable" ? [] : productsResult.data;
-  const content = homepageResult.source === "unavailable" ? null : homepageResult.data;
-  const preview = mode.mode === "preview";
+  const [catalog, homepage, about] = await Promise.all([getProducts(), getHomepageContent(), getPublishedPage("about")]);
+  const preview = getStorefrontMode().mode === "preview";
+  const content = homepage.source === "unavailable" ? null : homepage.data;
+  const products = catalog.source === "unavailable" ? [] : catalog.data;
+  const tea = products.filter((product) => product.collectionHandles.some((handle) => handle === "tea" || handle === "tea-bags") || /\btea\b/i.test(product.productType)).slice(0, 4);
   const slides = buildHomepageSlides(preview, content);
-
-  return (
-    <>
-      {slides.length ? <BannerCarousel slides={slides} /> : (
-        <section className="hero-carousel mx-auto w-full max-w-[1360px] px-5 md:px-10" aria-label="Store setup">
-          <div className="hero-carousel__slide">
-            <div className="hero-carousel__copy">
-              <p className="eyebrow hero-carousel__eyebrow">Nilkurinji</p>
-              <h1>The store is being prepared.</h1>
-              <p className="hero-carousel__description">{homepageResult.source === "unavailable" ? homepageResult.reason : "Publish approved homepage copy in Shopify to display it here."}</p>
-              <Link href="/shop" className="button button--dark">Browse the shop <ArrowRight aria-hidden="true" size={17} /></Link>
-            </div>
-            <div className="hero-carousel__visual hero-carousel__visual--pending" aria-hidden="true" />
-          </div>
-        </section>
-      )}
-
-      <section className="category-section" aria-labelledby="home-categories-heading">
-        <BotanicalFrame className="botanical-frame--categories" />
-        <div className="category-section__heading">
-          <BrandMark className="category-section__mark" />
-          <div className="category-section__title-row"><span /><h2 id="home-categories-heading">Our Categories</h2><span /></div>
-          <p>A wholesome range of premium foods, inspired by nature.</p>
-        </div>
-        <nav className="category-shelf mx-auto" aria-label="Shop by category">
-          {CATEGORIES.map((category, index) => (
-            <Link key={category.handle} href={category.href} className={`category-shelf__tile category-shelf__tile--${category.handle}`} data-scroll-reveal="category" data-scroll-reveal-delay={index * 42}>
-              <span className="category-shelf__image"><Image src={`/images/category-icon-${category.handle}.png`} alt="" fill sizes="(max-width: 640px) 72px, 100px" priority={index === 0} /></span>
-              <span className="category-shelf__label">{category.label}<ArrowRight aria-hidden="true" size={13} /></span>
-            </Link>
-          ))}
-        </nav>
-      </section>
-
-      <section className="section section--wide home-featured" aria-labelledby="home-featured-heading">
-        <BotanicalFrame className="botanical-frame--featured" />
-        <div className="home-featured__intro" data-scroll-reveal="rise">
-          <p className="eyebrow">{preview ? "Featured products" : "Nilkurinji catalogue"}</p>
-          <h2 id="home-featured-heading">{preview ? "Our Best Sellers" : content?.featuredProductsHeading || "Shop products"}</h2>
-          <p className="home-featured__description">{preview ? "Timeless classics, loved by many." : "Explore the foods and beverages in our pantry."}</p>
-          <Link href="/shop" className="button button--outline home-featured__shop">
-            Shop all <ArrowRight aria-hidden="true" size={15} />
-          </Link>
-        </div>
-        <div className="home-featured__products">
-          {productsResult.source === "unavailable" ? (
-            <div className="notice-card" role="status">{productsResult.reason}</div>
-          ) : products.length ? (
-            <FeaturedProductsCarousel products={products.slice(0, 8)} purchasingEnabled={isShopifyCheckoutEnabled()} />
-          ) : (
-            <div className="empty-state empty-state--catalog">
-              <span className="eyebrow">Shopify catalog</span>
-              <h2>Good things will be here soon.</h2>
-              <p>Publish approved products to the Nilkurinji Headless sales channel to show them here.</p>
-            </div>
-          )}
-        </div>
-      </section>
-
-      <section className="benefits-band home-benefits" aria-label="Nilkurinji benefits">
-        <div className="benefits-band__inner mx-auto w-full max-w-[1360px] px-5 md:px-10">
-          <article className="benefit" data-scroll-reveal="benefit" data-scroll-reveal-delay="0">
-            <Leaf aria-hidden="true" className="benefit__icon" />
-            <h2>{preview ? "100% Natural Ingredients" : "Ingredients"}</h2>
-            <p>{preview ? "Pure, Safe, Wholesome." : "Find ingredients and product details on every listing."}</p>
-          </article>
-          <article className="benefit" data-scroll-reveal="benefit" data-scroll-reveal-delay="55">
-            <Landmark aria-hidden="true" className="benefit__icon" />
-            <h2>{preview ? "Authentic Indian Heritage" : "Our story"}</h2>
-            <p>{preview ? "Tradition in every cup." : "Learn about Nilkurinji and the pantry we are building."}</p>
-          </article>
-          <article className="benefit" data-scroll-reveal="benefit" data-scroll-reveal-delay="110">
-            <ShieldCheck aria-hidden="true" className="benefit__icon" />
-            <h2>{preview ? "Premium Quality" : "Product details"}</h2>
-            <p>{preview ? "Carefully sourced, Always." : "Review available product information before purchase."}</p>
-          </article>
-          <article className="benefit" data-scroll-reveal="benefit" data-scroll-reveal-delay="165">
-            <Truck aria-hidden="true" className="benefit__icon" />
-            <h2>{preview ? "Pan India Delivery" : "Delivery"}</h2>
-            <p>{preview ? "Freshness at your doorstep." : "See delivery options for your address at checkout."}</p>
-          </article>
-        </div>
-      </section>
-    </>
-  );
+  const story = about.source === "shopify" && about.data?.body ? sanitizeMerchantHtml(about.data.body).replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().split(" ").slice(0, 55).join(" ") : "";
+  return <div className={styles.home}>
+    {slides.length ? <BannerCarousel slides={slides} /> : <section className={styles.section}><h1>The store is being prepared.</h1><p>Browse the collection, or return soon to see more.</p><Link href="/shop" className="button button--dark">Browse the shop <ArrowRight aria-hidden="true" size={17} /></Link></section>}
+    <section className={styles.section} aria-labelledby="home-featured-heading">
+      <div className={styles.sectionHeader}><div><h2 id="home-featured-heading">{content?.featuredProductsHeading || "Explore Nilkurinji tea"}</h2><p>{preview ? "Browse tea and tea bags in this storefront preview." : "Explore the current collection of tea and tea bags."}</p></div><Link href="/collections/tea">View all tea <ArrowRight size={17} aria-hidden="true" /></Link></div>
+      {catalog.source === "unavailable" ? <div className={styles.empty} role="status"><p>Tea listings are temporarily unavailable.</p><Link href="/shop">Browse the shop</Link></div> : tea.length ? <div className={`${styles.grid} ${tea.length <= 2 ? styles.gridSmall : ""}`}>{tea.map((product) => <ProductCard key={product.id} product={product} purchasingEnabled={isShopifyCheckoutEnabled()} />)}</div> : <div className={styles.empty}><p>The tea collection is being prepared.</p><Link href="/collections/tea">View tea collection</Link></div>}
+    </section>
+    <section className={styles.section} aria-label="Choose your tea"><div className={styles.discovery}>
+      {[{ title: "Tea", image: "/images/category-tea.png", href: "/collections/tea" }, { title: "Tea bags", image: "/images/category-tea-bags.png", href: "/collections/tea-bags" }].map((category) => <Link key={category.href} href={category.href}><span className={styles.discoveryImage}>{preview && <Image src={category.image} alt="" fill sizes="(max-width: 767px) 45vw, 26vw" />}</span><span className={styles.discoveryCopy}><strong>{category.title}</strong><span>Explore collection <ArrowRight size={17} aria-hidden="true" /></span></span></Link>)}
+    </div></section>
+    <section className={styles.section}><div className={styles.story}><h2>A little more about Nilkurinji.</h2><div>{story && <p>{story}</p>}<Link href="/about">Our story <ArrowRight size={17} aria-hidden="true" /></Link></div></div></section>
+    <section className={styles.section}><div className={styles.pantry}><h2>More from the pantry</h2><nav aria-label="Shop other pantry categories">{CATEGORIES.filter((item) => item.handle !== "tea" && item.handle !== "tea-bags").map((category) => <Link key={category.href} href={category.href}>{category.label}<ArrowRight size={16} aria-hidden="true" /></Link>)}</nav></div></section>
+  </div>;
 }

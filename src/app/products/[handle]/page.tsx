@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Star } from "lucide-react";
 import { ProductCard } from "@/components/product-card";
 import { ProductGallery } from "@/components/product-gallery";
 import { ProductPurchasePanel } from "@/components/product-purchase-panel";
@@ -70,82 +70,26 @@ function productJsonLd(product: StorefrontProduct): Record<string, unknown> {
 
 export const revalidate = 60;
 
+import { ProductDetails } from "@/components/product-details";
+import styles from "./product.module.css";
+import reading from "@/app/reading.module.css";
 export default async function ProductPage({ params }: PageProps) {
-  const { handle } = await params;
-  const result = await getProduct(handle);
-  if (result.source === "unavailable") {
-    return <div className="page-header"><p className="eyebrow">Shopify catalog</p><h1 className="page-title">Product details are unavailable</h1><p className="page-header__description">{result.reason}</p></div>;
-  }
+  const { handle } = await params; const result = await getProduct(handle);
+  if (result.source === "unavailable") return <div className={reading.heading} role="status"><h1>Product information is temporarily unavailable.</h1><p>Please browse all products instead.</p><Link href="/shop" className="text-link">Browse all products</Link></div>;
   if (!result.data) notFound();
   const product = result.data;
-  const category = CATEGORIES.find((item) => product.collectionHandles.includes(item.handle))
-    ?? CATEGORIES.find((item) => item.label.toLowerCase() === product.productType.toLowerCase());
+  const category = CATEGORIES.find((item) => product.collectionHandles.includes(item.handle));
   const recommendations = await getRecommendations(product);
-  const related = recommendations.source === "unavailable" ? [] : recommendations.data;
-
-  return (
-    <>
-      <div className="product-detail">
-        <ProductGallery images={product.images} title={product.title} />
-        <section className="product-info" aria-labelledby="product-title">
-          <div className="breadcrumb">
-            <Link href="/">Home</Link><ChevronRight aria-hidden="true" />
-            {category && <><Link href={category.href}>{category.label}</Link><ChevronRight aria-hidden="true" /></>}
-            <span>{product.title}</span>
-          </div>
-          <Link href={category?.href ?? "/shop"} className="product-info__back">← Back to {category?.label ?? "the shop"}</Link>
-          <p className="eyebrow product-info__category">{product.isPreview ? "Design preview" : (category?.label ?? product.productType ?? "Nilkurinji pantry")}</p>
-          <h1 id="product-title">{product.title}</h1>
-          <p className="product-info__description">
-            {product.description || (product.isPreview ? "This visual placeholder has no approved product description." : "Product information is being prepared in Shopify.")}
-          </p>
-          <div className="product-info__actions">
-            <WishlistButton handle={product.handle} />
-          </div>
-          <ProductPurchasePanel product={product} purchasingEnabled={isShopifyCheckoutEnabled()} />
-        </section>
-      </div>
-
-      <section className="product-content">
-        <div className="product-content__section">
-          <h2>Product details</h2>
-          <p>{product.details || (product.isPreview ? "Approved product details will appear here once published in Shopify." : "Product details will appear here when they are added to Shopify.")}</p>
-        </div>
-        <div className="product-content__section product-faq">
-          <h2>Frequently asked questions</h2>
-          {product.faqs.length ? product.faqs.map((faq) => (
-            <details key={faq.question}><summary>{faq.question}</summary><p>{faq.answer}</p></details>
-          )) : <p>Product-specific FAQs will be published here from Shopify.</p>}
-        </div>
-        <div className="product-content__section product-reviews">
-          <h2>Customer reviews</h2>
-          {product.approvedReviews.length ? (
-            <div className="product-reviews__list">
-              {product.approvedReviews.map((review, index) => (
-                <article className="product-review" key={`${review.name}-${review.date ?? "undated"}-${index}`}>
-                  <p className="product-review__rating"><span aria-hidden="true">{"★".repeat(review.rating)}</span><span className="sr-only">{review.rating} out of 5 stars</span></p>
-                  {review.title && <h3>{review.title}</h3>}
-                  <p>{review.body}</p>
-                  <p className="product-review__byline">{review.name}{review.date && <> · <time dateTime={review.date}>{new Intl.DateTimeFormat("en-IN", { dateStyle: "medium" }).format(new Date(`${review.date}T00:00:00`))}</time></>}</p>
-                </article>
-              ))}
-            </div>
-          ) : (
-            <p className="product-reviews__placeholder">Customer reviews will appear here after approved review content is added to Shopify.</p>
-          )}
-        </div>
-      </section>
-
-      {related.length > 0 && (
-        <section className="section section--wide">
-          <div className="section-heading"><div><p className="eyebrow">Keep exploring</p><h2>You may also like</h2></div></div>
-          <div className="product-grid">{related.slice(0, 4).map((item) => <ProductCard key={item.id} product={item} purchasingEnabled={isShopifyCheckoutEnabled()} />)}</div>
-        </section>
-      )}
-
-      {!product.isPreview && product.priceRange && (
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd(product)).replace(/</g, "\\u003c") }} />
-      )}
-    </>
-  );
+  const related = recommendations.source === "unavailable" ? [] : recommendations.data.filter((item) => item.id !== product.id);
+  return <div className={styles.page}>
+    <nav className={styles.breadcrumb} aria-label="Breadcrumb"><Link href="/shop">Shop</Link><ChevronRight size={14} aria-hidden="true" />{category && <><Link href={category.href}>{category.label}</Link><ChevronRight size={14} aria-hidden="true" /></>}<span>{product.title}</span></nav>
+    <div className={styles.layout} key={product.id}><ProductGallery images={product.images} title={product.title} /><ProductDetails className={styles.detail}><h1 id="product-title">{product.title}</h1><ProductPurchasePanel product={product} purchasingEnabled={isShopifyCheckoutEnabled()} />{product.description && <p className={styles.description}>{product.description}</p>}<WishlistButton handle={product.handle} title={product.title} /></ProductDetails></div>
+    {(product.details || product.faqs.length > 0 || product.approvedReviews.length > 0) && <div className={styles.content}>
+      {product.details && <section><h2>Product details</h2><p>{product.details}</p></section>}
+      {product.faqs.length > 0 && <section><h2>Frequently asked questions</h2>{product.faqs.map((faq) => <details key={faq.question}><summary>{faq.question}</summary><p>{faq.answer}</p></details>)}</section>}
+      {product.approvedReviews.length > 0 && <section><h2>Customer reviews</h2>{product.approvedReviews.map((review,index) => <article key={`${review.name}-${index}`}><div className={styles.stars} aria-label={`${review.rating} out of 5 stars`}>{Array.from({ length: review.rating }, (_, i) => <Star key={i} size={16} fill="currentColor" aria-hidden="true" />)}</div>{review.title && <h3>{review.title}</h3>}<p>{review.body}</p><p className={styles.byline}>{review.name}{review.date && <> · <time dateTime={review.date}>{new Intl.DateTimeFormat("en-IN", { dateStyle: "medium" }).format(new Date(`${review.date}T00:00:00`))}</time></>}</p></article>)}</section>}
+    </div>}
+    {related.length > 0 && <section className={styles.related}><h2>You may also like</h2><div className={styles.grid}>{related.slice(0,4).map((item) => <ProductCard key={item.id} product={item} purchasingEnabled={isShopifyCheckoutEnabled()} />)}</div></section>}
+    {!product.isPreview && product.priceRange && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd(product)).replace(/</g,"\\u003c") }} />}
+  </div>;
 }

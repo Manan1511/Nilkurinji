@@ -3,22 +3,23 @@
 import { useState } from "react";
 import Image from "next/image";
 import type { ShopifyImage } from "@/lib/shopify/types";
+import styles from "./product-gallery.module.css";
 
 export function ProductGallery({ images, title }: { images: ShopifyImage[]; title: string }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const active = images[activeIndex];
 
   if (!active) {
-    return <div className="product-gallery__empty"><span>Product imagery</span><small>Shopify photos appear here once published.</small></div>;
+    return <div className={styles.empty}><span>Product image coming soon</span></div>;
   }
 
   return (
-    <div className="product-gallery">
-      <div className="product-gallery__main">
-        <Image src={active.url} alt={active.altText || title} fill sizes="(max-width: 800px) 100vw, 55vw" priority className="product-gallery__image" />
+    <div className={styles.gallery}>
+      <div className={styles.main}>
+        <Image src={active.url} alt={active.altText || title} fill sizes="(max-width: 1023px) 100vw, 55vw" preload={activeIndex === 0} />
       </div>
       {images.length > 1 && (
-        <div className="product-gallery__thumbs" aria-label="Product photos">
+        <div className={styles.thumbs} aria-label="Product photos">
           {images.map((image, index) => (
             <button
               key={`${image.url}-${index}`}

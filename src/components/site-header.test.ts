@@ -18,6 +18,31 @@ describe("shared storefront header", () => {
       return markup.match(/<header class="([^"]+)"/)?.[1];
     });
 
-    expect(headerClasses).toEqual(["site-header", "site-header", "site-header"]);
+    expect(headerClasses.every(Boolean)).toBe(true);
+    expect(new Set(headerClasses).size).toBe(1);
+  });
+
+  it("uses a neutral shared store descriptor", () => {
+    const markup = renderToStaticMarkup(createElement(SiteHeader));
+
+    expect(markup).toContain("Food &amp; beverages");
+    expect(markup).not.toContain("Premium food");
+  });
+
+  it("submits a product query from the header instead of linking to a blank search page", () => {
+    const markup = renderToStaticMarkup(createElement(SiteHeader));
+
+    expect(markup).toContain('action="/search"');
+    expect(markup).toContain('name="q"');
+    expect(markup).toContain('placeholder="Search tea and pantry"');
+    expect(markup).not.toContain('href="/search"');
+  });
+
+  it("exposes an expandable mobile search control with its current state", () => {
+    const markup = renderToStaticMarkup(createElement(SiteHeader));
+
+    expect(markup).toContain('aria-label="Search products"');
+    expect(markup).toContain('aria-expanded="false"');
+    expect(markup).toContain('aria-controls="header-search-panel"');
   });
 });

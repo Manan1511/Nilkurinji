@@ -30,9 +30,13 @@ describe("quick add eligibility", () => {
     ],
   };
 
-  it("chooses the first available Shopify variant only after checkout is enabled", () => {
-    expect(getQuickAddVariant(liveProduct, true)?.id).toBe("gid://shopify/ProductVariant/second");
+  it("requires explicit choice for multiple variants even if just one is available", () => {
+    expect(getQuickAddVariant(liveProduct, true)).toBeNull();
     expect(getQuickAddVariant(liveProduct, false)).toBeNull();
+  });
+
+  it("adds only a single available, priced variant", () => {
+    expect(getQuickAddVariant({ ...liveProduct, variants: [liveProduct.variants[1]] }, true)?.id).toBe(liveProduct.variants[1].id);
   });
 
   it("never offers quick add for preview products or unavailable variants", () => {

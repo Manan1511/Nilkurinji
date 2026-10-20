@@ -1,0 +1,1 @@
+.notice { display: flex; align-items: center; justify-content: center; height: var(--notice-height); padding-inline: 12px; background: var(--surface-subtle); color: var(--brand); font: 500 13px/1.3 var(--font-body); text-align: center; }

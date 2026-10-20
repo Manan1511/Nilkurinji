@@ -1,0 +1,15 @@
+.card { min-width: 0; }
+.frame { position: relative; background: var(--surface-subtle); }
+.imageLink { display: block; position: relative; aspect-ratio: 4/5; overflow: hidden; }
+.image { object-fit: contain; transition: transform 240ms cubic-bezier(.2,.7,.3,1); }
+.imageLink:hover .image { transform: scale(1.025); }
+.fallback { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; font-size: 14px; color: var(--ink-secondary); padding: 16px; }
+.details { padding-top: 20px; }
+.details h3 { font: 400 22px/1.3 var(--font-editorial); min-height: 2.6em; overflow-wrap: anywhere; }
+.details h3 a { text-decoration: none; }
+.details h3 a:hover { text-decoration: underline; text-decoration-thickness: 1px; }
+.type { margin-top: 4px; color: var(--ink-secondary); font-size: 14px; }
+.price { margin-top: 8px; font-size: 16px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.link { min-height: 44px; display: inline-flex; align-items: center; font-size: 14px; margin-top: 4px; }
+.unavailable { color: var(--ink-secondary); font-size: 14px; margin-top: 4px; }
+@media (max-width: 767px) { .details { padding-top: 14px; } .details h3 { font-size: 18px; } .price { font-size: 16px; } }

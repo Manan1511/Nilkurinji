@@ -1,23 +1,58 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { ProductGrid } from "@/components/product-grid";
+import * as productGrid from "@/components/product-grid";
 
-describe("reference collection layout", () => {
-  it("places tea type tabs in the product column beside the filter sidebar", () => {
-    const html = renderToStaticMarkup(createElement(ProductGrid, {
+const gridHelpers = productGrid as unknown as {
+  filterProductsByTopFilters<T extends { tags: string[] }>(products: T[], selectedTags: string[]): T[];
+};
+
+describe("shared collection browsing", () => {
+  it("exposes product results and a named tea-type navigation", () => {
+    const html = renderToStaticMarkup(createElement(productGrid.ProductGrid, {
       products: [],
       emptyMessage: "No teas",
       allowCategoryFilter: false,
       showToolbar: false,
       topFilters: [{ label: "All Teas", value: "all", icon: "leaf" }],
     }));
-    const layout = html.indexOf("catalog-layout");
-    const results = html.indexOf("catalog-results");
-    const tabs = html.indexOf("collection-type-nav");
+    expect(html).toContain('aria-label="Products"');
+    expect(html).toContain('aria-label="Filter teas by type"');
+  });
 
-    expect(layout).toBeGreaterThanOrEqual(0);
-    expect(results).toBeGreaterThan(layout);
-    expect(tabs).toBeGreaterThan(results);
+  it("uses the selected tea type tag without requiring a duplicate facet", () => {
+    expect(gridHelpers.filterProductsByTopFilters).toBeTypeOf("function");
+    const products = [
+      { handle: "black", tags: ["type:black-tea", "caffeine:caffeinated"] },
+      { handle: "green", tags: ["type:green-tea", "caffeine:caffeinated"] },
+      { handle: "herbal", tags: ["type:herbal-tea", "caffeine:decaf"] },
+    ];
+
+    expect(gridHelpers.filterProductsByTopFilters(products, ["type:black-tea"]).map(({ handle }) => handle)).toEqual(["black"]);
+    expect(gridHelpers.filterProductsByTopFilters(products, [])).toEqual(products);
+  });
+
+  it("gives shoppers a useful next step when a collection has no products", () => {
+    const html = renderToStaticMarkup(createElement(productGrid.ProductGrid, {
+      products: [],
+      emptyMessage: "No teas",
+      allowCategoryFilter: false,
+      showToolbar: false,
+    }));
+
+    expect(html).not.toContain("Shopify");
+    expect(html).toContain("Products will appear here when they are available.");
+  });
+
+  it("exposes the selected category and announces product result changes", () => {
+    const html = renderToStaticMarkup(createElement(productGrid.ProductGrid, {
+      products: [],
+      emptyMessage: "No teas",
+    }));
+
+    expect(html).toContain('aria-pressed="true"');
+    expect(html).toContain('aria-pressed="false"');
+    expect(html).toContain('aria-live="polite"');
+    expect(html).toContain("0 products found.");
   });
 });

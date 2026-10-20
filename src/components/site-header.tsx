@@ -1,93 +1,61 @@
 "use client";
-
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Heart, Menu, Search, ShoppingBag, UserRound, X } from "lucide-react";
+import { Heart, Menu, Search, ShoppingBag, UserRound } from "lucide-react";
 import { BrandMark } from "@/components/brand-mark";
+import { SearchOverlay } from "@/components/search/search-overlay";
+import { ModalSheet } from "@/components/storefront/modal-sheet";
 import { PRIMARY_NAV } from "@/lib/site-config";
-
-type CartResponse = { cart?: { totalQuantity?: number } | null };
+import styles from "./site-header.module.css";
 
 export function SiteHeader() {
   const pathname = usePathname();
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [panel, setPanel] = useState<"menu" | "search" | null>(null);
+  const [compact, setCompact] = useState(false);
+  const [query, setQuery] = useState("");
   const [cartCount, setCartCount] = useState(0);
-
+  const searchRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLButtonElement>(null);
+  const close = useCallback(() => setPanel(null), []);
+  useEffect(() => {
+    const media = window.matchMedia?.("(max-width: 1023px)");
+    if (!media) return;
+    const sync = () => { setCompact(media.matches); setPanel(null); };
+    sync(); media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, []);
   useEffect(() => {
     let active = true;
+    let generation = 0;
     const refresh = async () => {
+      const current = ++generation;
       try {
         const response = await fetch("/api/cart", { cache: "no-store" });
-        const result = await response.json() as CartResponse;
-        if (active) setCartCount(result.cart?.totalQuantity ?? 0);
-      } catch {
-        if (active) setCartCount(0);
-      }
+        if (!response.ok) return;
+        const body = await response.json() as { cart?: { totalQuantity?: number } | null };
+        if (active && generation === current) setCartCount(body.cart?.totalQuantity ?? 0);
+      } catch { /* Keep the last confirmed count during an outage. */ }
     };
-    void refresh();
-    window.addEventListener("nilkurinji:cart-updated", refresh);
-    return () => {
-      active = false;
-      window.removeEventListener("nilkurinji:cart-updated", refresh);
-    };
+    void refresh(); window.addEventListener("nilkurinji:cart-updated", refresh);
+    return () => { active = false; window.removeEventListener("nilkurinji:cart-updated", refresh); };
   }, []);
-
-  return (
-    <header className="site-header">
-      <div className="site-header__utility-row mx-auto w-full max-w-[1360px] px-5 md:px-10">
-        <button
-          className="icon-button site-header__menu"
-          type="button"
-          aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
-          aria-expanded={menuOpen}
-          aria-controls="primary-navigation"
-          onClick={() => setMenuOpen((open) => !open)}
-        >
-          {menuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
-        </button>
-
-        <Link href="/search" className="site-header__desktop-search" aria-label="Search the shop">
-          <Search aria-hidden="true" size={18} />
-          <span>Search</span>
-        </Link>
-
-        <Link href="/" className="wordmark" aria-label="Nilkurinji home">
-          <BrandMark className="wordmark__mark" />
-          <span className="wordmark__name">NILKURINJI</span>
-          <span className="wordmark__tagline">Premium food &amp; beverages</span>
-        </Link>
-
-        <nav id="primary-navigation" className={`site-nav ${menuOpen ? "site-nav--open" : ""}`} aria-label="Primary navigation">
-          {PRIMARY_NAV.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="site-nav__link"
-              aria-current={pathname === item.href ? "page" : undefined}
-              onClick={() => setMenuOpen(false)}
-            >
-              {item.label}
-            </Link>
-          ))}
-          <Link
-            href="/wishlist"
-            className="site-nav__link site-nav__wishlist-link"
-            aria-current={pathname === "/wishlist" ? "page" : undefined}
-            onClick={() => setMenuOpen(false)}
-          >Your wishlist</Link>
-        </nav>
-
-        <div className="site-tools" aria-label="Shop tools">
-          <Link href="/search" className="icon-button site-tools__search" aria-label="Search the shop"><Search aria-hidden="true" /></Link>
-          <Link href="/account" className="icon-button site-tools__account" aria-label="Shopify customer account"><UserRound aria-hidden="true" /></Link>
-          <Link href="/wishlist" className="icon-button site-tools__wishlist" aria-label="Your wishlist"><Heart aria-hidden="true" /></Link>
-          <Link href="/cart" className="icon-button site-tools__cart" aria-label={`Shopping cart${cartCount ? `, ${cartCount} items` : ""}`}>
-            <ShoppingBag aria-hidden="true" />
-            {cartCount > 0 && <span key={cartCount} className="cart-count" aria-hidden="true">{cartCount > 99 ? "99+" : cartCount}</span>}
-          </Link>
-        </div>
+  useEffect(() => { const closeForNavigation = () => setPanel(null); closeForNavigation(); }, [pathname]);
+  const links = PRIMARY_NAV.filter((item) => item.href !== "/");
+  const navigation = <>{links.map((item) => <Link key={item.href} href={item.href} aria-current={pathname === item.href ? "page" : undefined} onClick={close}>{item.label}</Link>)}</>;
+  return <header className={styles.header}>
+    <div className={styles.row}>
+      <button ref={menuRef} className={`${styles.tool} ${styles.menu} site-header__menu`} type="button" aria-label="Open navigation menu" aria-expanded={panel === "menu"} onClick={() => setPanel((value) => value === "menu" ? null : "menu")}><Menu aria-hidden="true" /></button>
+      <Link className={styles.logo} href="/" aria-label="Nilkurinji home" onClick={close}><BrandMark className={styles.mark} /><span className={styles.name}>NILKURINJI</span><span className={styles.tagline}>Food &amp; beverages</span></Link>
+      <nav className={styles.nav} aria-label="Primary navigation">{navigation}</nav>
+      <div className={styles.tools}>
+        <button ref={searchRef} className={`${styles.tool} site-header__search-trigger site-tools__search`} type="button" aria-label="Search products" aria-expanded={panel === "search"} aria-controls="header-search-panel" onClick={() => setPanel((value) => value === "search" ? null : "search")}><Search aria-hidden="true" /></button>
+        <Link href="/account" className={`${styles.tool} ${styles.desktopUtility}`} aria-label="Shopify customer account" onClick={close}><UserRound aria-hidden="true" /></Link>
+        <Link href="/wishlist" className={`${styles.tool} ${styles.desktopUtility}`} aria-label="Your wishlist" onClick={close}><Heart aria-hidden="true" /></Link>
+        <Link href="/cart" className={styles.tool} aria-label={`Shopping cart${cartCount ? `, ${cartCount} items` : ""}`} onClick={close}><ShoppingBag aria-hidden="true" />{cartCount > 0 && <span className={styles.count} aria-hidden="true">{cartCount > 99 ? "99+" : cartCount}</span>}</Link>
       </div>
-    </header>
-  );
+    </div>
+    <SearchOverlay open={panel === "search"} compact={compact} query={query} onQueryChange={setQuery} onClose={close} triggerRef={searchRef} />
+    <ModalSheet open={panel === "menu" && compact} label="Menu" placement="right" triggerRef={menuRef} onClose={close}><nav className={styles.mobileNav} aria-label="Mobile navigation">{navigation}<Link href="/wishlist" onClick={close}>Your wishlist</Link><Link href="/account" onClick={close}>Your account</Link></nav></ModalSheet>
+  </header>;
 }
