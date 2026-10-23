@@ -1,5 +1,6 @@
 import { parseApprovedReviews, parseFaqs } from "@/lib/shopify/product-content";
 import type { ShopifyImage, ShopifyMoney, StorefrontProduct } from "@/lib/shopify/types";
+import { parseTeaProfile } from "@/lib/shopify/tea-profile";
 
 type RawProduct = {
   id: string;
@@ -26,6 +27,7 @@ type RawProduct = {
   details?: { value?: string | null } | null;
   faqs?: { value?: string | null } | null;
   reviews?: { value?: string | null } | null;
+  teaProfile?: { value?: string | null } | null;
 };
 
 export function normalizeProduct(raw: RawProduct): StorefrontProduct {
@@ -55,6 +57,7 @@ export function normalizeProduct(raw: RawProduct): StorefrontProduct {
     collectionHandles: raw.collections?.nodes?.map(({ handle }) => handle) ?? [],
     faqs: parseFaqs(raw.faqs?.value),
     approvedReviews: parseApprovedReviews(raw.reviews?.value),
+    teaProfile: parseTeaProfile(raw.teaProfile?.value),
     details: raw.details?.value?.trim() ?? "",
     isPreview: false,
   };

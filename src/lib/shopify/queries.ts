@@ -31,6 +31,11 @@ export const PRODUCT_FIELDS = `
   reviews: metafield(namespace: "nilkurinji", key: "approved_reviews") { value }
 `;
 
+export const PRODUCT_DETAIL_FIELDS = `
+  ${PRODUCT_FIELDS}
+  teaProfile: metafield(namespace: "nilkurinji", key: "tea_profile") { value }
+`;
+
 export const PRODUCTS_QUERY = `
   query NilkurinjiProducts($first: Int!, $sortKey: ProductSortKeys!, $reverse: Boolean!) {
     products(first: $first, sortKey: $sortKey, reverse: $reverse) {
@@ -41,7 +46,7 @@ export const PRODUCTS_QUERY = `
 
 export const PRODUCT_BY_HANDLE_QUERY = `
   query NilkurinjiProduct($handle: String!) {
-    product(handle: $handle) { ${PRODUCT_FIELDS} }
+    product(handle: $handle) { ${PRODUCT_DETAIL_FIELDS} }
   }
 `;
 

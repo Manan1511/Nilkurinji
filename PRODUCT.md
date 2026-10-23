@@ -1,35 +1,31 @@
-# Nilkurinji storefront product brief
+# Nilkurinji tea storefront
 
 ## Product
 
-Nilkurinji is a consumer food and drink storefront designed from the supplied homepage and website-plan PDFs. The approved implementation is a responsive Next.js storefront deployed on Netlify, with Shopify as the source of catalog, inventory, cart pricing, hosted checkout, and order administration.
+Nilkurinji is a Shopify-backed tea brand storefront for two product formats: loose tea and tea bags. The supplied HTML is a visual reference for premium tea presentation. Its unsupported claims, product categories, and product stories are not part of Nilkurinji's content.
 
-The intended audience appears to be shoppers in India; this is an inference from the INR, India-only checkout, and food-category requirements, not a confirmed audience statement. English and INR are the initial defaults.
+## Shopper experience
 
-## Experience
+The site includes Home, one Shop page, Product, Search, Cart, About, Contact, Shopify policies, and the Shopify customer-account handoff. Loose tea and tea bags are filters within Shop, not separate pages. Previous `/collections/tea` and `/collections/tea-bags` links forward to the matching Shop filter. The wishlist feature has been removed.
 
-The site includes Home, Shop, Tea, Tea Bags, Rice, Snacks, and Other Foods collections, product detail, Cart, predictive Search, Wishlist, About, Contact, and Shopify policy pages. Product pages support galleries, variants, quantity, add-to-cart, buy-now, approved details, FAQs and reviews, and related-product recommendations. Search, filtering, sorting, recommendations, inventory, price, and checkout use Shopify data when the storefront is live.
+Catalog, search, direct product, and recommendation data are limited to products assigned to the `tea` or `tea-bags` Shopify collection. The Shop page lets shoppers filter between these two formats. Rice, snacks, other foods, teaware, brewing equipment, storage containers, accessory bundles, and all other merchandise are excluded from the storefront.
 
-The redesign keeps the supplied logo and forest-green identity, with warm near-white surfaces, Newsreader editorial headings, Manrope controls and body text, and open product frames. A compact header opens search in a desktop popover or a mobile sheet without moving the page. The homepage leads with a tea-focused hero and selected tea, then links to Tea, Tea Bags, the brand story, and pantry collections. Shop, collection, search, and recommendation cards share one system. Layouts adapt to mobile, tablet, and desktop widths. The site excludes Tea Guide, Recipes, Journal, newsletter, and a custom customer-account system.
+Product pages support galleries, Shopify variants, quantity, Add to Cart, Buy Now, approved product information, genuine approved reviews, FAQs, and tea-only recommendations. Preview products cannot be purchased. Live checkout remains hosted by Shopify and uses Shopify prices and availability.
 
-The current local storefront is a design preview. Preview catalog names, sample prices, packaging, and selected imagery are illustrative. Those values do not establish merchant facts or production catalog content. Purchases and indexing stay disabled in preview mode. See [DESIGN.md](DESIGN.md) for the implemented visual system and [the redesign handover](docs/design/redesign-v2/handover.md) for evidence and remaining launch gates.
+There is no currency chooser. The buyer-facing market defaults to India and INR. Live prices and currency data come from Shopify. Preview prices are explicitly labelled sample prices and remain illustrative.
 
-## Commerce and operations
+## Visual direction
 
-- Shopify Headless Storefront API is the only live catalog/cart authority; prices and inventory must never be inferred from local fixtures.
-- Shopify's hosted checkout handles transactions. COD and online payments are configured in Shopify Admin; no custom card or Razorpay processing is built in the storefront.
-- Only approved merchant products, up to 20, may become live. The development store currently has no storefront-visible products, and payment eligibility has not been verified.
-- A clearly labeled local preview catalog may demonstrate layout only. It has no prices, checkout, or purchase controls.
-- Wishlist state is saved in the visitor's browser and is not an account/order data source.
-- Contact, policy, product-origin, ingredient, health, shipping, refund, social, and review facts need owner-supplied approval. Never fabricate them.
-- Private Shopify credentials are server-only Netlify runtime secrets, not source, browser environment variables, build artifacts, or commits. Rotate the shared private token before production.
+The implementation adapts the user's premium tea HTML reference with warm paper, deep forest green, restrained brass, Playfair Display headings, and DM Sans shopping copy. The Nilkurinji wordmark and sprout remain unchanged, with its descriptor omitted. The header stays compact and consistent. Search opens in a modal without adding height or moving the page.
 
-## Launch gates
+## Brand personality and voice
 
-Before launch, the owner must provide approved product data and imagery; policy and shipping/COD rules; business and contact information; social URLs; Shopify merchant-store eligibility and Headless channel configuration; Razorpay approval if used; domain access; and Netlify environment secrets. Test browse → cart → hosted checkout, test payments/refunds, Shopify order state, and inventory before opening checkout to shoppers.
+Nilkurinji is warm, unhurried, and lightly playful. It makes space for different tea habits without making tea feel like a test of expertise. Use clear, everyday language with a little sensory detail. Keep the tone welcoming, never grand or precious. “No perfect cup required” is the homepage brand note. Do not add origin, ingredient, health, quality, or product claims without merchant approval.
 
-## Authority
+The homepage format section shows alpha-transparent cutouts for loose tea and tea bags on warm parchment. Keep their transparency intact and do not add circles or masks behind them. The cutouts are illustrative and do not establish final packaging, ingredients, origin, harvest, or product attributes.
 
-- `NILKURINJI HOME PAGE DESIGN.pdf` — visual composition and home copy/layout reference.
-- `NILKURINJI Website plan 2.pdf` — visual and content scope reference.
-- The user-approved Netlify implementation plan in this conversation — technical and commerce scope.
+## Preview and launch safety
+
+The local site is a non-indexable design preview. Product names, sample INR amounts, and product imagery are examples only. Preview purchase controls and checkout are disabled. A live Shopify error never falls back to preview products, copy, or prices.
+
+Shopify remains authoritative for products, variants, options, inventory, live prices, carts, hosted checkout, orders, policies, and payments. Merchant approval, the final tea catalog, COD/payment configuration, domain, and production deployment remain separate launch work. See [DESIGN.md](DESIGN.md), [Shopify setup](docs/SHOPIFY_SETUP.md), and the [design handover](docs/design/tea-only-reference/handover.md).

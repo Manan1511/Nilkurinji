@@ -12,7 +12,7 @@ Never put either token in source code, `NEXT_PUBLIC_*`, client components, publi
 
 ## 2. Local environment and safe modes
 
-Copy `.env.example` to `.env.local`. The default is a non-indexable, visibly labelled preview with unpriced, non-purchasable layout fixtures. The fixture catalog is never used to recover from a live Shopify error.
+Copy `.env.example` to `.env.local`. The default is a non-indexable, visibly labelled preview with illustrative catalog fixtures and prices labelled “Sample price”. Preview purchases are disabled. The fixture catalog is never used to recover from a live Shopify error.
 
 For live catalog development, set these values locally only after the new token is ready:
 
@@ -37,7 +37,7 @@ Add the same variables to Netlify separately for **Deploy Previews** and **Produ
 
 ## 3. Publish the catalog
 
-Create up to 20 approved products with real product images, titles, descriptions, product type, tags, variants/options, INR prices, availability/inventory, SEO title/description, and the actual food/product facts. Do not publish generated concept packaging or unconfirmed ingredient, sourcing, nutrition, health, delivery, or refund claims. The code requests up to 20 products and up to 50 variants per product.
+Create up to 20 approved tea and tea-bag products with real product images, titles, descriptions, product type, tags, variants/options, INR prices, availability/inventory, SEO title/description, and confirmed tea-specific facts. Do not publish generated concept packaging or unconfirmed ingredient, sourcing, nutrition, health, delivery, or refund claims. The code requests up to 20 products and up to 50 variants per product.
 
 Create Shopify collections with these exact handles and publish relevant products into them:
 
@@ -45,11 +45,10 @@ Create Shopify collections with these exact handles and publish relevant product
 | --- | --- |
 | Tea | `tea` |
 | Tea Bags | `tea-bags` |
-| Rice | `rice` |
-| Snacks | `snacks` |
-| Other Foods | `other-foods` |
 
-The category filter uses Shopify collection membership. Product type, INR price-band facets, and sorting use fields from the current Shopify result set. Product pages use Shopify recommendations first and fall back to other products in the first assigned collection. Shopify search and its returned product data drive the search page.
+The storefront reads only products assigned to `tea` or `tea-bags`. These Shopify collection handles filter the unified Shop page. Old collection URLs redirect to its matching filter. Direct product lookup, search, and recommendations apply the same tea-only scope. Product type, INR price-band facets, and sorting use fields from the current Shopify result set. Product pages use Shopify recommendations first and fall back to other tea products in the assigned tea collection. Shopify search and its returned product data drive the search page.
+
+There is no currency chooser. The storefront is configured for the India market and displays Shopify's returned currency. Confirm INR market pricing in Shopify before enabling checkout.
 
 ## 4. Product metafields
 
@@ -64,7 +63,7 @@ Create product metafields in namespace `nilkurinji`:
 Example FAQ value:
 
 ```json
-[{"question":"How should I store this product?","answer":"Use the storage instructions confirmed on the product packaging."}]
+[{"question":"How should I prepare this tea?","answer":"Follow the preparation directions confirmed for this product."}]
 ```
 
 Example review value (replace with a real approved review, never use this sample as customer content):
@@ -77,7 +76,38 @@ The storefront ignores reviews without `approved: true`, invalid ratings, malfor
 
 ## 5. Homepage, pages, policies, accounts
 
-Create and publish a metaobject definition with type `nilkurinji_home`, then create its entry with handle `home`. Add required text fields `eyebrow`, `heading`, and `description`; add optional file-reference fields `hero_image` and `secondary_image`; add optional text fields `secondary_eyebrow`, `secondary_heading`, and `secondary_description` (the second carousel slide appears only when all three are supplied); add optional `featured_products_heading`, `closing_eyebrow`, `closing_heading`, and `closing_description` text fields; and add optional single-line URL/text fields `instagram_url`, `facebook_url`, `youtube_url`, and `pinterest_url`. The social-link renderer accepts HTTPS URLs only on the corresponding official platform hostname. Homepage copy is required in live mode; missing or failed Shopify content displays a setup message, never draft copy. Preview-only artwork is not substituted for missing live hero images.
+Create and publish a metaobject definition with type `nilkurinji_home`, then create its entry with handle `home`. Add required text fields `heading` and `description`; optional text field `eyebrow`; optional file references `format_tea_image` and `format_tea_bags_image` for the hero's loose-tea and tea-bag images; legacy optional file references `hero_image` and `secondary_image` as a fallback for those images; optional legacy text `secondary_eyebrow`, `secondary_heading`, and `secondary_description`; optional `featured_products_heading`, `closing_eyebrow`, `closing_heading`, and `closing_description`; and optional URL/text fields `instagram_url`, `facebook_url`, `youtube_url`, and `pinterest_url`.
+
+The homepage uses the two format image references as transparent cutouts against the forest stage. Add meaningful alt text to each Shopify image. Do not upload teaware, storage products, unrelated merchandise, or imagery that implies unapproved origin or ingredients. Add optional text `brewing_product_handle` only for an approved tea product with owner-approved brewing data. The site shows a qualitative preparation note when no approved profile is available.
+
+The social-link renderer accepts HTTPS URLs only on the corresponding official platform hostname. Homepage copy is required in live mode; missing or failed Shopify content displays a setup message, never draft copy. Preview-only artwork is not substituted for missing live imagery.
+
+For each tea product that has owner-approved information, create a product metafield with namespace `nilkurinji`, key `tea_profile`, and Shopify JSON type. Set `approved` to `true` only after the merchant has checked every value. The storefront ignores the entire profile unless this flag is exactly true, malformed JSON is rejected, invalid fields are omitted, strings are trimmed and bounded, and HTML is rejected. Product title, price, weights, variants, inventory, and options still come from Shopify product and variant data.
+
+Accepted JSON shape:
+
+```json
+{
+  "approved": true,
+  "format": "loose-tea",
+  "origin": null,
+  "estate": null,
+  "elevationM": null,
+  "harvest": null,
+  "lot": null,
+  "tastingNotes": [],
+  "brewing": {
+    "dose": { "amount": 2, "unit": "g" },
+    "waterMl": 200,
+    "temperatureC": 90,
+    "steepSeconds": 180,
+    "infusions": null,
+    "instructions": null
+  }
+}
+```
+
+`format` accepts `loose-tea`, `tea-bag`, or `null`. Origin and estate are limited to 100 characters; harvest and lot to 80; each of up to 8 tasting notes to 60; brewing instructions to 500. Elevation must be an integer from 0 to 10,000 metres. Brewing dose accepts a positive amount up to 1,000 and unit `g` or `bag`; water accepts 1 to 5,000 ml; temperature 0 to 100°C; steep time 1 to 3,600 seconds; and infusion count 1 to 20. Invalid individual values are omitted. Keep variant-specific directions in separately approved product details until variant support exists.
 
 Create and publish Shopify Online Store pages with handles `about` and `contact`. Use the About page for owner-approved brand copy. Use Contact for confirmed email/phone/address/support links. The site does not invent contact details and does not submit a contact form.
 

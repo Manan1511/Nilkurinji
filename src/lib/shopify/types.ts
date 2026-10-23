@@ -28,6 +28,26 @@ export type ApprovedProductReview = {
   date: string | null;
 };
 
+export type TeaProfileFormat = "loose-tea" | "tea-bag";
+export type TeaProfile = {
+  approved: true;
+  format: TeaProfileFormat | null;
+  origin: string | null;
+  estate: string | null;
+  elevationM: number | null;
+  harvest: string | null;
+  lot: string | null;
+  tastingNotes: string[];
+  brewing: {
+    dose: { amount: number; unit: "g" | "bag" } | null;
+    waterMl: number | null;
+    temperatureC: number | null;
+    steepSeconds: number | null;
+    infusions: number | null;
+    instructions: string | null;
+  } | null;
+};
+
 export type StorefrontProduct = {
   id: string;
   handle: string;
@@ -44,6 +64,7 @@ export type StorefrontProduct = {
   collectionHandles: string[];
   faqs: ProductFaq[];
   approvedReviews: ApprovedProductReview[];
+  teaProfile: TeaProfile | null;
   details: string;
   isPreview: boolean;
 }

@@ -24,7 +24,7 @@ describe("preview about page", () => {
     vi.stubEnv("SHOPIFY_MODE", "preview");
     const markup = renderToStaticMarkup(StoreNotice());
 
-    expect(markup).toContain("Preview storefront");
+    expect(markup).toContain("Design preview.");
     expect(markup).toContain('role="status"');
     expect(markup).toContain("Purchases disabled");
   });

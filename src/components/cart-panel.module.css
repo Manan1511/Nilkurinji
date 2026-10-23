@@ -1,8 +1,13 @@
 .layout { display: grid; grid-template-columns: minmax(0,1fr) 320px; gap: 64px; max-width: 1440px; padding: 0 var(--page-gutter) 72px; margin-inline: auto; align-items: start; }
-.line { display: grid; grid-template-columns: 96px minmax(0,1fr); gap: 24px; padding-block: 24px; border-bottom: 1px solid var(--rule); }
+.line { display: grid; grid-template-columns: 96px minmax(0,1fr); gap: 24px; padding-block: 24px; border-bottom: 1px solid var(--rule); animation: cart-line-in var(--motion-control) var(--ease-out) both; }
+.line:nth-child(2) { animation-delay: 24ms; }
+.line:nth-child(3) { animation-delay: 48ms; }
+.line:nth-child(4) { animation-delay: 72ms; }
+@keyframes cart-line-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 .line:first-child { padding-top: 0; }
-.image { position: relative; aspect-ratio: 4/5; background: var(--surface-subtle); align-self: start; }
-.image img { object-fit: contain; }
+.image { position: relative; aspect-ratio: 4/5; overflow: hidden; background: var(--surface-subtle); align-self: start; }
+.image img { object-fit: contain; transition: transform var(--motion-control) var(--ease-out); }
+.image:hover img,.image:focus-visible img { transform: scale(1.035); }
 .lineBody { min-width: 0; }
 .titleRow { display: flex; justify-content: space-between; align-items: start; gap: 16px; }
 .titleRow h2 { font-size: 24px; overflow-wrap: anywhere; }
@@ -12,9 +17,11 @@
 .controls { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
 .quantity { display: flex; align-items: center; border: 1px solid var(--rule); }
 .quantity button { width: 44px; height: 44px; padding: 0; display: grid; place-items: center; border: 0; background: transparent; color: var(--brand); }
+.quantity button:hover:not(:disabled) { background: var(--surface-subtle); }
 .quantity output { min-width: 28px; text-align: center; font-size: 14px; }
 .quantity button:disabled,.remove:disabled { opacity: .4; }
-.remove { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; color: var(--brand); background: transparent; border: 0; padding: 8px 0; text-decoration: underline; font-size: 14px; }
+.remove { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; color: var(--brand); background: transparent; border: 0; padding: 8px 0; text-decoration: underline; font-size: 14px; text-underline-offset: 4px; transition: color var(--motion-fast) ease, text-decoration-color var(--motion-fast) ease; }
+.remove:hover:not(:disabled) { color: var(--error); text-decoration-thickness: 2px; }
 .summary { padding: 28px; background: var(--surface-subtle); }
 .summary h2 { font-size: 28px; margin-bottom: 24px; }
 .summary > div:not([role]) { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
@@ -27,6 +34,24 @@
 .empty h2 { font-size: 32px; }
 .empty p { margin-block: 20px; max-width: 60ch; color: var(--ink-secondary); }
 .empty a { margin-right: 16px; }
+.drawer.layout { display: flex; flex-direction: column; gap: 20px; height: calc(100dvh - 132px); max-height: var(--sheet-available, calc(100dvh - 132px)); padding: 0; }
+.drawer .lines { min-height: 0; flex: 1; overflow-y: auto; overscroll-behavior: contain; }
+.drawer .line { grid-template-columns: 64px minmax(0,1fr); gap: 12px; padding-block: 14px; }
+.drawer .titleRow { display: block; }
+.drawer .titleRow h2 { font-size: 20px; }
+.drawer .titleRow strong { display: block; margin-top: 4px; }
+.drawer .titleRow p { font-size: 14px; }
+.drawer .controls { gap: 12px; margin-top: 12px; }
+.drawer .quantity button { width: 38px; height: 38px; }
+.drawer .summary { flex: 0 0 auto; padding: 18px 0 0; border-top: 1px solid var(--rule); background: var(--paper); }
+.drawer .summary h2 { margin-bottom: 12px; font-size: 22px; }
+.drawer .summary > button { min-height: 48px; margin-top: 14px; }
+.drawer .summary .fine { margin-top: 10px; }
+.fullCart { display: flex; align-items: center; justify-content: center; min-height: 44px; margin-top: 4px; color: var(--forest); font-size: 14px; }
+.empty.drawer { padding: 0; }
+.empty.drawer h2 { font-size: 28px; }
+.empty.drawer p { font-size: 14px; }
 @media (min-width: 1024px) and (min-height: 800px) { .summary { position: sticky; top: calc(var(--shell-height) + 24px); } }
 @media (max-width: 1023px) { .layout { grid-template-columns: minmax(0,1fr); gap: 32px; } }
 @media (max-width: 767px) { .layout { padding-bottom: 48px; } .line { grid-template-columns: 72px minmax(0,1fr); gap: 16px; } .titleRow { flex-direction: column; gap: 8px; } .titleRow h2 { font-size: 22px; } .summary { padding: 24px 20px; } .controls { gap: 8px; } }
+@media (prefers-reduced-motion: reduce) { .line { animation: none; } .image img { transition: none; } .image:hover img,.image:focus-visible img { transform: none; } }

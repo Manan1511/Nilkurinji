@@ -5,6 +5,13 @@ import { getBuyerIp, shopifyQuery } from "@/lib/shopify/server";
 import { getSocialLinks, type SocialLink } from "@/lib/shopify/social-links";
 import type { ShopifyPage, ShopifyPolicy, StorefrontData } from "@/lib/shopify/types";
 import type { ShopifyImage } from "@/lib/shopify/types";
+export type HomepageRitualChapter = {
+  id: "leaf" | "water" | "cup";
+  label: string;
+  image: ShopifyImage;
+  mobileImage: ShopifyImage | null;
+  altText: string;
+};
 
 async function buyerIp(): Promise<string | undefined> {
   return getBuyerIp(await headers());
@@ -23,13 +30,19 @@ export type HomepageContent = {
   closingHeading?: string;
   closingDescription?: string;
   featuredProductsHeading?: string;
+  ritualChapters?: HomepageRitualChapter[];
+  formatImages?: { tea: ShopifyImage | null; teaBags: ShopifyImage | null };
+  brewingProductHandle?: string | null;
+  storyHeading?: string;
+  storyBody?: string;
+  storyImage?: ShopifyImage | null;
   socialLinks: SocialLink[];
 };
 
 export const DRAFT_HOMEPAGE_CONTENT: HomepageContent = {
-  eyebrow: "",
-  heading: "A considered cup, every day.",
-  description: "Explore Nilkurinji tea and tea bags for the moments that make a day.",
+  eyebrow: "NILKURINJI TEA",
+  heading: "Make a little room for tea.",
+  description: "Loose tea when you want to linger. Tea bags when you want to keep it simple.",
   heroImage: null,
   secondaryEyebrow: "",
   secondaryHeading: "",
@@ -39,6 +52,12 @@ export const DRAFT_HOMEPAGE_CONTENT: HomepageContent = {
   closingHeading: "",
   closingDescription: "",
   featuredProductsHeading: "",
+  ritualChapters: [],
+  formatImages: { tea: null, teaBags: null },
+  brewingProductHandle: null,
+  storyHeading: "A twelve-year rhythm.",
+  storyBody: "Some populations of the violet-blue kurinji flower bloom in cycles of about twelve years. Timing varies between populations.",
+  storyImage: null,
   socialLinks: [],
 };
 
@@ -64,6 +83,13 @@ export async function getHomepageContent(): Promise<StorefrontData<HomepageConte
     if (!fields.heading?.trim() || !fields.description?.trim()) {
       return { source: "unavailable", data: null, reason: "Homepage content is incomplete in Shopify." };
     }
+    const ritualIds = ["leaf", "water", "cup"] as const;
+    const ritualChapters: HomepageRitualChapter[] = ritualIds.flatMap((id) => {
+      const image = images[`${id}_image`];
+      const altText = fields[`${id}_alt`]?.trim() ?? "";
+      if (!image || !altText) return [];
+      return [{ id, label: id === "leaf" ? "Leaf" : id === "water" ? "Water" : "Cup", image, mobileImage: images[`${id}_mobile_image`] ?? null, altText }];
+    });
     return {
       source: "shopify",
       data: {
@@ -79,12 +105,23 @@ export async function getHomepageContent(): Promise<StorefrontData<HomepageConte
         closingHeading: fields.closing_heading?.trim() ?? "",
         closingDescription: fields.closing_description?.trim() ?? "",
         featuredProductsHeading: fields.featured_products_heading?.trim() ?? "",
+        ritualChapters,
+        formatImages: { tea: images.format_tea_image ?? null, teaBags: images.format_tea_bags_image ?? null },
+        brewingProductHandle: boundedHandle(fields.brewing_product_handle),
+        storyHeading: fields.story_heading?.trim() ?? "",
+        storyBody: fields.story_body?.trim() ?? "",
+        storyImage: images.story_image ?? null,
         socialLinks: getSocialLinks(fields),
       },
     };
   } catch {
     return { source: "unavailable", data: null, reason: "Homepage content is temporarily unavailable." };
   }
+}
+
+function boundedHandle(value: string | undefined): string | null {
+  const handle = value?.trim() ?? "";
+  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(handle) && handle.length <= 100 ? handle : null;
 }
 
 export async function getPublishedPage(handle: string): Promise<StorefrontData<ShopifyPage | null>> {

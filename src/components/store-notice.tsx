@@ -7,7 +7,7 @@ export function StoreNotice() {
   if (mode.mode === "preview") {
     return (
       <div className={styles.notice} role="status">
-        Preview storefront · Purchases disabled
+        Design preview. Purchases disabled.
       </div>
     );
   }

@@ -1,8 +1,0 @@
-.wrapper { position: relative; }
-.compact { position: absolute; top: 8px; right: 8px; z-index: 2; }
-.button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-width: 44px; min-height: 44px; border: 0; background: var(--surface); color: var(--brand); padding: 10px; font-size: 14px; }
-.button svg { width: 20px; height: 20px; stroke-width: 1.5; }
-.button:hover { background: var(--surface-subtle); }
-.saved svg { fill: var(--brand); }
-.message { margin-top: 8px; font-size: 14px; color: var(--error); }
-.compact .message { position: absolute; right: 0; top: 44px; z-index: 5; width: min(240px, 75vw); padding: 12px; border: 1px solid var(--rule); background: var(--surface); }

@@ -1,4 +1,16 @@
 export type CatalogSort = "featured" | "title-asc" | "price-asc" | "price-desc";
+export const TEA_COLLECTIONS = ["tea", "tea-bags"] as const;
+export function isTeaProduct<T extends { collectionHandles: readonly string[] }>(product: T): boolean {
+  return product.collectionHandles.some((handle) => TEA_COLLECTIONS.includes(handle as (typeof TEA_COLLECTIONS)[number]));
+}
+export function filterTeaProducts<T extends { collectionHandles: readonly string[] }>(products: T[]): T[] {
+  return products.filter(isTeaProduct);
+}
+export function matchesCategory(collectionHandles: readonly string[], category: string): boolean {
+  if (category === "all") return true;
+  if (!TEA_COLLECTIONS.includes(category as (typeof TEA_COLLECTIONS)[number])) return false;
+  return collectionHandles.includes(category);
+}
 export type CatalogState = { sort: CatalogSort; category: string; productType: string; priceBand: string; selectedFacets: Record<string, string[]> };
 export type CatalogConfig = { categories: readonly string[]; productTypes: readonly string[]; priceBands: readonly string[]; facets: readonly { id: string; values: readonly string[] }[] };
 export const emptyCatalogState = (): CatalogState => ({ sort: "featured", category: "all", productType: "all", priceBand: "all", selectedFacets: {} });

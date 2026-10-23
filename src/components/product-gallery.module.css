@@ -1,9 +1,13 @@
 .gallery { min-width: 0; }
 .main { position: relative; aspect-ratio: 1; background: var(--surface-subtle); }
-.main img { object-fit: contain; }
+.mainImage { object-fit: contain; animation: gallery-image-in var(--motion-control) ease both; }
+@keyframes gallery-image-in { from { opacity: .7; } to { opacity: 1; } }
 .thumbs { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
-.thumbs button { width: 64px; height: 64px; position: relative; border: 1px solid var(--rule); background: var(--surface-subtle); padding: 0; }
+.thumbs button { width: 64px; height: 64px; position: relative; border: 1px solid var(--rule); background: var(--surface-subtle); padding: 0; transition: border-color var(--motion-fast) ease, background-color var(--motion-fast) ease; }
+.thumbs button:hover { border-color: var(--brand); }
 .thumbs button[aria-pressed="true"] { border-color: var(--brand); outline: 1px solid var(--brand); }
-.thumbs img { object-fit: contain; }
+.thumbs img { object-fit: contain; transition: transform var(--motion-control) var(--ease-out); }
+.thumbs button:hover img { transform: scale(1.035); }
 .empty { aspect-ratio: 1; display: flex; flex-direction: column; gap: 12px; align-items: center; justify-content: center; padding: 24px; text-align: center; background: var(--surface-subtle); color: var(--ink-secondary); }
 .empty small { font-size: 14px; }
+@media (prefers-reduced-motion: reduce) { .mainImage { animation: none; } .thumbs img { transition: none; } .thumbs button:hover img { transform: none; } }

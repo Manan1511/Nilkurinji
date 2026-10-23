@@ -6,6 +6,7 @@ describe("quick add eligibility", () => {
   const liveProduct = {
     ...PREVIEW_PRODUCTS[0],
     isPreview: false,
+    teaProfile: null,
     variants: [
       {
         id: "gid://shopify/ProductVariant/first",

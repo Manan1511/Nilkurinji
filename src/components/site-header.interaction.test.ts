@@ -3,10 +3,12 @@ import { act, createElement, type ComponentProps } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("next/navigation", () => ({ usePathname: () => "/" }));
+vi.mock("next/navigation", () => ({ usePathname: () => "/", useSearchParams: () => new URLSearchParams("") }));
 vi.mock("next/form", () => ({ default: (props: ComponentProps<"form">) => createElement("form", props) }));
 
 import { SiteHeader } from "@/components/site-header";
+import { CartProvider } from "@/components/cart-provider";
+import { makeCart } from "../../test/fixtures/storefront";
 
 describe("header search interaction", () => {
   let root: Root;
@@ -14,11 +16,11 @@ describe("header search interaction", () => {
 
   beforeEach(async () => {
     vi.stubGlobal("IS_REACT_ACT_ENVIRONMENT", true);
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ json: async () => ({ cart: null }) }));
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => ({ cart: makeCart(), purchasingEnabled: true }) }));
     container = document.createElement("div");
     document.body.append(container);
     root = createRoot(container);
-    await act(async () => root.render(createElement(SiteHeader)));
+    await act(async () => root.render(createElement(CartProvider, null, createElement(SiteHeader))));
   });
 
   afterEach(async () => {
@@ -35,16 +37,16 @@ describe("header search interaction", () => {
 
   it("opens a real search field on desktop and restores focus when Escape closes it", async () => {
     const trigger = element<HTMLButtonElement>(".site-header__search-trigger");
-    const panel = element<HTMLElement>("#header-search-panel");
-    expect(panel.hidden).toBe(true);
+    const panel = element<HTMLDialogElement>("#header-search-panel");
+    expect(panel.open).toBe(false);
 
     await act(async () => trigger.click());
-    expect(panel.hidden).toBe(false);
+    expect(panel.open).toBe(true);
     expect(trigger.getAttribute("aria-expanded")).toBe("true");
     expect(document.activeElement).toBe(element("#header-product-search"));
 
     await act(async () => document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true })));
-    expect(panel.hidden).toBe(true);
+    expect(panel.open).toBe(false);
     expect(document.activeElement).toBe(trigger);
   });
 
@@ -53,14 +55,26 @@ describe("header search interaction", () => {
     const menu = element<HTMLButtonElement>(".site-header__menu");
     await act(async () => menu.click());
     expect(menu.getAttribute("aria-expanded")).toBe("true");
+    expect(menu.getAttribute("aria-controls")).toBe("header-menu-panel");
+    expect(element<HTMLDialogElement>("#header-menu-panel").getAttribute("data-placement")).toBe("left");
+    expect(element<HTMLDialogElement>('dialog[aria-label="Menu"]').getAttribute("data-placement")).toBe("left");
 
     await act(async () => search.click());
     expect(menu.getAttribute("aria-expanded")).toBe("false");
-    expect(element<HTMLElement>("#header-search-panel").hidden).toBe(false);
+    expect(element<HTMLDialogElement>("#header-search-panel").open).toBe(true);
 
     await act(async () => menu.click());
-    expect(element<HTMLElement>("#header-search-panel").hidden).toBe(true);
+    expect(element<HTMLDialogElement>("#header-search-panel").open).toBe(false);
     expect(menu.getAttribute("aria-expanded")).toBe("true");
+  });
+
+  it("opens a cart drawer from the shared cart controller", async () => {
+    const trigger = element<HTMLButtonElement>('button[aria-label^="Shopping cart"]');
+    expect(trigger.getAttribute("aria-label")).toContain("1 item");
+    await act(async () => trigger.click());
+    const drawer = element<HTMLDialogElement>("#header-cart-panel");
+    expect(drawer.open).toBe(true);
+    expect(drawer.textContent).toContain("Test tea");
   });
 
   it("preserves the submitted query and closes the disclosure on submission", async () => {
@@ -74,7 +88,7 @@ describe("header search interaction", () => {
     expect(form.getAttribute("action")).toBe("/search");
     expect(new FormData(form).get("q")).toBe("green tea");
     await act(async () => form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })));
-    expect(element<HTMLElement>("#header-search-panel").hidden).toBe(true);
+    expect(element<HTMLDialogElement>("#header-search-panel").open).toBe(false);
     expect(new FormData(form).get("q")).toBe("green tea");
   });
 
@@ -84,7 +98,7 @@ describe("header search interaction", () => {
     document.body.append(outside);
     outside.focus();
     await act(async () => outside.dispatchEvent(new MouseEvent("pointerdown", { bubbles: true })));
-    expect(element<HTMLElement>("#header-search-panel").hidden).toBe(true);
+    expect(element<HTMLDialogElement>("#header-search-panel").open).toBe(false);
     expect(document.activeElement).toBe(outside);
   });
 
@@ -93,14 +107,14 @@ describe("header search interaction", () => {
     const shop = element<HTMLAnchorElement>('nav[aria-label="Primary navigation"] a[href="/shop"]');
     shop.addEventListener("click", (event) => event.preventDefault(), { once: true });
     await act(async () => shop.click());
-    expect(element<HTMLElement>("#header-search-panel").hidden).toBe(true);
+    expect(element<HTMLDialogElement>("#header-search-panel").open).toBe(false);
   });
 
   it("returns focus to the visible search trigger when crossing to compact layout", async () => {
     await act(async () => root.unmount());
     let matches = false; const listeners = new Set<() => void>();
     vi.stubGlobal("matchMedia", () => ({ get matches() { return matches; }, addEventListener: (_: string, callback: () => void) => listeners.add(callback), removeEventListener: (_: string, callback: () => void) => listeners.delete(callback) }));
-    root = createRoot(container); await act(async () => root.render(createElement(SiteHeader)));
+    root = createRoot(container); await act(async () => root.render(createElement(CartProvider, null, createElement(SiteHeader))));
     const trigger = element<HTMLButtonElement>('[aria-label="Search products"]');
     await act(async () => trigger.click()); expect(document.activeElement).toBe(element("#header-product-search"));
     await act(async () => { matches = true; listeners.forEach((listener) => listener()); });

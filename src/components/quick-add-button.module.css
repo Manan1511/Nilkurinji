@@ -1,3 +1,6 @@
-.button { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 0; color: var(--brand); background: transparent; border: 0; font-size: 14px; font-weight: 600; text-decoration: underline; text-underline-offset: 5px; }
+.button { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 0; color: var(--brand); background: transparent; border: 0; font-size: 14px; font-weight: 600; text-decoration: underline; text-underline-offset: 5px; transition: color var(--motion-fast) ease, text-decoration-color var(--motion-fast) ease; }
+.button:hover:not(:disabled) { color: var(--forest-hover); text-decoration-thickness: 2px; }
+.button:active:not(:disabled) { transform: translateY(1px); }
 .button:disabled { opacity: .6; }
 .message { font-size: 14px; color: var(--ink-secondary); }
+@media (prefers-reduced-motion: reduce) { .button:active:not(:disabled) { transform: none; } }

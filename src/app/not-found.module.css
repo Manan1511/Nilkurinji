@@ -1,0 +1,7 @@
+.page { display: flex; min-height: min(62vh, 600px); flex-direction: column; align-items: flex-start; justify-content: center; width: min(1280px, 100%); padding: 64px var(--page-gutter) 88px; margin-inline: auto; background: var(--paper); }
+.eyebrow { margin-bottom: 20px; color: var(--forest); font: 600 12px/1.5 var(--font-body); letter-spacing: .16em; text-transform: uppercase; }
+.page h1 { max-width: 13ch; color: var(--ink); font: 400 clamp(2.4rem, 4vw, 4.2rem)/1.04 var(--font-editorial); letter-spacing: -.035em; }
+.page > p:not(.eyebrow) { margin-top: 18px; color: var(--ash); font-size: 1rem; line-height: 1.6; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.actions :global(.button) { min-height: 48px; }
+@media (max-width: 479px) { .page { min-height: 64vh; padding-block: 48px 64px; } .actions { align-items: stretch; flex-direction: column; width: min(100%, 280px); } .actions :global(.button) { width: 100%; } }

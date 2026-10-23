@@ -1,41 +1,154 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-20T12:52:12Z",
-  "title": "Design System: Nilkurinji Storefront",
+  "generatedAt": "2026-10-20T17:15:27Z",
+  "title": "Design System: Nilkurinji Tea",
   "extensions": {
     "colorMeta": {
-      "forest": { "role": "primary", "displayName": "Forest Green", "canonical": "#254434", "tonalRamp": ["oklch(15% 0.047 160)", "oklch(25% 0.047 160)", "oklch(35% 0.047 160)", "oklch(45% 0.047 160)", "oklch(55% 0.047 160)", "oklch(65% 0.047 160)", "oklch(80% 0.047 160)", "oklch(95% 0.047 160)"] },
-      "forest-hover": { "role": "primary", "displayName": "Deep Forest", "canonical": "#1c3327", "tonalRamp": ["oklch(15% 0.037 160)", "oklch(25% 0.037 160)", "oklch(35% 0.037 160)", "oklch(45% 0.037 160)", "oklch(55% 0.037 160)", "oklch(65% 0.037 160)", "oklch(80% 0.037 160)", "oklch(95% 0.037 160)"] },
-      "paper": { "role": "neutral", "displayName": "Clean Paper", "canonical": "#fafbf8", "tonalRamp": ["oklch(15% 0.004 122)", "oklch(25% 0.004 122)", "oklch(35% 0.004 122)", "oklch(45% 0.004 122)", "oklch(55% 0.004 122)", "oklch(65% 0.004 122)", "oklch(80% 0.004 122)", "oklch(95% 0.004 122)"] },
-      "paper-soft": { "role": "neutral", "displayName": "Soft Paper", "canonical": "#f4f6f1", "tonalRamp": ["oklch(15% 0.007 124)", "oklch(25% 0.007 124)", "oklch(35% 0.007 124)", "oklch(45% 0.007 124)", "oklch(55% 0.007 124)", "oklch(65% 0.007 124)", "oklch(80% 0.007 124)", "oklch(95% 0.007 124)"] },
-      "ink": { "role": "neutral", "displayName": "Pantry Ink", "canonical": "#242d24", "tonalRamp": ["oklch(15% 0.020 145)", "oklch(25% 0.020 145)", "oklch(35% 0.020 145)", "oklch(45% 0.020 145)", "oklch(55% 0.020 145)", "oklch(65% 0.020 145)", "oklch(80% 0.020 145)", "oklch(95% 0.020 145)"] },
-      "ink-secondary": { "role": "neutral", "displayName": "Sage Ink", "canonical": "#526356", "tonalRamp": ["oklch(15% 0.029 152)", "oklch(25% 0.029 152)", "oklch(35% 0.029 152)", "oklch(45% 0.029 152)", "oklch(55% 0.029 152)", "oklch(65% 0.029 152)", "oklch(80% 0.029 152)", "oklch(95% 0.029 152)"] },
-      "divider": { "role": "neutral", "displayName": "Fine Green Divider", "canonical": "#d7ded7", "tonalRamp": ["oklch(15% 0.012 145)", "oklch(25% 0.012 145)", "oklch(35% 0.012 145)", "oklch(45% 0.012 145)", "oklch(55% 0.012 145)", "oklch(65% 0.012 145)", "oklch(80% 0.012 145)", "oklch(95% 0.012 145)"] },
-      "error": { "role": "tertiary", "displayName": "Error Red", "canonical": "#9f3434", "tonalRamp": ["oklch(15% 0.142 24)", "oklch(25% 0.142 24)", "oklch(35% 0.142 24)", "oklch(45% 0.142 24)", "oklch(55% 0.142 24)", "oklch(65% 0.142 24)", "oklch(80% 0.142 24)", "oklch(95% 0.142 24)"] }
+      "paper": {
+        "role": "neutral",
+        "displayName": "Warm Paper",
+        "canonical": "#FBF9F4"
+      },
+      "parchment": {
+        "role": "neutral",
+        "displayName": "Parchment",
+        "canonical": "#F0EEE9"
+      },
+      "forest": {
+        "role": "primary",
+        "displayName": "Deep Forest",
+        "canonical": "#04190F"
+      },
+      "forest-hover": {
+        "role": "primary",
+        "displayName": "Forest Hover",
+        "canonical": "#192E23"
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#1B1C19"
+      },
+      "ash": {
+        "role": "neutral",
+        "displayName": "Ash",
+        "canonical": "#53574F"
+      },
+      "violet": {
+        "role": "secondary",
+        "displayName": "Kurinji Violet",
+        "canonical": "#6E5D7B"
+      },
+      "brass": {
+        "role": "tertiary",
+        "displayName": "Muted Brass",
+        "canonical": "#AF8C47"
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Structural Rule",
+        "canonical": "rgb(27 28 25 / 12%)"
+      },
+      "rule-dark": {
+        "role": "neutral",
+        "displayName": "Dark Surface Rule",
+        "canonical": "rgb(251 249 244 / 24%)"
+      },
+      "error": {
+        "role": "tertiary",
+        "displayName": "Error",
+        "canonical": "#8C302A"
+      }
     },
     "typographyMeta": {
-      "display": { "displayName": "Editorial Display", "purpose": "Homepage hero and primary editorial headings." },
-      "headline": { "displayName": "Section Headline", "purpose": "Store section headings." },
-      "title": { "displayName": "Product Title", "purpose": "Product-card titles and compact editorial labels." },
-      "body": { "displayName": "Shopping Body", "purpose": "Product information, descriptions, prices, and forms." },
-      "input": { "displayName": "Search Input", "purpose": "Search entry text and input placeholders." },
-      "label": { "displayName": "Functional Label", "purpose": "Navigation and concise utility labels." },
-      "action": { "displayName": "Action Label", "purpose": "Button and purchase action text." }
+      "display": {
+        "displayName": "Nilkurinji Tea Display",
+        "purpose": "Homepage hero headline; desktop clamp(3.5rem, 6vw, 6.6rem), mobile clamp(3.1rem, 12vw, 4.5rem)."
+      },
+      "headline": {
+        "displayName": "Premium Editorial Headline",
+        "purpose": "Section and brand-story headings."
+      },
+      "title": {
+        "displayName": "Product Title",
+        "purpose": "Product cards and compact editorial titles."
+      },
+      "body": {
+        "displayName": "Shopping Body",
+        "purpose": "Descriptions, prices, product information and forms; hero intro may clamp from 1rem to 1.125rem."
+      },
+      "label": {
+        "displayName": "Functional Label",
+        "purpose": "Navigation and interface actions."
+      },
+      "index": {
+        "displayName": "Editorial Index",
+        "purpose": "Small numbered indexes and approved brewing data."
+      }
     },
-    "shadows": [
-      { "name": "search-popover", "value": "0 16px 32px rgb(28 51 39 / 10%)", "purpose": "Separate the desktop predictive-search popover from the page beneath it." }
-    ],
+    "shadows": [],
     "motion": [
-      { "name": "control-color", "value": "180ms", "purpose": "Short feedback on buttons, links, and navigation states." },
-      { "name": "product-image-hover", "value": "240ms cubic-bezier(.2,.7,.3,1)", "purpose": "Restrained product-image feedback on pointer hover." },
-      { "name": "hero-copy-settle", "value": "480ms cubic-bezier(.16,1,.3,1)", "purpose": "One brief entrance on the homepage hero copy." },
-      { "name": "reduced-motion", "value": "prefers-reduced-motion: reduce", "purpose": "Remove nonessential animation and transitions while retaining state changes." }
+      {
+        "name": "action-feedback",
+        "value": "150ms color feedback, 1px active press",
+        "purpose": "Acknowledge button presses without moving unrelated icons."
+      },
+      {
+        "name": "navigation-reveal",
+        "value": "180ms",
+        "purpose": "Primary navigation underline state."
+      },
+      {
+        "name": "directional-panels",
+        "value": "240ms cubic-bezier(.16,1,.3,1)",
+        "purpose": "Navigation and filters enter from the left, cart from the right, and search from below the shared header."
+      },
+      {
+        "name": "editorial-image-hover",
+        "value": "520ms cubic-bezier(.16,1,.3,1), maximum scale 1.035",
+        "purpose": "Subtle response to image hover or keyboard focus."
+      },
+      {
+        "name": "state-change-feedback",
+        "value": "150–180ms",
+        "purpose": "Show FAQ, search-result, cart-line, and gallery state changes."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "prefers-reduced-motion: reduce",
+        "purpose": "Remove spatial movement, image zoom, and list entrances while preserving essential interaction feedback."
+      },
+      {
+        "name": "hero-cutout-hover",
+        "value": "520ms cubic-bezier(.16,1,.3,1), translateY(-4px) scale(1.015)",
+        "purpose": "Subtle response of the transparent loose-tea and tea-bag images on hover."
+      }
     ],
     "breakpoints": [
-      { "name": "small-phone", "value": "max-width: 359px" },
-      { "name": "tablet-gutter", "value": "min-width: 768px" },
-      { "name": "desktop-header", "value": "min-width: 1024px" },
-      { "name": "wide-gutter-and-grid", "value": "min-width: 1280px" }
+      {
+        "name": "small-phone",
+        "value": "max-width: 359px"
+      },
+      {
+        "name": "mobile-catalog",
+        "value": "max-width: 767px"
+      },
+      {
+        "name": "stacked-hero",
+        "value": "max-width: 899px"
+      },
+      {
+        "name": "compact-header",
+        "value": "max-width: 1199px"
+      },
+      {
+        "name": "desktop-gutter",
+        "value": "min-width: 1200px"
+      },
+      {
+        "name": "content-maximum",
+        "value": "1440px"
+      }
     ]
   },
   "components": [
@@ -43,71 +156,90 @@
       "name": "Primary Action",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "A forest-filled, compact action with clear label hierarchy.",
-      "html": "<button class=\"ds-button-primary\" type=\"button\">Explore tea <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M5 12h14m-7-7 7 7-7 7\"/></svg></button>",
-      "css": ".ds-button-primary { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 12px 22px; border: 1px solid transparent; border-radius: var(--radius-control); background: var(--brand); color: var(--surface); font: 600 14px/1.4 var(--font-body); text-decoration: none; transition: background-color 180ms, color 180ms; cursor: pointer; } .ds-button-primary svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.6; } .ds-button-primary:hover { background: var(--brand-hover); } .ds-button-primary:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; } .ds-button-primary:active { background: var(--brand-hover); }"
+      "description": "A 48px forest-filled action with a square 2px corner and visible keyboard focus.",
+      "html": "<a class=\"button button--dark\" href=\"/shop?category=tea\">Shop loose tea</a>",
+      "css": ".button--dark { min-height: 48px; padding: 12px 20px; border: 1px solid var(--forest); border-radius: 2px; background: var(--forest); color: var(--paper); font: 500 14px/1.4 var(--font-body); } .button--dark:hover { background: var(--brand-hover); }"
     },
     {
       "name": "Secondary Action",
       "kind": "button",
       "refersTo": "button-secondary",
-      "description": "An outlined action for a supporting route or choice.",
-      "html": "<a class=\"ds-button-secondary\" href=\"#collection\">View collection</a>",
-      "css": ".ds-button-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 12px 22px; border: 1px solid var(--brand); border-radius: var(--radius-control); background: transparent; color: var(--brand); font: 600 14px/1.4 var(--font-body); text-decoration: none; transition: background-color 180ms, color 180ms; cursor: pointer; } .ds-button-secondary:hover { background: var(--surface-subtle); } .ds-button-secondary:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }"
+      "description": "A clear outlined alternative with the same control height and corner geometry.",
+      "html": "<a class=\"button button--outline\" href=\"/shop?category=tea-bags\">Shop tea bags</a>",
+      "css": ".button--outline { min-height: 48px; padding: 12px 20px; border: 1px solid var(--forest); border-radius: 2px; background: transparent; color: var(--forest); } .button--outline:hover { background: var(--parchment); }"
     },
     {
-      "name": "Search Field",
+      "name": "Search Modal Field",
       "kind": "input",
-      "refersTo": "input-search",
-      "description": "A quiet search field with one visible edge and a clear keyboard focus state.",
-      "html": "<label class=\"ds-search-field\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"11\" cy=\"11\" r=\"7\"/><path d=\"m16 16 4 4\"/></svg><input type=\"search\" aria-label=\"Search tea and pantry\" placeholder=\"Search tea and pantry\"></label>",
-      "css": ".ds-search-field { display: flex; align-items: center; gap: 12px; width: 100%; min-width: 0; padding: 4px 0 10px; border-bottom: 1px solid var(--brand); } .ds-search-field svg { width: 20px; height: 20px; flex: 0 0 20px; fill: none; stroke: var(--brand); stroke-width: 1.5; } .ds-search-field input { width: 100%; min-width: 0; min-height: 44px; padding: 8px 4px; border: 0; border-radius: var(--radius-control); background: transparent; color: var(--ink); font: 400 16px/1.5 var(--font-body); } .ds-search-field input::placeholder { color: var(--ink-secondary); opacity: 1; } .ds-search-field input:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }"
+      "refersTo": "search-overlay",
+      "description": "One labelled input in a bounded 720px modal. Opening it does not change page flow.",
+      "html": "<form role=\"search\"><label class=\"sr-only\" for=\"header-product-search\">Search products</label><input id=\"header-product-search\" name=\"q\" type=\"search\" placeholder=\"Search tea and tea bags\" /></form>",
+      "css": ".top { position: fixed; width: min(720px, calc(100vw - 32px)); max-height: min(640px, calc(100dvh - var(--shell-height) - 20px)); border: 1px solid var(--rule); background: var(--paper); }"
     },
     {
-      "name": "Primary Navigation",
-      "kind": "nav",
-      "refersTo": "navigation-primary",
-      "description": "A calm row of compact links with a thin active underline.",
-      "html": "<nav class=\"ds-primary-nav\" aria-label=\"Primary navigation\"><a href=\"#shop\" aria-current=\"page\">Shop</a><a href=\"#tea\">Tea</a><a href=\"#story\">Our story</a></nav>",
-      "css": ".ds-primary-nav { display: flex; align-items: center; justify-content: center; gap: 28px; } .ds-primary-nav a { position: relative; display: inline-flex; align-items: center; min-height: 44px; color: var(--ink); font: 500 14px/1.4 var(--font-body); text-decoration: none; white-space: nowrap; } .ds-primary-nav a::after { position: absolute; right: 0; bottom: 7px; left: 0; height: 1px; background: var(--brand); content: ''; transform: scaleX(0); transform-origin: left; transition: transform 180ms; } .ds-primary-nav a:hover::after, .ds-primary-nav a[aria-current='page']::after { transform: scaleX(1); } .ds-primary-nav a:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }"
+      "name": "Directional Modal Sheet",
+      "kind": "overlay",
+      "refersTo": "modal-sheet",
+      "description": "A modal enters from the same edge as its trigger: navigation and mobile filters from the left, cart from the right, and search below the header. It does not change document flow.",
+      "html": "<dialog data-placement=\"left\" aria-label=\"Menu\"></dialog>",
+      "css": ".sheet { transition: opacity var(--motion-panel) var(--ease-out), transform var(--motion-panel) var(--ease-out), display var(--motion-panel) allow-discrete, overlay var(--motion-panel) allow-discrete; }"
     },
     {
       "name": "Open Product Card",
       "kind": "card",
       "refersTo": "product-card",
-      "description": "A consistent portrait image frame with readable title and product detail.",
-      "html": "<article class=\"ds-product-card\"><div class=\"ds-product-card__frame\" role=\"img\" aria-label=\"Product image supplied by the catalog\"></div><p class=\"ds-product-card__type\">Tea</p><h3><a href=\"#product\">Selected tea</a></h3><p class=\"ds-product-card__detail\">Product details</p></article>",
-      "css": ".ds-product-card { min-width: 0; color: var(--ink); } .ds-product-card__frame { aspect-ratio: 4 / 5; background: var(--surface-subtle); } .ds-product-card__type { margin: 20px 0 4px; color: var(--ink-secondary); font: 400 14px/1.4 var(--font-body); } .ds-product-card h3 { min-height: 2.6em; margin: 0; overflow-wrap: anywhere; font: 400 22px/1.3 var(--font-newsreader), Georgia, serif; } .ds-product-card h3 a { color: inherit; text-decoration: none; } .ds-product-card h3 a:hover { text-decoration: underline; text-decoration-thickness: 1px; } .ds-product-card__detail { margin-top: 8px; color: var(--ink); font: 400 16px/1.5 var(--font-body); } @media (max-width: 767px) { .ds-product-card__type { margin-top: 14px; } .ds-product-card h3 { font-size: 18px; } }"
+      "description": "An open product image and copy presentation. Preview prices carry an explicit Sample price label.",
+      "html": "<article><a href=\"/products/example\"><img alt=\"Catalog product\" /><h3>Product title</h3></a><p>Sample price: ₹0</p></article>",
+      "css": ".imageLink { display: block; aspect-ratio: 4 / 5; overflow: hidden; background: var(--parchment); } article h3 { font: 400 clamp(1.25rem, 1.5vw, 1.55rem)/1.18 var(--font-editorial); }"
     }
   ],
   "narrative": {
-    "northStar": "The Considered Cup",
-    "overview": "Nilkurinji keeps its existing logo and forest-green identity. The interface uses editorial type for the product story, clear sans-serif controls for shopping, quiet surfaces, and product imagery as the main visual material. The storefront should feel deliberate through proportion, hierarchy, and alignment rather than ornamental volume.\n\nThe header is compact and consistent across routes. Search opens over the page in a desktop popover and in a mobile sheet. Shop, collections, product detail, and recommendations share the same open card language. Repeated botanical framing, a large masthead, and the circular category shelf were rejected for this redesign. Product packaging and preview prices remain illustrative until approved by the owner.",
+    "northStar": "Nilkurinji Tea, in Two Formats",
+    "overview": "The supplied premium tea reference informs the dark forest stage, warm paper, restrained brass accents, high-contrast serif type, and product-led page rhythm. The Nilkurinji wordmark remains consistent. Only loose tea and tea bags appear as merchandise. The homepage presents a short tea selection before compact transparent cutout links for the two formats. Search remains modal and does not change header height. Preview sample prices and concept imagery are labelled, and purchases stay disabled.",
     "keyCharacteristics": [
-      "Keep the existing Nilkurinji mark and forest-green identity.",
-      "Pair editorial Newsreader headings with Manrope shopping controls and body copy.",
-      "Use calm, near-white surfaces, light dividers, and consistent product frames.",
-      "Keep the shell compact and let search open without pushing the page down.",
-      "Use merchant-approved photography and content when the live catalog is ready."
+      "Preserve the Nilkurinji wordmark and sprout; omit the descriptor.",
+      "Show loose tea and tea bags as the only merchandise categories.",
+      "Show the featured tea selection before compact format links; cap desktop format frames at 320px.",
+      "Use the transparent tea and tea-bag photographs directly on the forest stage, without circles or oval masks.",
+      "Keep the shared shell compact and the product information factual."
     ],
     "rules": [
-      { "name": "The Product-First Rule", "body": "Use product, place, and people imagery to carry the brand story. Add decoration only when the approved direction gives it a clear role.", "section": "colors" },
-      { "name": "The One Logo Rule", "body": "Preserve the supplied wordmark as its own lockup. Do not restyle its lettering independently on individual routes.", "section": "typography" },
-      { "name": "The Quiet Surface Rule", "body": "Use contrast, spacing, and a fine divider before adding a shadow or enclosing every item in a card.", "section": "elevation" }
+      {
+        "name": "The Product Truth Rule",
+        "body": "Never use colour, copy, decoration, or imagery to imply unapproved origin, quality, health, delivery, ingredients, or product details.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Logo Rule",
+        "body": "Use the same Nilkurinji wordmark and sprout dimensions on every route, without the removed descriptor.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tea-Only Catalog Rule",
+        "body": "Only products assigned to the tea or tea-bags Shopify collection may appear in the unified Shop, search, product lookup, or recommendations. Tea format choices are filters within Shop.",
+        "section": "components"
+      },
+      {
+        "name": "The Flat-By-Default Rule",
+        "body": "Use rules, tonal surfaces, spacing, and photography to establish hierarchy. Avoid decorative shadows.",
+        "section": "elevation"
+      }
     ],
     "dos": [
-      "Do preserve the existing logo and forest-green identity.",
-      "Do correct alignment at the shared component or token when the same defect appears on multiple routes.",
-      "Do review the header at rest and with search open, on desktop and mobile.",
-      "Do use clear product imagery, readable copy, and consistent product frames.",
-      "Do keep reduced-motion support and visible keyboard focus."
+      "Do keep the complete storefront merchandise range limited to tea and tea bags.",
+      "Do show featured tea products before compact tea-format links.",
+      "Do use the transparent loose-tea and tea-bag cutouts without circular backplates.",
+      "Do label preview amounts as Sample price and disclose concept imagery.",
+      "Do keep search and drawers modal, bounded, and keyboard reachable.",
+      "Do respect reduced-motion settings and visible focus."
     ],
     "donts": [
-      "Don't repeat leaf illustrations as a border or frame around page sections.",
-      "Don't add a circle or oval behind transparent product/category imagery unless the approved composition calls for it.",
-      "Don't let header, logo, or navigation sizing drift between routes.",
-      "Don't use tiny copy, misaligned action icons, or inconsistent card geometry as decorative styling.",
-      "Don't present concept images, sample prices, reviews, origin stories, or product claims as merchant-approved facts."
+      "Do not add pantry foods, teaware, brewing equipment, storage products, or accessory bundles.",
+      "Do not add a currency chooser. Keep Shopify as the price and currency authority.",
+      "Do not invent sourcing, brewing, health, shipping, review, or quality claims.",
+      "Do not add Tea Guide, Recipes, Journal, or newsletter surfaces.",
+      "Do not use em dashes in shopper-facing copy.",
+      "Do not repeat foliage as section decoration or present preview assets as approved products."
     ]
   }
 }

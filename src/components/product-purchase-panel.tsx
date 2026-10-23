@@ -6,6 +6,7 @@ import { formatMoney } from "@/lib/format";
 import type { StorefrontProduct, StorefrontVariant } from "@/lib/shopify/types";
 import styles from "./product-purchase-panel.module.css";
 import { postCartAction } from "@/lib/cart-client";
+import { useStorefrontCart } from "@/components/cart-provider";
 
 function variantOptions(variants: StorefrontVariant[]): { name: string; values: string[] }[] {
   const values = new Map<string, Set<string>>();
@@ -58,6 +59,7 @@ export function ProductPurchasePanel({
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const mutationLock = useRef(false);
+  const cart = useStorefrontCart();
 
   const selectedVariant = findSelectedVariant(product.variants, selectedOptions)
     ?? (options.length === 0 ? firstVariant : undefined);
@@ -70,14 +72,18 @@ export function ProductPurchasePanel({
     setBusy(true);
     setMessage("");
     try {
-      const result = await postCartAction({ action, variantId: selectedVariant.id, quantity });
+      const cartAction = { action, variantId: selectedVariant.id, quantity } as const;
+      const result = cart ? await cart.mutate(cartAction) : await postCartAction(cartAction);
+      if (cart && !result) throw new Error("Your cart is being updated. Please try again.");
       if (action === "buy-now") {
-        if (!result.checkoutUrl) throw new Error("Shopify did not return a checkout address.");
-        window.location.assign(result.checkoutUrl);
+        const checkoutUrl = result?.checkoutUrl;
+        if (!checkoutUrl) throw new Error("Shopify did not return a checkout address.");
+        window.location.assign(checkoutUrl);
         return;
       }
       setMessage("Added to your cart.");
-      window.dispatchEvent(new Event("nilkurinji:cart-updated"));
+      if (cart) window.dispatchEvent(new Event("nilkurinji:cart-open"));
+      else window.dispatchEvent(new Event("nilkurinji:cart-updated"));
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "The cart could not be updated.");
     } finally {

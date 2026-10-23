@@ -1,7 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getProducts } from "@/lib/shopify/catalog";
 import { isIndexableSite } from "@/lib/shopify/checkout-config";
-import { CATEGORIES } from "@/lib/site-config";
 
 function siteBase(): URL | null {
   try {
@@ -20,7 +19,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const routes = [
     "",
     "/shop",
-    ...CATEGORIES.map((category) => category.href),
     "/about",
     "/contact",
     "/pages/privacy-policy",

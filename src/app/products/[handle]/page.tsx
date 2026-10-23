@@ -5,7 +5,7 @@ import { ChevronRight, Star } from "lucide-react";
 import { ProductCard } from "@/components/product-card";
 import { ProductGallery } from "@/components/product-gallery";
 import { ProductPurchasePanel } from "@/components/product-purchase-panel";
-import { WishlistButton } from "@/components/wishlist-button";
+import { TeaDetails } from "@/components/tea-details";
 import { isShopifyCheckoutEnabled } from "@/lib/shopify/checkout-config";
 import { getProduct, getRecommendations } from "@/lib/shopify/catalog";
 import { CATEGORIES } from "@/lib/site-config";
@@ -83,7 +83,7 @@ export default async function ProductPage({ params }: PageProps) {
   const related = recommendations.source === "unavailable" ? [] : recommendations.data.filter((item) => item.id !== product.id);
   return <div className={styles.page}>
     <nav className={styles.breadcrumb} aria-label="Breadcrumb"><Link href="/shop">Shop</Link><ChevronRight size={14} aria-hidden="true" />{category && <><Link href={category.href}>{category.label}</Link><ChevronRight size={14} aria-hidden="true" /></>}<span>{product.title}</span></nav>
-    <div className={styles.layout} key={product.id}><ProductGallery images={product.images} title={product.title} /><ProductDetails className={styles.detail}><h1 id="product-title">{product.title}</h1><ProductPurchasePanel product={product} purchasingEnabled={isShopifyCheckoutEnabled()} />{product.description && <p className={styles.description}>{product.description}</p>}<WishlistButton handle={product.handle} title={product.title} /></ProductDetails></div>
+    <div className={styles.layout} key={product.id}><ProductGallery images={product.images} title={product.title} /><ProductDetails className={styles.detail}><h1 id="product-title">{product.title}</h1><ProductPurchasePanel product={product} purchasingEnabled={isShopifyCheckoutEnabled()} />{product.description && <p className={styles.description}>{product.description}</p>}<TeaDetails product={product} /></ProductDetails></div>
     {(product.details || product.faqs.length > 0 || product.approvedReviews.length > 0) && <div className={styles.content}>
       {product.details && <section><h2>Product details</h2><p>{product.details}</p></section>}
       {product.faqs.length > 0 && <section><h2>Frequently asked questions</h2>{product.faqs.map((faq) => <details key={faq.question}><summary>{faq.question}</summary><p>{faq.answer}</p></details>)}</section>}

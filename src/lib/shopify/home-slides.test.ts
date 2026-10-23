@@ -21,18 +21,23 @@ describe("homepage carousel copy", () => {
     expect(slides[0]?.heading).not.toBe(DRAFT_HOMEPAGE_CONTENT.heading);
   });
 
-  it("uses neutral draft copy in the preview storefront", () => {
+  it("shows the manual Leaf, Water, Cup chapters with illustrative preview art", () => {
     const slides = buildHomepageSlides(true, DRAFT_HOMEPAGE_CONTENT);
-    expect(slides).toHaveLength(1);
+    expect(slides).toHaveLength(3);
     expect(slides[0]).toMatchObject({
-      eyebrow: "",
-      heading: "A considered cup, every day.",
-      description: "Explore Nilkurinji tea and tea bags for the moments that make a day.",
-      image: "/images/preview-hero-home-v4.png",
-      imageCaption: "",
-      href: "/collections/tea",
+      id: "leaf",
+      label: "Leaf",
+      eyebrow: "NILKURINJI TEA",
+      heading: "Make a little room for tea.",
+      description: "Loose tea when you want to linger. Tea bags when you want to keep it simple.",
+      image: "/images/leaf-to-cup/hero-leaf.webp",
+      imageCaption: "Dry tea leaves",
+      href: "/shop?category=tea",
     });
-    expect(slides[0]?.imageAlt).toBe("Illustrative Nilkurinji tea scene with a tin and glass cup");
+    expect(slides.map((slide) => slide.label)).toEqual(["Leaf", "Water", "Cup"]);
+    expect(slides[0]?.imageAlt).toBe("Illustrative dry tea leaves in a ceramic dish");
+    expect(slides[1]?.image).toBe("/images/leaf-to-cup/hero-water.webp");
+    expect(slides[2]?.image).toBe("/images/leaf-to-cup/hero-cup.webp");
   });
 
   it("supports an approved second campaign without an unused eyebrow", () => {

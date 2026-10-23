@@ -16,7 +16,7 @@ export function ProductGallery({ images, title }: { images: ShopifyImage[]; titl
   return (
     <div className={styles.gallery}>
       <div className={styles.main}>
-        <Image src={active.url} alt={active.altText || title} fill sizes="(max-width: 1023px) 100vw, 55vw" preload={activeIndex === 0} />
+        <Image key={active.url} className={styles.mainImage} src={active.url} alt={active.altText || title} fill sizes="(max-width: 1023px) 100vw, 55vw" preload={activeIndex === 0} />
       </div>
       {images.length > 1 && (
         <div className={styles.thumbs} aria-label="Product photos">

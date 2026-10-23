@@ -18,8 +18,8 @@
     "next": "16.4.0",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "server-only": "latest",
     "sanitize-html": "latest",
+    "server-only": "latest",
     "tailwind-merge": "latest"
   },
   "devDependencies": {
@@ -31,6 +31,7 @@
     "@types/sanitize-html": "latest",
     "eslint": "10.12.0",
     "eslint-plugin-react-hooks": "7.1.1",
+    "jsdom": "26.1.0",
     "tailwindcss": "4.3.3",
     "typescript": "5",
     "typescript-eslint": "8.71.1",

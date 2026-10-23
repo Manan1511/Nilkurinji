@@ -2,23 +2,17 @@ import { describe, expect, it } from "vitest";
 import { CATEGORIES, PRIMARY_NAV } from "@/lib/site-config";
 
 describe("Nilkurinji storefront navigation", () => {
-  it("includes all five approved Shopify collection routes in the planned order", () => {
+  it("keeps tea formats as filters within the single shop route", () => {
     expect(CATEGORIES.map(({ label, href }) => [label, href])).toEqual([
-      ["Tea", "/collections/tea"],
-      ["Tea Bags", "/collections/tea-bags"],
-      ["Rice", "/collections/rice"],
-      ["Snacks", "/collections/snacks"],
-      ["Other Foods", "/collections/other-foods"],
+      ["Tea", "/shop?category=tea"],
+      ["Tea Bags", "/shop?category=tea-bags"],
     ]);
   });
 
-  it("provides the planned navigation without adding excluded editorial pages", () => {
+  it("keeps primary navigation focused on one shop page and brand information", () => {
     expect(PRIMARY_NAV.map(({ href }) => href)).toEqual([
-      "/",
       "/shop",
-      "/collections/tea",
       "/about",
-      "/contact",
     ]);
     expect(PRIMARY_NAV.some(({ href }) => /recipes|journal|tea-guide|newsletter/i.test(href))).toBe(false);
   });

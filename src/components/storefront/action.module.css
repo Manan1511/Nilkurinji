@@ -1,11 +1,15 @@
-.action { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 12px 22px; border: 1px solid transparent; border-radius: var(--radius-control); font: 600 14px/1.4 var(--font-body); text-decoration: none; cursor: pointer; transition: background-color 180ms, color 180ms; }
+.action { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 12px 22px; border: 1px solid transparent; border-radius: var(--radius-control); font: 600 14px/1.4 var(--font-body); text-decoration: none; cursor: pointer; transition: background-color var(--motion-control) ease, color var(--motion-control) ease, border-color var(--motion-control) ease, transform 120ms ease; }
 .primary { background: var(--brand); color: var(--surface); }
 .primary:hover { background: var(--brand-hover); }
 .secondary { border-color: var(--brand); color: var(--brand); background: transparent; }
 .secondary:hover { background: var(--surface-subtle); }
 .text { color: var(--brand); padding-inline: 0; }
 .text:hover { text-decoration: underline; text-underline-offset: 5px; }
+.action svg.lucide-arrow-right,.action svg.lucide-arrow-up-right { transition: transform var(--motion-fast) var(--ease-out); }
+.action:hover svg.lucide-arrow-right,.action:hover svg.lucide-arrow-up-right { transform: translateX(3px); }
+.action:active:not(:disabled) { transform: translateY(1px); }
 .action:disabled { opacity: .5; cursor: not-allowed; }
 .icon { display: inline-grid; place-items: center; width: 44px; height: 44px; flex-shrink: 0; padding: 0; border: 0; border-radius: 2px; background: transparent; color: var(--brand); cursor: pointer; }
 .icon:hover { background: var(--surface-subtle); }
 .icon svg { width: 21px; height: 21px; stroke-width: 1.5; }
+@media (prefers-reduced-motion: reduce) { .action,.icon { transition-duration: 100ms; transition-property: color,background-color,border-color,fill; } .action:active:not(:disabled),.action:hover svg.lucide-arrow-right,.action:hover svg.lucide-arrow-up-right { transform: none; } }

@@ -6,7 +6,7 @@ export function makeVariant(overrides: Partial<StorefrontVariant> = {}): Storefr
 }
 export function makeProduct(overrides: Partial<StorefrontProduct> = {}): StorefrontProduct {
   const price = { amount: "320.00", currencyCode: "INR" };
-  return { id: "gid://shopify/Product/101", handle: "test-tea", title: "Test tea", description: "Test fixture only.", productType: "Tea", vendor: "Nilkurinji", tags: [], featuredImage: null, images: [], variants: [makeVariant()], priceRange: { minVariantPrice: price, maxVariantPrice: price }, collectionHandles: ["tea"], faqs: [], approvedReviews: [], details: "", isPreview: false, ...overrides };
+  return { id: "gid://shopify/Product/101", handle: "test-tea", title: "Test tea", description: "Test fixture only.", productType: "Tea", vendor: "Nilkurinji", tags: [], featuredImage: null, images: [], variants: [makeVariant()], priceRange: { minVariantPrice: price, maxVariantPrice: price }, collectionHandles: ["tea"], faqs: [], approvedReviews: [], details: "", teaProfile: null, isPreview: false, ...overrides };
 }
 export function makeCart(overrides: Partial<ShopifyCart> = {}): ShopifyCart {
   const price = { amount: "320.00", currencyCode: "INR" };
