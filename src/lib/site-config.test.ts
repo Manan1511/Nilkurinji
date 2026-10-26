@@ -2,18 +2,24 @@ import { describe, expect, it } from "vitest";
 import { CATEGORIES, PRIMARY_NAV } from "@/lib/site-config";
 
 describe("Nilkurinji storefront navigation", () => {
-  it("keeps tea formats as filters within the single shop route", () => {
+  it("keeps all merchandise categories inside the single shop route", () => {
     expect(CATEGORIES.map(({ label, href }) => [label, href])).toEqual([
       ["Tea", "/shop?category=tea"],
       ["Tea Bags", "/shop?category=tea-bags"],
+      ["Rice", "/shop?category=rice"],
+      ["Snacks", "/shop?category=snacks"],
+      ["Other Foods", "/shop?category=other-foods"],
     ]);
   });
 
-  it("keeps primary navigation focused on one shop page and brand information", () => {
+  it("uses the approved global primary navigation", () => {
     expect(PRIMARY_NAV.map(({ href }) => href)).toEqual([
+      "/",
       "/shop",
-      "/about",
+      "/tea-guide",
+      "/recipes",
+      "/journal",
+      "/contact",
     ]);
-    expect(PRIMARY_NAV.some(({ href }) => /recipes|journal|tea-guide|newsletter/i.test(href))).toBe(false);
   });
 });

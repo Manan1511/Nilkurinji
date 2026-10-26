@@ -9,6 +9,7 @@ import { sanitizeMerchantHtml } from "@/lib/shopify/sanitize";
 const POLICIES = {
   "privacy-policy": { key: "privacy", title: "Privacy policy" },
   "refund-policy": { key: "refund", title: "Refund policy" },
+  "shipping-policy": { key: "shipping", title: "Shipping policy" },
   "terms-and-conditions": { key: "terms", title: "Terms & conditions" },
 } as const;
 

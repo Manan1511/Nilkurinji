@@ -17,7 +17,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: indexable ? "/" : undefined,
-      disallow: indexable ? ["/api/", "/cart", "/account", "/search"] : "/",
+      disallow: indexable ? ["/api/", "/cart", "/account", "/search", "/checkout"] : "/",
     },
     ...(indexable && base ? { sitemap: new URL("/sitemap.xml", base).toString(), host: base.host } : {}),
   };

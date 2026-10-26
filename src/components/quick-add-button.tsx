@@ -1,11 +1,12 @@
 "use client";
 import { useRef, useState } from "react";
+import { ShoppingCart } from "lucide-react";
 import type { StorefrontProduct } from "@/lib/shopify/types";
 import { getQuickAddVariant } from "@/lib/shopify/cart-ui";
 import { postCartAction } from "@/lib/cart-client";
 import { useStorefrontCart } from "@/components/cart-provider";
 import styles from "./quick-add-button.module.css";
-export function QuickAddButton({ product, purchasingEnabled }: { product: StorefrontProduct; purchasingEnabled: boolean; compact?: boolean }) {
+export function QuickAddButton({ product, purchasingEnabled, compact = false }: { product: StorefrontProduct; purchasingEnabled: boolean; compact?: boolean }) {
   const variant = getQuickAddVariant(product, purchasingEnabled);
   const lock = useRef(false);
   const [pending, setPending] = useState(false);
@@ -28,5 +29,5 @@ export function QuickAddButton({ product, purchasingEnabled }: { product: Storef
     } catch (error) { setMessage(error instanceof Error ? error.message : "The item could not be added. Please try again."); }
     finally { lock.current = false; setPending(false); }
   }
-  return <div><button className={styles.button} type="button" disabled={pending} aria-label={`Add ${product.title} to cart`} aria-busy={pending} onClick={() => void add()}>{pending ? "Adding…" : added ? "Added" : "Add to cart"}</button>{message && <p className={styles.message} role="status">{message}</p>}</div>;
+  return <div><button className={`${styles.button} ${compact ? styles.compact : ""}`} type="button" disabled={pending} aria-label={`${pending ? "Adding" : "Add"} ${product.title} to cart`} aria-busy={pending} onClick={() => void add()}>{compact ? <><ShoppingCart aria-hidden="true" /><span className="sr-only">{pending ? "Adding" : added ? "Added" : "Add to cart"}</span></> : pending ? "Adding…" : added ? "Added" : "Add to cart"}</button>{message && <p className={styles.message} role="status">{message}</p>}</div>;
 }

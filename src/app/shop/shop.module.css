@@ -1,0 +1,22 @@
+.banner { position: relative; display: flex; align-items: center; min-height: clamp(220px,20vw,270px); overflow: hidden; isolation: isolate; background: var(--paper); }
+.media { position: absolute; z-index: -1; inset: 0; background: var(--paper); }
+.picture { position: absolute; inset: 0; }
+.media img { object-fit: cover; object-position: 72% 56%; }
+.fade { position: absolute; inset: 0; background: linear-gradient(90deg,var(--paper) 0%,rgb(243 239 227 / 98%) 27%,rgb(243 239 227 / 86%) 40%,rgb(243 239 227 / 22%) 58%,transparent 72%); pointer-events: none; }
+.copy { position: relative; z-index: 1; width: min(1440px,100%); padding: 32px var(--page-gutter); margin-inline: auto; }
+.eyebrow { color: var(--forest); font: 700 12px/1.5 var(--font-body); letter-spacing: .17em; }
+.copy h1 { max-width: 18ch; margin-top: 10px; color: var(--ink); font: 400 clamp(2rem,3.2vw,3rem)/1.08 var(--font-editorial); letter-spacing: -.03em; }
+.copy > p:not(.eyebrow) { max-width: 52ch; margin-top: 10px; color: var(--muted); font-size: 15px; line-height: 1.55; }
+.disclosure { position: absolute; top: 18px; right: var(--page-gutter); padding: 4px 8px; color: var(--paper); background: rgb(22 49 34 / 78%); font-size: 11px; }
+.notice { width: min(1440px,100%); min-height: 180px; padding: 32px var(--page-gutter) 64px; margin-inline: auto; }
+.notice p { margin-bottom: 18px; color: var(--muted); }
+@media (max-width: 599px) {
+  .banner { align-items: center; min-height: 220px; }
+  .media { position: absolute; z-index: -1; inset: 0; display: block; width: 100%; height: auto; flex: initial; }
+  .media img { object-position: 72% center; }
+  .fade { background: linear-gradient(90deg,var(--paper) 0%,rgb(243 239 227 / 96%) 40%,rgb(243 239 227 / 78%) 58%,rgb(243 239 227 / 12%) 100%); }
+  .copy { width: 100%; padding-block: 24px; }
+  .copy h1 { max-width: 15ch; margin-top: 6px; font-size: clamp(1.7rem,7vw,2rem); line-height: 1.08; }
+  .copy > p:not(.eyebrow) { max-width: 32ch; margin-top: 8px; font-size: 14px; line-height: 1.45; }
+  .disclosure { top: auto; right: 10px; bottom: 8px; max-width: calc(100% - 20px); font-size: 11px; }
+}

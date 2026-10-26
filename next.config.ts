@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [{ protocol: "https", hostname: "cdn.shopify.com" }],
   },
+  async redirects() {
+    return [{ source: "/wishlist", destination: "/shop", permanent: true }];
+  },
 };
 
 export default nextConfig;

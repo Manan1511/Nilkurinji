@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 import { makeCart } from "../../../../test/fixtures/storefront";
 import { createCartCookie } from "@/lib/shopify/cart-cookie";
 vi.mock("@/lib/shopify/mode", () => ({ getStorefrontMode: vi.fn() }));
-vi.mock("@/lib/shopify/checkout-config", () => ({ isShopifyCheckoutEnabled: () => true, checkoutAllowedHosts: (domain: string) => [domain] }));
+vi.mock("@/lib/shopify/checkout-config", () => ({ isShopifyCheckoutEnabled: () => true, getCheckoutProvider: () => "shopify", checkoutAllowedHosts: (domain: string) => [domain] }));
 vi.mock("@/lib/shopify/cart", async (original) => ({ ...await original<typeof import("@/lib/shopify/cart")>(), getShopifyCart: vi.fn(), createShopifyCart: vi.fn(), addShopifyCartLine: vi.fn(), updateShopifyCartLine: vi.fn(), removeShopifyCartLine: vi.fn() }));
 import { getStorefrontMode } from "@/lib/shopify/mode";
 import { createShopifyCart, getShopifyCart } from "@/lib/shopify/cart";
@@ -11,7 +11,7 @@ import { GET, POST } from "./route";
 const secret = "test-only-cookie-secret-not-for-production";
 const cookie = () => `nk_cart=${createCartCookie("gid://shopify/Cart/ordinary", secret)}`;
 const post = () => POST(new NextRequest("http://localhost/api/cart", { method: "POST", headers: { cookie: cookie(), "Content-Type": "application/json" }, body: JSON.stringify({ action: "buy-now", variantId: "gid://shopify/ProductVariant/101", quantity: 1 }) }));
-beforeEach(() => { vi.clearAllMocks(); vi.stubEnv("CART_COOKIE_SECRET", secret); vi.mocked(getStorefrontMode).mockReturnValue({ mode: "live", storeDomain: "example.myshopify.com", apiVersion: "2026-10", privateToken: "test-fixture-only" }); });
+beforeEach(() => { vi.clearAllMocks(); vi.stubEnv("CART_COOKIE_SECRET", secret); vi.stubEnv("CHECKOUT_PROVIDER", "shopify"); vi.mocked(getStorefrontMode).mockReturnValue({ mode: "live", storeDomain: "example.myshopify.com", apiVersion: "2026-10", privateToken: "test-fixture-only" }); });
 afterEach(() => vi.unstubAllEnvs());
 describe("cart isolation regression", () => {
   it("Buy Now returns a separate validated checkout without replacing the shopping cookie", async () => { vi.mocked(createShopifyCart).mockResolvedValue(makeCart()); const response = await post(); expect(response.status).toBe(200); expect(response.headers.has("set-cookie")).toBe(false); expect(response.headers.get("cache-control")).toContain("no-store"); expect(getShopifyCart).not.toHaveBeenCalled(); expect((await response.json()).buyNow).toBe(true); });

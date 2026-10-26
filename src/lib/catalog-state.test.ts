@@ -1,7 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { parseCatalogQuery, writeCatalogQuery } from "./catalog-state";
+import { matchesCategory, parseCatalogQuery, writeCatalogQuery } from "./catalog-state";
 const config = { categories: ["tea"], productTypes: ["Tea"], priceBands: ["under-500"], facets: [{ id: "type", values: ["green"] }] };
 describe("catalog URL state", () => {
+  it("keeps all five Shopify product categories visible in the unified shop", () => {
+    expect(matchesCategory(["rice"], "rice")).toBe(true);
+    expect(matchesCategory(["snacks"], "snacks")).toBe(true);
+    expect(matchesCategory(["other-foods"], "other-foods")).toBe(true);
+  });
+
   it("validates sort, facet values and duplicate parameters", () => {
     const state = parseCatalogQuery(new URLSearchParams("sort=bad&category=wrong&facet.type=green&facet.type=green&facet.type=unknown"), config);
     expect(state.sort).toBe("featured"); expect(state.category).toBe("all"); expect(state.selectedFacets).toEqual({ type: ["green"] });

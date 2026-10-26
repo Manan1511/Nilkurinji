@@ -34,6 +34,8 @@ export const PRODUCT_FIELDS = `
 export const PRODUCT_DETAIL_FIELDS = `
   ${PRODUCT_FIELDS}
   teaProfile: metafield(namespace: "nilkurinji", key: "tea_profile") { value }
+  howItsMade: metafield(namespace: "nilkurinji", key: "how_its_made") { value }
+  howItsMadeApproved: metafield(namespace: "nilkurinji", key: "how_its_made_approved") { value }
 `;
 
 export const PRODUCTS_QUERY = `
@@ -59,6 +61,27 @@ export const COLLECTION_BY_HANDLE_QUERY = `
       description
       image { url altText width height }
       products(first: 20, sortKey: BEST_SELLING) { nodes { ${PRODUCT_FIELDS} } }
+    }
+  }
+`;
+
+export const SHOP_CATEGORY_BANNER_QUERY = `
+  query NilkurinjiShopCategoryBanner($handle: String!) {
+    metaobject(handle: { type: "nilkurinji_category", handle: $handle }) {
+      fields {
+        key
+        value
+        reference {
+          ... on MediaImage { image { url altText width height } }
+          ... on Metaobject {
+            fields {
+              key
+              value
+              reference { ... on MediaImage { image { url altText width height } } }
+            }
+          }
+        }
+      }
     }
   }
 `;
@@ -89,11 +112,69 @@ export const PAGE_BY_HANDLE_QUERY = `
   }
 `;
 
+const ARTICLE_FIELDS = `
+  id
+  handle
+  title
+  excerpt
+  contentHtml
+  publishedAt
+  authorV2 { name }
+  tags
+  image { url altText width height }
+  seo { title description }
+  contentReviewed: metafield(namespace: "nilkurinji", key: "content_reviewed") { value }
+  blog { handle title }
+`;
+
+export const BLOG_BY_HANDLE_QUERY = `
+  query NilkurinjiBlog($handle: String!, $first: Int!) {
+    blog(handle: $handle) {
+      id
+      handle
+      title
+      articles(first: $first, reverse: true, sortKey: PUBLISHED_AT) {
+        nodes { ${ARTICLE_FIELDS} }
+      }
+    }
+  }
+`;
+
+export const ARTICLE_BY_HANDLE_QUERY = `
+  query NilkurinjiArticle($blogHandle: String!, $articleHandle: String!) {
+    blog(handle: $blogHandle) {
+      articleByHandle(handle: $articleHandle) { ${ARTICLE_FIELDS} }
+    }
+  }
+`;
+
+export const BLOG_LANDING_QUERY = `
+  query NilkurinjiBlogLanding($handle: String!) {
+    metaobject(handle: { type: "nilkurinji_blog_landing", handle: $handle }) {
+      fields {
+        key
+        value
+        reference {
+          ... on MediaImage { image { url altText width height } }
+          ... on Metaobject {
+            fields {
+              key
+              value
+              reference { ... on MediaImage { image { url altText width height } } }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const POLICIES_QUERY = `
   query NilkurinjiPolicies {
     shop {
       privacyPolicy { id title handle body url }
       refundPolicy { id title handle body url }
+      shippingPolicy { id title handle body url }
       termsOfService { id title handle body url }
     }
   }
@@ -108,6 +189,20 @@ export const HOME_METAOBJECT_QUERY = `
         value
         reference {
           ... on MediaImage { image { url altText width height } }
+        }
+      }
+    }
+  }
+`;
+
+export const SHIPPING_METAOBJECT_QUERY = `
+  query NilkurinjiIndiaShipping {
+    metaobject(handle: { type: "nilkurinji_shipping", handle: "india" }) {
+      fields {
+        key
+        value
+        reference {
+          ... on GenericFile { url mimeType originalFileSize }
         }
       }
     }

@@ -1,5 +1,6 @@
 .panel { display: grid; gap: 20px; padding-block: 24px; }
 .panel :global(.purchase-panel__price) { font: 500 24px/1.4 var(--font-body); font-variant-numeric: tabular-nums; }
+.panel :global(.purchase-panel__tax) { margin-top: -16px; color: var(--ink-secondary); font-size: 14px; }
 .panel label { display: flex; flex-direction: column; gap: 10px; font-size: 14px; }
 .panel select { min-height: 48px; max-width: 100%; padding: 10px 12px; background: var(--surface); border: 1px solid var(--rule); border-radius: 2px; font-size: 16px; color: var(--ink); }
 .panel :global(.quantity-control) { display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 14px; }

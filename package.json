@@ -14,11 +14,12 @@
   },
   "dependencies": {
     "clsx": "latest",
+    "jose": "^6.2.13",
     "lucide-react": "latest",
-    "next": "16.4.0",
+    "next": "^16.4.3",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "sanitize-html": "latest",
+    "sanitize-html": "^2.18.1",
     "server-only": "latest",
     "tailwind-merge": "latest"
   },

@@ -84,6 +84,10 @@ export default async function ProductPage({ params }: PageProps) {
   return <div className={styles.page}>
     <nav className={styles.breadcrumb} aria-label="Breadcrumb"><Link href="/shop">Shop</Link><ChevronRight size={14} aria-hidden="true" />{category && <><Link href={category.href}>{category.label}</Link><ChevronRight size={14} aria-hidden="true" /></>}<span>{product.title}</span></nav>
     <div className={styles.layout} key={product.id}><ProductGallery images={product.images} title={product.title} /><ProductDetails className={styles.detail}><h1 id="product-title">{product.title}</h1><ProductPurchasePanel product={product} purchasingEnabled={isShopifyCheckoutEnabled()} />{product.description && <p className={styles.description}>{product.description}</p>}<TeaDetails product={product} /></ProductDetails></div>
+    {(product.howItsMade || product.isPreview) && <section className={styles.howItsMade} aria-labelledby="how-its-made-heading">
+      <h2 id="how-its-made-heading">How it’s made</h2>
+      <p>{product.howItsMade ?? "Production details for this product will appear here once Nilkurinji confirms them."}</p>
+    </section>}
     {(product.details || product.faqs.length > 0 || product.approvedReviews.length > 0) && <div className={styles.content}>
       {product.details && <section><h2>Product details</h2><p>{product.details}</p></section>}
       {product.faqs.length > 0 && <section><h2>Frequently asked questions</h2>{product.faqs.map((faq) => <details key={faq.question}><summary>{faq.question}</summary><p>{faq.answer}</p></details>)}</section>}

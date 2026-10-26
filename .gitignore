@@ -13,7 +13,6 @@ coverage/
 !.env.example
 
 # Deployment and editor state
-.netlify/
 .vercel/
 .vscode/
 .idea/

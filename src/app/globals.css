@@ -23,7 +23,11 @@ img { max-width: 100%; }
 .skip-link { position: fixed; z-index: 100; top: 8px; left: 16px; padding: 12px 20px; color: var(--paper); background: var(--forest); transform: translateY(-150%); }
 .skip-link:focus { transform: none; }
 .site-shell { position: sticky; top: 0; z-index: 30; }
-.page-main { min-height: 50vh; }
+::view-transition { pointer-events: none; }
+::view-transition-old(.storefront-page-exit) { animation: 110ms ease-out both storefront-page-out; }
+::view-transition-new(.storefront-page-enter) { animation: 170ms var(--ease-out) both storefront-page-in; }
+@keyframes storefront-page-out { to { opacity: 0; } }
+@keyframes storefront-page-in { from { opacity: .72; } to { opacity: 1; } }
 .button { display: inline-flex; justify-content: center; align-items: center; gap: 10px; min-height: 48px; padding: 12px 20px; border: 1px solid var(--forest); border-radius: var(--radius-control); text-decoration: none; font: 500 14px/1.4 var(--font-body); transition: background-color var(--motion-fast) ease, color var(--motion-fast) ease, border-color var(--motion-fast) ease, transform 120ms ease; }
 .button--dark { background: var(--forest); color: var(--paper); }
 .button--dark:hover { background: var(--brand-hover); border-color: var(--brand-hover); }
@@ -33,8 +37,14 @@ img { max-width: 100%; }
 .button svg.lucide-arrow-right,.button svg.lucide-arrow-up-right { transition: transform var(--motion-fast) var(--ease-out); }
 .button:hover svg.lucide-arrow-right,.button:hover svg.lucide-arrow-up-right { transform: translateX(3px); }
 .text-link { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; font-size: 14px; }
+.checkout-load-error { position: fixed; z-index: 80; right: 20px; bottom: 20px; width: min(440px, calc(100vw - 40px)); padding: 24px; border: 1px solid var(--control); background: var(--paper); color: var(--ink); box-shadow: 0 12px 36px rgb(20 43 28 / 20%); }
+.checkout-load-error h2 { font-size: 24px; }
+.checkout-load-error p { margin-top: 8px; color: var(--muted); font-size: 14px; }
+.checkout-load-error > div > :is(a,button) { margin-top: 16px; margin-right: 8px; }
 @media (prefers-reduced-motion: reduce) {
-  *,*::before,*::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+  html { scroll-behavior: auto; }
   button:not(:disabled):active,.button:hover svg.lucide-arrow-right,.button:hover svg.lucide-arrow-up-right { transform: none !important; }
   .button,.action { transition-duration: 100ms !important; transition-property: color,background-color,border-color,fill !important; }
+  ::view-transition-old(.storefront-page-exit) { animation-duration: 80ms !important; }
+  ::view-transition-new(.storefront-page-enter) { animation-duration: 80ms !important; }
 }

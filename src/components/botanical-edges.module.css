@@ -1,0 +1,91 @@
+.edges { position: absolute; z-index: 0; inset: 0; overflow: hidden; pointer-events: none; }
+.edges img {
+  position: absolute;
+  display: block;
+  width: auto;
+  max-width: none;
+  height: auto;
+  object-fit: contain;
+  user-select: none;
+  transform-origin: var(--foliage-origin, 50% 82%);
+  animation: foliage-sway var(--foliage-duration, 8.8s) ease-in-out infinite;
+}
+.edges .left { --foliage-duration: 8.4s; }
+.edges .right { --foliage-duration: 10.1s; animation-delay: -4.6s; }
+
+@keyframes foliage-sway {
+  0%, 100% { rotate: 0deg; translate: 0 0; }
+  24% { rotate: 1.8deg; translate: 2px -0.7px; }
+  53% { rotate: -1.05deg; translate: -1.4px 0.5px; }
+  79% { rotate: 0.75deg; translate: 1px -0.35px; }
+}
+
+/* The hero cutout has cropped edges; keep its stem anchored and sway only a few pixels. */
+@keyframes home-hero-left-sway {
+  0%, 100% { rotate: 0deg; translate: 0 0; }
+  28% { rotate: .48deg; translate: .35px -.1px; }
+  62% { rotate: -.36deg; translate: -.25px .1px; }
+  83% { rotate: .16deg; translate: .1px 0; }
+}
+
+/* Header corners use their own flowering tea branches, cropped to the paper edge. */
+.header .left,.header .right { top: 0; bottom: 0; width: clamp(80px,12vw,184px); height: 100%; object-fit: cover; transform: none; }
+.header .left { left: 0; object-position: left center; }
+.header .right { right: 0; object-position: right center; }
+
+/* Home uses a separate asymmetrical flowering pair, contained at the banner edges. */
+.home-hero .left,.home-hero .right { top: 0; bottom: 0; width: clamp(72px,12vw,184px); height: 100%; object-fit: cover; transform: none; }
+.home-hero .left {
+  top: 50%;
+  bottom: auto;
+  left: -6px;
+  width: clamp(200px,15vw,240px);
+  height: auto;
+  object-fit: contain;
+  object-position: left center;
+  transform: translateY(-50%);
+  --foliage-origin: 2% 96%;
+  animation: home-hero-left-sway 11.2s ease-in-out infinite;
+}
+.home-hero .right { right: 0; object-position: right center; --foliage-origin: 98% 8%; }
+
+/* The featured shelf carries the category foliage so the five medallions stay clear. */
+.featured .left { top: 50%; left: -105px; width: clamp(170px,15vw,220px); transform: translateY(-50%); }
+.featured .right { right: -12px; bottom: -20px; width: clamp(220px,19vw,280px); }
+
+/* Editorial pages use their own branch pair; these are not the home assets. */
+.banner .left { top: -13px; left: -58px; width: 195px; transform: rotate(-9deg); }
+.banner .right { right: -62px; bottom: -38px; width: 200px; transform: rotate(12deg); }
+.story .left { top: -22px; left: -65px; width: 216px; transform: rotate(-11deg); }
+.story .right { right: -68px; bottom: -57px; width: 214px; transform: rotate(10deg); }
+
+/* Offset each branch so the paired artwork moves like a light, uneven breeze. */
+.header .left { animation-delay: -2.4s; }
+.header .right { animation-delay: -7.2s; }
+.home-hero .left { animation-delay: -4.7s; }
+.home-hero .right { animation-delay: -1.3s; }
+.featured .left { animation-delay: -6.1s; }
+.featured .right { animation-delay: -3.2s; }
+.banner .left,.story .left { animation-delay: -5.5s; }
+.banner .right,.story .right { animation-delay: -2.1s; }
+
+@media (min-width: 768px) and (max-width: 1279px) {
+  .header .left,.header .right { width: clamp(80px,11vw,140px); }
+  .home-hero .left,.home-hero .right { width: clamp(64px,9vw,112px); object-fit: cover; transform: none; }
+  .home-hero .left { top: 50%; bottom: auto; left: -3px; width: clamp(88px,10vw,124px); height: auto; object-fit: contain; object-position: left center; transform: translateY(-50%); --foliage-origin: 2% 96%; }
+  .featured .left { left: -95px; width: 180px; }
+  .featured .right { right: -12px; width: 235px; }
+  .banner .left,.story .left { width: 150px; }
+  .banner .right,.story .right { width: 152px; }
+}
+
+@media (max-width: 767px) {
+  .header .left,.header .right { display: none; }
+  /* The hero copy stacks above its image on phones, so foliage would cross text. */
+  .home-hero .left,.home-hero .right,.featured .left,.featured .right { display: none; }
+  .banner .left,.banner .right,.story .left,.story .right { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .edges img { animation: none; rotate: none; }
+}

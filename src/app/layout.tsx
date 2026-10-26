@@ -1,23 +1,27 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Sans, Playfair_Display, Space_Mono } from "next/font/google";
+import { Caveat, Lato, Libre_Baskerville, Playfair_Display, Space_Mono } from "next/font/google";
 import "@/app/globals.css";
 import "@/app/storefront-tokens.css";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { StoreNotice } from "@/components/store-notice";
 import { CartProvider } from "@/components/cart-provider";
+import { RouteTransition } from "@/components/storefront/route-transition";
 import { ScrollRevealObserver } from "@/components/storefront/scroll-reveal";
 import { DEFAULT_DESCRIPTION, SITE_NAME } from "@/lib/site-config";
 import { getHomepageContent } from "@/lib/shopify/content";
 import { getStorefrontMode } from "@/lib/shopify/mode";
 import { isIndexableSite, isShopifyCheckoutEnabled } from "@/lib/shopify/checkout-config";
 
-const displayFont = Playfair_Display({
+const displayFont = Libre_Baskerville({
   subsets: ["latin"],
-  variable: "--font-playfair-display",
+  weight: ["400", "700"],
+  variable: "--font-libre",
   display: "swap",
 });
-const bodyFont = DM_Sans({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-dm-sans", display: "swap" });
+const bodyFont = Lato({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-lato", display: "swap" });
+const scriptFont = Caveat({ subsets: ["latin"], weight: ["400"], variable: "--font-caveat", display: "swap" });
+const logoFont = Playfair_Display({ subsets: ["latin"], weight: ["400"], variable: "--font-playfair-display", display: "swap" });
 const monoFont = Space_Mono({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-space-mono", display: "swap" });
 
 function metadataBase(): URL | undefined {
@@ -31,11 +35,11 @@ export async function generateMetadata(): Promise<Metadata> {
   const base = metadataBase();
   const homepage = await getHomepageContent();
   const image = mode.mode === "preview"
-    ? "/images/category-icon-tea-bags.png"
+    ? "/images/preview-hero-home-kurinji.webp"
     : homepage.source === "shopify" ? homepage.data.heroImage?.url : undefined;
   return {
     ...(base ? { metadataBase: base } : {}),
-    title: { default: `${SITE_NAME} · Tea and tea bags`, template: `%s · ${SITE_NAME}` },
+    title: { default: `${SITE_NAME} · Tea, tea bags and pantry`, template: `%s · ${SITE_NAME}` },
     description: DEFAULT_DESCRIPTION,
     robots: { index: isIndexableSite(), follow: isIndexableSite() },
     applicationName: SITE_NAME,
@@ -43,7 +47,7 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
       locale: "en_IN",
       siteName: SITE_NAME,
-      title: `${SITE_NAME} · Tea and tea bags`,
+      title: `${SITE_NAME} · Tea, tea bags and pantry`,
       description: DEFAULT_DESCRIPTION,
       ...(base && image ? { images: [{ url: image, alt: mode.mode === "preview" ? "Illustrative Nilkurinji tea concept artwork" : "Nilkurinji homepage" }] } : {}),
     },
@@ -59,7 +63,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#FBF9F4",
+  themeColor: "#F3EFE3",
 };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -67,12 +71,12 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const socialLinks = settings.source === "unavailable" ? [] : settings.data.socialLinks;
   const notice = getStorefrontMode().mode !== "live" || !isShopifyCheckoutEnabled();
   return (
-    <html lang="en" className={`${displayFont.variable} ${bodyFont.variable} ${monoFont.variable}`}>
+    <html lang="en" className={`${displayFont.variable} ${bodyFont.variable} ${scriptFont.variable} ${logoFont.variable} ${monoFont.variable}`}>
       <body data-notice={String(notice)}>
         <CartProvider>
           <a className="skip-link" href="#main-content">Skip to content</a>
           <div className="site-shell"><StoreNotice /><SiteHeader /></div>
-          <main id="main-content" className="page-main">{children}</main>
+          <RouteTransition>{children}</RouteTransition>
           <ScrollRevealObserver />
           <SiteFooter socialLinks={socialLinks} />
         </CartProvider>

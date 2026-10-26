@@ -1,6 +1,5 @@
 import { headers } from "next/headers";
 import { normalizeSearchQuery } from "@/lib/search/query";
-import { filterTeaProducts, isTeaProduct } from "@/lib/catalog-state";
 import { CATEGORIES } from "@/lib/site-config";
 import { getStorefrontMode } from "@/lib/shopify/mode";
 import {
@@ -39,7 +38,7 @@ function handlePreviewProducts(handle: string): StorefrontProduct[] {
 
 export async function getProducts(): Promise<StorefrontData<StorefrontProduct[]>> {
   const mode = getStorefrontMode();
-  if (mode.mode === "preview") return { source: "preview", data: filterTeaProducts(PREVIEW_PRODUCTS) };
+  if (mode.mode === "preview") return { source: "preview", data: PREVIEW_PRODUCTS };
   if (mode.mode === "unavailable") return unavailable(mode.reason);
 
   try {
@@ -48,7 +47,7 @@ export async function getProducts(): Promise<StorefrontData<StorefrontProduct[]>
       sortKey: "BEST_SELLING",
       reverse: false,
     }, { buyerIp: await currentBuyerIp(), tags: ["shopify-products"] });
-    return { source: "shopify", data: filterTeaProducts(data.products.nodes.map(normalizeProduct)) };
+    return { source: "shopify", data: data.products.nodes.map(normalizeProduct) };
   } catch {
     return unavailable("The live Shopify catalog is unavailable right now.");
   }
@@ -63,7 +62,7 @@ export async function getCollection(handle: string): Promise<StorefrontData<Stor
   try {
     const data = await shopifyQuery<{ collection: RawCollection | null }>(COLLECTION_BY_HANDLE_QUERY, { handle }, {
       buyerIp: await currentBuyerIp(),
-      tags: [`shopify-collection-${handle}`],
+      tags: ["shopify-products", `shopify-collection-${handle}`],
     });
     const collection = data.collection;
     return {
@@ -74,7 +73,7 @@ export async function getCollection(handle: string): Promise<StorefrontData<Stor
         title: collection.title,
         description: collection.description,
         image: collection.image ?? null,
-        products: filterTeaProducts(collection.products.nodes.map(normalizeProduct)),
+        products: collection.products.nodes.map(normalizeProduct),
       } : null,
     };
   } catch {
@@ -86,7 +85,7 @@ export async function getProduct(handle: string): Promise<StorefrontData<Storefr
   const mode = getStorefrontMode();
   if (mode.mode === "preview") {
     const product = getPreviewProduct(handle);
-    return { source: "preview", data: product && isTeaProduct(product) ? product : null };
+    return { source: "preview", data: product };
   }
   if (mode.mode === "unavailable") return unavailable(mode.reason);
 
@@ -94,10 +93,10 @@ export async function getProduct(handle: string): Promise<StorefrontData<Storefr
     const data = await shopifyQuery<{ product: Parameters<typeof normalizeProduct>[0] | null }>(
       PRODUCT_BY_HANDLE_QUERY,
       { handle },
-      { buyerIp: await currentBuyerIp(), tags: [`shopify-product-${handle}`] },
+      { buyerIp: await currentBuyerIp(), tags: ["shopify-products", `shopify-product-${handle}`] },
     );
     const product = data.product ? normalizeProduct(data.product) : null;
-    return { source: "shopify", data: product && isTeaProduct(product) ? product : null };
+    return { source: "shopify", data: product };
   } catch {
     return unavailable("This Shopify product is temporarily unavailable.");
   }
@@ -112,7 +111,7 @@ export async function searchProducts(term: string): Promise<StorefrontData<Store
     return { source: "shopify", data: [] };
   }
   if (mode.mode === "preview") {
-    return { source: "preview", data: filterTeaProducts(PREVIEW_PRODUCTS).filter((product) => product.title.toLowerCase().includes(query.toLowerCase())) };
+    return { source: "preview", data: PREVIEW_PRODUCTS.filter((product) => product.title.toLowerCase().includes(query.toLowerCase())) };
   }
   if (mode.mode === "unavailable") return unavailable(mode.reason);
 
@@ -122,7 +121,7 @@ export async function searchProducts(term: string): Promise<StorefrontData<Store
       { query, first: 20 },
       { buyerIp: await currentBuyerIp(), tags: ["shopify-search"] },
     );
-    return { source: "shopify", data: filterTeaProducts(data.search.nodes.map(normalizeProduct)) };
+    return { source: "shopify", data: data.search.nodes.map(normalizeProduct) };
   } catch {
     return unavailable("Shopify search is temporarily unavailable.");
   }
@@ -133,7 +132,7 @@ export async function getRecommendations(product: StorefrontProduct): Promise<St
   if (mode.mode === "preview") {
     return {
       source: "preview",
-      data: filterTeaProducts(handlePreviewProducts(product.collectionHandles[0] ?? "")).filter((item) => item.id !== product.id),
+      data: handlePreviewProducts(product.collectionHandles[0] ?? "").filter((item) => item.id !== product.id),
     };
   }
   if (mode.mode === "unavailable") return unavailable(mode.reason);
@@ -142,9 +141,9 @@ export async function getRecommendations(product: StorefrontProduct): Promise<St
     const data = await shopifyQuery<{ productRecommendations: Parameters<typeof normalizeProduct>[0][] | null }>(
       RECOMMENDATIONS_QUERY,
       { productId: product.id },
-      { buyerIp: await currentBuyerIp(), tags: [`shopify-recommendations-${product.handle}`] },
+      { buyerIp: await currentBuyerIp(), tags: ["shopify-products", `shopify-recommendations-${product.handle}`] },
     );
-    const recommended = filterTeaProducts((data.productRecommendations ?? []).map(normalizeProduct)).filter((item) => item.id !== product.id);
+    const recommended = (data.productRecommendations ?? []).map(normalizeProduct).filter((item) => item.id !== product.id);
     if (recommended.length || !product.collectionHandles[0]) return { source: "shopify", data: recommended };
 
     const collection = await getCollection(product.collectionHandles[0]);

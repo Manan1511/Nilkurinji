@@ -28,7 +28,16 @@ type RawProduct = {
   faqs?: { value?: string | null } | null;
   reviews?: { value?: string | null } | null;
   teaProfile?: { value?: string | null } | null;
+  howItsMade?: { value?: string | null } | null;
+  howItsMadeApproved?: { value?: string | null } | null;
 };
+
+function parseApprovedHowItsMade(content: string | null | undefined, approved: string | null | undefined): string | null {
+  if (approved?.trim().toLowerCase() !== "true") return null;
+  const text = content?.replace(/\r\n?/g, "\n").trim();
+  if (!text || text.length > 2400 || /<\/?[a-z][^>]*>/i.test(text)) return null;
+  return text;
+}
 
 export function normalizeProduct(raw: RawProduct): StorefrontProduct {
   const variants = raw.variants?.nodes ?? [];
@@ -58,6 +67,7 @@ export function normalizeProduct(raw: RawProduct): StorefrontProduct {
     faqs: parseFaqs(raw.faqs?.value),
     approvedReviews: parseApprovedReviews(raw.reviews?.value),
     teaProfile: parseTeaProfile(raw.teaProfile?.value),
+    howItsMade: parseApprovedHowItsMade(raw.howItsMade?.value, raw.howItsMadeApproved?.value),
     details: raw.details?.value?.trim() ?? "",
     isPreview: false,
   };

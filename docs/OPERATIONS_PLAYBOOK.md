@@ -1,37 +1,45 @@
 # Nilkurinji operations and handover
 
-Use Shopify Admin for store operations. This storefront does not create a second product, inventory, customer-account, order, or payment dashboard.
+Shopify Admin is the store operations interface. Vercel hosts the storefront. The payment-provider dashboard may still be needed for settlement, gateway disputes and reconciliation.
 
-## Product and content update
+## Catalog and content
 
-1. Open **Shopify Admin → Products**. Add the real item, confirmed food details and images, options, INR prices, inventory, SEO fields, and the appropriate Shopify product type.
-2. Assign the product to the relevant published collection: `tea`, `tea-bags`, `rice`, `snacks`, or `other-foods`. Publish it to the **Headless** sales channel. The storefront reads at most 20 products and 50 variants per product.
-3. Update the `nilkurinji` metafields for product details and FAQs. Add customer reviews only after receiving a genuine review and approval to publish it.
-4. Edit the published `nilkurinji_home` metaobject to update required homepage copy, approved hero media, optional second-carousel copy, featured-products heading, closing copy, and allowed social URLs. Keep incomplete or unapproved copy out of the live metaobject.
-5. Edit the Shopify About/Contact pages and merchant policies from Shopify Admin. Do not use placeholder copy, personal contact details, or generated pack artwork as production facts.
+1. Add products, pack-size variants, SKU, price, stock, shipping weight, images, SEO and the correct published collection in Shopify Admin.
+2. Tea facets use tags with type:, flavour: and caffeine: prefixes. Keep values stable and approved.
+3. Publish products to the Headless storefront and verify them in the intended environment.
+4. Edit homepage/category/story/values/shipping metaobjects and Shopify blogs. Confirm the current query supports each field before entering content.
+5. Publish only approved product facts and genuine reviews.
 
-## Order, payment, fulfillment, and refund routine
+## Orders and fulfillment
 
-1. Open **Shopify Admin → Orders**. Review payment state before packing: COD orders can be unpaid/pending until the courier collects payment; online orders must show the merchant-approved paid state.
-2. Verify address, shipping serviceability, inventory, and any COD restrictions. Fulfill only after the store's written payment and fulfillment rules are met.
-3. Add tracking and mark fulfilled in Shopify so the store's order record remains authoritative.
-4. Handle cancellation, partial/full refund, COD reconciliation, and customer notification using the merchant's approved policy and Shopify Admin. Record the reason and reconcile inventory/payment status.
-5. Never issue a refund from this storefront. Confirm Razorpay eligibility and its current Shopify order/refund steps with the merchant account before training staff on those payment cases.
+1. Review Shopify Admin → Orders. Confirm payment or COD status before packing.
+2. Verify address, carrier serviceability, inventory and merchant COD rules.
+3. Fulfill in Shopify and add tracking there.
+4. Handle cancellation and refund according to approved policies and provider procedures.
+5. Never treat COD as prepaid or a browser callback as proof of payment.
 
-## Netlify release and support triage
+## Delivery data
 
-- Follow [Netlify deployment](./NETLIFY_DEPLOYMENT.md) for deploy previews, Production environment variables, DNS, HTTPS, and recovery. Keep checkout and indexing separately gated.
-- For a storefront bug, record the exact URL, timestamp/time zone, device/browser, expected result, actual result, and steps to reproduce. Check the Netlify deploy and function logs for that release and the matching Shopify product/cart/order record before changing business data.
-- For stale catalog or homepage content, check that the item is published to the Headless channel, the collection/metaobject handle is exact, and the 60-second server cache window has passed.
-- For checkout/payment or order-state issues, stop checkout by setting `SHOPIFY_CHECKOUT_ENABLED=false`, inspect Shopify Admin/provider status, then rerun the purchase test before reopening.
-- For a release regression, use Netlify's prior successful deployment as the recovery point, then deploy a corrected commit. Do not edit build output or patch a production cart/order manually.
-- Share URLs, timestamps, public error text, and request IDs with support. Never include the private Storefront token, cookie secret, customer payment details, or a full customer address in bug reports.
+Maintain the public nilkurinji_shipping metaobject entry india and its serviceability CSV. Use six-digit PINs and true/false prepaid/COD flags. Refresh the verified timestamp whenever the data changes. Stale or unavailable data returns unknown; checkout remains the final authority.
 
-## Launch training checklist
+## Vercel release and incident triage
 
-- [ ] Walk the owner through adding a product, options, price, inventory, collection, SEO, and Headless publication.
-- [ ] Walk through homepage metaobject, About/Contact pages, policy publishing, and review approval.
-- [ ] Demonstrate a Shopify test order, COD pending state where enabled, fulfillment, cancellation, and test refund.
-- [ ] Verify staff permissions in Shopify Admin and Netlify follow least privilege.
-- [ ] Confirm the owner can deploy a preview, inspect logs, keep indexing closed during tests, and use the documented recovery procedure.
-- [ ] Record the owner-approved live product catalog, primary domain, payment configuration, policies, and post-launch support contact/coverage.
+- Follow docs/VERCEL_DEPLOYMENT.md for project setup, environment scope, domain and rollback.
+- Record exact URL, time zone, device/browser, expected result, actual result and reproduction steps.
+- Inspect Vercel deployment/function logs and the corresponding Shopify product/cart/order before changing business data.
+- For stale content, verify Headless publication, collection/metaobject handle and the 60-second cache window.
+- For article/page content without a Shopify webhook topic, use POST /api/revalidate with an approved scope and the operator secret through a secure server-side tool. Never expose REVALIDATE_SECRET in a browser or logs.
+- For payment uncertainty, close new checkout with SHOPIFY_CHECKOUT_ENABLED=false and reconcile the provider and Shopify state. Never start a second payment after capture or while status is uncertain.
+- Roll back through Vercel deployment history. Do not patch build output or alter a production cart/order to hide an application defect.
+- Never include tokens, cookie secrets, payment credentials, full addresses or other customer data in bug reports.
+
+## Launch training
+
+- [ ] Product, pack, price, stock, collection and image maintenance.
+- [ ] Homepage/category/story/blog/policy publishing.
+- [ ] Test order, COD state, fulfillment, cancellation and refund.
+- [ ] Vercel previews, logs, environment scopes, rollback and least-privilege access.
+- [ ] Owner-approved provider, domain, policies and support coverage recorded.
+- [ ] Payment-pending recovery and serviceability data maintenance documented.
+
+No live merchant order, refund, settlement or production deployment is verified by this playbook alone.

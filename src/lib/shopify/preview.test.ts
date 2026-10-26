@@ -2,12 +2,14 @@ import { describe, expect, it } from "vitest";
 import { getPreviewCollection, getPreviewProduct, PREVIEW_PRODUCTS } from "@/lib/shopify/preview";
 
 describe("reference preview catalog", () => {
-  it("contains only tea products and uses INR sample prices", () => {
+  it("covers every approved shop category and uses INR sample prices", () => {
     expect(PREVIEW_PRODUCTS.length).toBeGreaterThan(0);
-    expect(PREVIEW_PRODUCTS.every((product) => product.collectionHandles.length > 0 && product.collectionHandles.every((handle) => ["tea", "tea-bags"].includes(handle)))).toBe(true);
+    const categories = ["tea", "tea-bags", "rice", "snacks", "other-foods"];
+    expect(PREVIEW_PRODUCTS.every((product) => product.collectionHandles.length > 0 && product.collectionHandles.every((handle) => categories.includes(handle)))).toBe(true);
+    expect(categories.every((category) => PREVIEW_PRODUCTS.some((product) => product.collectionHandles.includes(category)))).toBe(true);
     expect(PREVIEW_PRODUCTS.every((product) => product.priceRange?.minVariantPrice.currencyCode === "INR")).toBe(true);
-    expect(getPreviewProduct("preview-rice")).toBeNull();
-    expect(getPreviewProduct("preview-snacks")).toBeNull();
+    expect(getPreviewProduct("preview-basmati-rice")?.isPreview).toBe(true);
+    expect(getPreviewProduct("preview-pantry-snacks")?.isPreview).toBe(true);
   });
 
   it("fills tea and tea-bag collections with the reference products", () => {
@@ -71,13 +73,18 @@ describe("reference preview catalog", () => {
 
     for (const [handle, imageName] of Object.entries(cardImages)) {
       const product = PREVIEW_PRODUCTS.find((item) => item.handle === handle);
+      const hasKurinjiBrandBlossoms = !["jasmine-tea", "hibiscus-tea"].includes(handle);
+      const flowerSuffix = hasKurinjiBrandBlossoms ? "-kurinji" : "";
       expect(product).toBeDefined();
       expect(Reflect.get(product!, "cardImage")).toMatchObject({
-        url: `/images/preview-product-${imageName}-wide.webp`,
+        url: `/images/preview-product-${imageName}-wide${flowerSuffix}.webp`,
         width: 1586,
         height: 992,
       });
       expect(product?.featuredImage?.url).toMatch(/\.png$/);
+      if (hasKurinjiBrandBlossoms) {
+        expect(product?.featuredImage?.url).toContain("-kurinji.png");
+      }
     }
   });
 });

@@ -1,6 +1,8 @@
 # Nilkurinji storefront
 
-Responsive Next.js, React, TypeScript, and Tailwind storefront deployed on Netlify, with Shopify as the live product, cart, and hosted-checkout backend.
+Next.js App Router, React, TypeScript and Tailwind storefront for Tea, Tea Bags, Rice, Snacks and Other Foods. Shopify owns the live catalog, variants, prices, inventory, cart, customer accounts, orders and editable content. Vercel is the planned hosting platform.
+
+The approved reference package and implementation decisions are recorded in docs/plan/. The final homepage mockup takes precedence over older redesign proposals.
 
 ## Start locally
 
@@ -8,23 +10,25 @@ Responsive Next.js, React, TypeScript, and Tailwind storefront deployed on Netli
     Copy-Item .env.example .env.local
     npm run dev
 
-Local .env.example defaults to an explicitly labelled, unpriced, non-purchasable preview. Add real Shopify secrets to .env.local only when connecting the approved Headless storefront. Never commit .env.local; the private Storefront token is server-only and must be rotated before production because it was shared in chat.
+The example environment starts the non-indexable, non-purchasable preview. Do not copy real secrets into tracked files. Server-only credentials belong in local .env.local or the deployment secret store.
 
 ## Checks
 
-    npm test
+    npm test -- --run
     npm run typecheck
     npm run lint
     npm run build
+    git diff --check
 
-## Operations
+## Current documentation
 
-- [Shopify content, catalog, token, payment, and test setup](docs/SHOPIFY_SETUP.md)
-- [Netlify and GoDaddy domain deployment runbook](docs/NETLIFY_DEPLOYMENT.md)
-- [Store admin, fulfillment, support, and launch training](docs/OPERATIONS_PLAYBOOK.md)
-- [Owner content review and launch checklist](docs/CONTENT_REVIEW.md)
-- [Generated concept asset register](docs/ASSETS.md)
-- [Implemented design system](DESIGN.md)
-- [Storefront product brief](PRODUCT.md)
+- [Implementation plan](docs/plan/README.md)
+- [Shopify setup](docs/SHOPIFY_SETUP.md)
+- [Vercel deployment](docs/VERCEL_DEPLOYMENT.md)
+- [Operations playbook](docs/OPERATIONS_PLAYBOOK.md)
+- [Content review and launch gate](docs/CONTENT_REVIEW.md)
+- [Asset inventory](docs/ASSETS.md)
+- [Current design system](DESIGN.md)
+- [Product scope and commerce architecture](PRODUCT.md)
 
-Netlify config is in netlify.toml. Build publishes .next through Netlify's automatic Next.js OpenNext runtime. The repository is not yet connected to a Netlify project or production domain; checkout remains disabled until the merchant, catalog, policies, shipping, and payment tests pass.
+The payment provider remains unselected. Razorpay Magic Checkout for headless Shopify is the technical baseline; Cashfree requires equivalent supported Shopify order completion and recovery verification. Checkout stays disabled until merchant onboarding and real test-order flows pass. No deployment or production payment has been performed by this repository update.

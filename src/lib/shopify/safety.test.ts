@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { parseCartAction } from "@/lib/shopify/cart-validation";
 import { CART_COOKIE_NAME, createCartCookie, readCartCookie } from "@/lib/shopify/cart-cookie";
 import { isSafeCheckoutUrl } from "@/lib/shopify/checkout-url";
@@ -20,10 +20,12 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
+beforeEach(() => vi.stubEnv("CHECKOUT_PROVIDER", "shopify"));
+
 describe("commerce safety boundaries", () => {
   it("keeps the full preview catalogue illustrative and non-purchasable", () => {
     expect(PREVIEW_PRODUCTS.length).toBeGreaterThan(0);
-    expect(PREVIEW_PRODUCTS.every((product) => product.collectionHandles.length > 0 && product.collectionHandles.every((handle) => ["tea", "tea-bags"].includes(handle)))).toBe(true);
+    expect(PREVIEW_PRODUCTS.every((product) => product.collectionHandles.length > 0 && product.collectionHandles.every((handle) => ["tea", "tea-bags", "rice", "snacks", "other-foods"].includes(handle)))).toBe(true);
     expect(PREVIEW_PRODUCTS.every((product) => product.isPreview && product.variants.length === 0)).toBe(true);
     expect(PREVIEW_PRODUCTS.every((product) => product.id.startsWith("preview-") && product.priceRange?.minVariantPrice.currencyCode === "INR")).toBe(true);
     expect(new Set(PREVIEW_PRODUCTS.map((product) => product.featuredImage?.url)).size).toBeGreaterThan(0);
@@ -161,10 +163,11 @@ describe("commerce safety boundaries", () => {
     expect(init.cache).toBe("no-store");
   });
 
-  it("uses Netlify's client IP in production and only trusts forwarded IP locally", () => {
+  it("uses Vercel's edge-provided client IP in production and only trusts forwarded IP locally", () => {
     vi.stubEnv("NODE_ENV", "production");
     expect(getBuyerIp(new Headers({ "x-forwarded-for": "203.0.113.9" }))).toBeUndefined();
-    expect(getBuyerIp(new Headers({ "x-nf-client-connection-ip": "203.0.113.8", "x-forwarded-for": "203.0.113.9" }))).toBe("203.0.113.8");
+    expect(getBuyerIp(new Headers({ "x-vercel-forwarded-for": "203.0.113.8", "x-forwarded-for": "203.0.113.9" }))).toBe("203.0.113.8");
+    expect(getBuyerIp(new Headers({ "x-vercel-forwarded-for": "not-an-ip" }))).toBeUndefined();
     vi.stubEnv("NODE_ENV", "test");
     expect(getBuyerIp(new Headers({ "x-forwarded-for": "203.0.113.9" }))).toBe("203.0.113.9");
   });

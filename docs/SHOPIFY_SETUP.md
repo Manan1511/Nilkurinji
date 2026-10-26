@@ -1,146 +1,177 @@
-# Shopify content and commerce setup
+# Shopify setup
 
-Shopify is the authority for every live product, option, price, availability state, cart, and checkout. This app calls the Storefront GraphQL API from Next.js server code; the browser never receives the private Storefront token. Shopify hosts checkout and owns orders, taxes, shipping calculations, payments, COD, and refunds.
+Shopify is authoritative for live products, sellable pack variants, prices, availability, carts, customers, orders, policies and editable storefront content. The storefront calls Shopify from server code. Never send a private token to the browser.
 
-## 1. Configure the Headless storefront
+The approved scope includes Tea, Tea Bags, Rice, Snacks and Other Foods in one Shop page. The Storefront API and Customer Account API default to version 2026-10. Review Shopify’s official version support schedule before changing it.
 
-In Shopify Admin, install/open the **Headless** sales channel, select the storefront, and enable the Storefront API permissions needed to read products, collections, product metafields/metaobjects, pages, policies, search, recommendations, and to read/write carts. Publish the approved products and collections to that Headless storefront. If the store cannot use Headless or publish products, resolve eligibility or migrate to an eligible merchant store before live launch.
+## 1. Store and channel
 
-Create a least-privilege private Storefront API token for this deployment. The private-looking credential shared in chat has the `shpat_` format Shopify documents for Admin API access tokens. Shopify uses `X-Shopify-Access-Token` for the Admin API and `Shopify-Storefront-Private-Token` for Storefront API calls; an existing Admin token is suitable for Storefront use only when it has the required unauthenticated Storefront scopes. Prefer the private token issued by the Headless channel or a narrowly scoped delegate token. This implementation has not been given that credential locally and never places credentials in source. Because the shared value is an Admin API credential, revoke/rotate it promptly in Shopify Admin before any Shopify writes or production use.
+1. Use a merchant-eligible Shopify store and configure the Headless sales channel.
+2. Enable Storefront API access for products, collections, search, recommendations, cart operations, public product metafields and public metaobjects.
+3. Publish only approved products and content to the storefront.
+4. Create a least-privilege private Storefront token.
+5. Revoke and rotate any credential previously shared outside a secret manager. Do not reuse an Admin API token as a Storefront token.
+6. Enable Shopify Customer Accounts and configure the Headless client for the Customer Account API.
 
-Never put either token in source code, `NEXT_PUBLIC_*`, client components, public build variables, screenshots, or a committed `.env` file. The public token can remain unused; this implementation uses a server-only private Storefront token.
+Required access: product/collection reads; predictive and full search; cart create/read/update/remove; public metafield/metaobject reads; customer authentication, orders and addresses.
 
-## 2. Local environment and safe modes
+## 2. Environment
 
-Copy `.env.example` to `.env.local`. The default is a non-indexable, visibly labelled preview with illustrative catalog fixtures and prices labelled “Sample price”. Preview purchases are disabled. The fixture catalog is never used to recover from a live Shopify error.
+Copy .env.example to .env.local. Defaults keep the site in preview mode and keep checkout and indexing disabled.
 
-For live catalog development, set these values locally only after the new token is ready:
+| Variable | Use |
+|---|---|
+| SHOPIFY_MODE | preview or live |
+| SHOPIFY_STORE_DOMAIN | Exact .myshopify.com hostname |
+| SHOPIFY_API_VERSION | Pinned quarterly version, currently 2026-10 |
+| SHOPIFY_STOREFRONT_PRIVATE_TOKEN | Server-only Storefront token |
+| SITE_URL | Exact environment origin for OAuth/canonical URLs |
+| CART_COOKIE_SECRET | At least 32 random characters |
+| CUSTOMER_SESSION_SECRET | Long random session/encryption secret |
+| SHOPIFY_CUSTOMER_ACCOUNT_CLIENT_ID | Shopify Headless account client |
+| SHOPIFY_CUSTOMER_ACCOUNT_CLIENT_SECRET | Optional only if Shopify issues one |
+| SHOPIFY_WEBHOOK_SECRET | Shopify app client secret used for HTTPS webhook HMAC verification |
+| REVALIDATE_SECRET | At least 32 random characters for restricted manual invalidation |
+| SHOPIFY_CHECKOUT_ENABLED | false until commerce verification |
+| CHECKOUT_PROVIDER | Unselected; runtime recognizes shopify or razorpay |
+| CHECKOUT_ATTEMPT_SECRET | At least 32 random characters for Razorpay attempts |
+| RAZORPAY_KEY_ID / RAZORPAY_KEY_SECRET | Provider credentials; secret stays server-only |
+| RAZORPAY_WEBHOOK_SECRET | Payment webhook signature secret |
+| SHOPIFY_CHECKOUT_FALLBACK_ENABLED | false until recovery flow is approved |
+| SHOPIFY_CHECKOUT_ALLOWED_HOSTS | Comma-separated exact verified HTTPS hosts |
+| SHOPIFY_INDEXING_ENABLED | false until production launch approval |
 
-```dotenv
-SHOPIFY_MODE=live
-SHOPIFY_STORE_DOMAIN=nilkurinji-jcqze5tu.myshopify.com
-SHOPIFY_API_VERSION=2026-10
-SHOPIFY_STOREFRONT_PRIVATE_TOKEN=<new-private-token>
-CART_COOKIE_SECRET=<random-secret-at-least-32-characters>
-SHOPIFY_CHECKOUT_ENABLED=false
-SHOPIFY_INDEXING_ENABLED=false
-SHOPIFY_CHECKOUT_ALLOWED_HOSTS=
-SITE_URL=https://<approved-site-domain>
-SHOPIFY_CUSTOMER_ACCOUNT_URL=
-```
+Never expose secrets through NEXT_PUBLIC variables. Vercel Preview stays in preview mode, noindex and non-purchasable. Do not use production customer data in public previews.
 
-Generate a cookie secret with `node -e "console.log(require('node:crypto').randomBytes(32).toString('base64url'))"`. Keep checkout disabled while using a development store or while any launch gate is open. Live catalog, search, products, and policies fail with an unavailable state if Shopify is misconfigured or unreachable; draft/demo catalog data is not substituted.
+Live mode returns unavailable rather than fixtures when Shopify configuration or requests fail. Preview is the only mode that uses sample catalog prices and concept imagery.
 
-Add the same variables to Netlify separately for **Deploy Previews** and **Production**. Keep Deploy Previews on `SHOPIFY_MODE=preview` unless there is a deliberate, secure Shopify test-store configuration. `SHOPIFY_CHECKOUT_ENABLED` and `SHOPIFY_INDEXING_ENABLED` must remain `false` in deploy previews. Production stays noindex until the owner completes the launch and explicitly sets `SHOPIFY_INDEXING_ENABLED=true`; that flag is independent of checkout testing and only works in a production runtime. Redeploy after changing server environment variables.
+## 3. Catalog, products and collections
 
-`SHOPIFY_CHECKOUT_ALLOWED_HOSTS` is optional. The store's `.myshopify.com` host is always included. Add another exact hostname only if Shopify returns a legitimate HTTPS checkout URL on it. Never use a wildcard or a user-controlled value. The server validates the returned HTTPS checkout URL before redirecting.
+Create and publish these collections:
 
-## 3. Publish the catalog
+| Storefront category | Collection handle |
+|---|---|
+| All | shop-all |
+| Tea | tea |
+| Tea Bags | tea-bags |
+| Rice | rice |
+| Snacks | snacks |
+| Other Foods | other-foods |
+| Featured products | featured-products |
 
-Create up to 20 approved tea and tea-bag products with real product images, titles, descriptions, product type, tags, variants/options, INR prices, availability/inventory, SEO title/description, and confirmed tea-specific facts. Do not publish generated concept packaging or unconfirmed ingredient, sourcing, nutrition, health, delivery, or refund claims. The code requests up to 20 products and up to 50 variants per product.
+Put each product in its correct collection. Do not suppress food products from Shop, Search, direct product routes or recommendations.
 
-Create Shopify collections with these exact handles and publish relevant products into them:
+Recommended model:
 
-| Storefront category | Shopify collection handle |
-| --- | --- |
-| Tea | `tea` |
-| Tea Bags | `tea-bags` |
+- One product per actual product/format identity.
+- Variant option name: Pack size.
+- Each sellable size/count has its own Shopify variant, SKU, price, inventory and shipping weight.
+- Use sibling tea and tea-bag products when packaging, images, inventory or price differs.
+- Prices and inventory remain native Shopify data.
+- Check src/lib/shopify/catalog.ts before exceeding its bounded result limits.
 
-The storefront reads only products assigned to `tea` or `tea-bags`. These Shopify collection handles filter the unified Shop page. Old collection URLs redirect to its matching filter. Direct product lookup, search, and recommendations apply the same tea-only scope. Product type, INR price-band facets, and sorting use fields from the current Shopify result set. Product pages use Shopify recommendations first and fall back to other tea products in the assigned tea collection. Shopify search and its returned product data drive the search page.
+Product tags power tea facets:
 
-There is no currency chooser. The storefront is configured for the India market and displays Shopify's returned currency. Confirm INR market pricing in Shopify before enabling checkout.
+- Type: type:black-tea, type:green-tea and other approved values.
+- Flavour: flavour:<approved-value>.
+- Caffeine: caffeine:caffeinated, caffeine:decaffeinated or caffeine:caffeine-free.
+
+Use stable slugs after each prefix. Multiple choices within one facet are alternatives; separate facets combine. Availability derives from Shopify variants. Price bands are under ₹300, ₹300–₹499 and ₹500+.
+
+The Shop reads category banner content from public metaobjects of type nilkurinji_category, using collection handles above. The current query reads category title, intro and banner reference. The banner resolves eyebrow, heading, body, desktop/mobile images and alt text. Use panoramic artwork; do not stretch square medallions into banners.
 
 ## 4. Product metafields
 
-Create product metafields in namespace `nilkurinji`:
+The current GraphQL query reads these public fields in namespace nilkurinji:
 
-| Key | Suggested Shopify type | Value |
-| --- | --- | --- |
-| `details` | Multi-line text | Approved product information to show under the product description |
-| `faqs` | JSON | Array of `{ "question": "...", "answer": "..." }` objects |
-| `approved_reviews` | JSON | Array described below; only owner-approved genuine customer reviews |
+| Key | Shopify type | Purpose |
+|---|---|---|
+| details | multi_line_text_field | Approved product details |
+| how_its_made | multi_line_text_field | Product-specific making details, written as plain text |
+| how_its_made_approved | boolean | Must be true before the storefront displays how_its_made |
+| faqs | json | Approved question/answer entries |
+| approved_reviews | json | Genuine reviews with publication approval |
+| tea_profile | json | Optional validated tea profile |
 
-Example FAQ value:
+tea_profile is ignored unless approved is explicitly true. It may include format, tasting notes and a brewing profile. Numeric values and strings are validated; do not put HTML in the field. Never show brewing instructions on rice or snacks.
 
-```json
-[{"question":"How should I prepare this tea?","answer":"Follow the preparation directions confirmed for this product."}]
-```
+The product page displays `how_its_made` only when `how_its_made_approved` is explicitly true and the value is valid plain text of at most 2,400 characters. Keep the copy product-specific and factual. Do not describe sourcing, hand-picking, processing methods or facilities unless Nilkurinji has confirmed them.
 
-Example review value (replace with a real approved review, never use this sample as customer content):
+Use native product/variant fields for title, pack option, images, price, compare-at price and availability. Label, allergen, nutrition and tax facts require merchant review.
 
-```json
-[{"approved":true,"name":"Customer display name","rating":5,"title":"Optional title","body":"Approved review text","date":"2026-09-01"}]
-```
+## 5. Homepage and category content
 
-The storefront ignores reviews without `approved: true`, invalid ratings, malformed JSON, or out-of-range content. Do not invent review text or publish a review without permission.
+The homepage reads public metaobject type nilkurinji_home, handle home. Current required fields are heading and description. Current optional fields include eyebrow, featured_products_heading, hero_image, secondary_image, and verified social URLs. Additional fields are only supported when implemented in src/lib/shopify/content.ts. Missing live content never uses preview copy or local preview assets.
 
-## 5. Homepage, pages, policies, accounts
+The category page queries nilkurinji_category by handle. Current fields are title, intro and banner. The referenced banner fields are eyebrow, heading, body, desktop_image, mobile_image and image_alt.
 
-Create and publish a metaobject definition with type `nilkurinji_home`, then create its entry with handle `home`. Add required text fields `heading` and `description`; optional text field `eyebrow`; optional file references `format_tea_image` and `format_tea_bags_image` for the hero's loose-tea and tea-bag images; legacy optional file references `hero_image` and `secondary_image` as a fallback for those images; optional legacy text `secondary_eyebrow`, `secondary_heading`, and `secondary_description`; optional `featured_products_heading`, `closing_eyebrow`, `closing_heading`, and `closing_description`; and optional URL/text fields `instagram_url`, `facebook_url`, `youtube_url`, and `pinterest_url`.
+The detailed implementation plan defines additional site, story, values, trust, blog landing and shipping metaobjects. Before content entry, verify current query/type support and Storefront permissions. Do not assume an unimplemented field is displayed.
 
-The homepage uses the two format image references as transparent cutouts against the forest stage. Add meaningful alt text to each Shopify image. Do not upload teaware, storage products, unrelated merchandise, or imagery that implies unapproved origin or ingredients. Add optional text `brewing_product_handle` only for an approved tea product with owner-approved brewing data. The site shows a qualitative preparation note when no approved profile is available.
+## 6. India delivery serviceability
 
-The social-link renderer accepts HTTPS URLs only on the corresponding official platform hostname. Homepage copy is required in live mode; missing or failed Shopify content displays a setup message, never draft copy. Preview-only artwork is not substituted for missing live imagery.
+Create public metaobject type nilkurinji_shipping, entry handle india. The current delivery endpoint reads its serviceability_file reference and freshness fields. Upload a Shopify Files CSV with columns:
 
-For each tea product that has owner-approved information, create a product metafield with namespace `nilkurinji`, key `tea_profile`, and Shopify JSON type. Set `approved` to `true` only after the merchant has checked every value. The storefront ignores the entire profile unless this flag is exactly true, malformed JSON is rejected, invalid fields are omitted, strings are trimmed and bounded, and HTML is rejected. Product title, price, weights, variants, inventory, and options still come from Shopify product and variant data.
+    pincode,prepaid,cod,eta_min_days,eta_max_days
 
-Accepted JSON shape:
+PINs must be six digits; prepaid/cod values true or false; ETA values may be blank. Remove duplicate/malformed rows. Set the verified timestamp and maximum age. The server accepts only Shopify CDN file URLs, bounds file size and returns unknown for missing, stale or unavailable data.
 
-```json
-{
-  "approved": true,
-  "format": "loose-tea",
-  "origin": null,
-  "estate": null,
-  "elevationM": null,
-  "harvest": null,
-  "lot": null,
-  "tastingNotes": [],
-  "brewing": {
-    "dose": { "amount": 2, "unit": "g" },
-    "waterMl": 200,
-    "temperatureC": 90,
-    "steepSeconds": 180,
-    "infusions": null,
-    "instructions": null
-  }
-}
-```
+This lookup is advisory. It does not replace Shopify shipping profiles, provider rules or checkout eligibility. An outage does not block a valid checkout attempt.
 
-`format` accepts `loose-tea`, `tea-bag`, or `null`. Origin and estate are limited to 100 characters; harvest and lot to 80; each of up to 8 tasting notes to 60; brewing instructions to 500. Elevation must be an integer from 0 to 10,000 metres. Brewing dose accepts a positive amount up to 1,000 and unit `g` or `bag`; water accepts 1 to 5,000 ml; temperature 0 to 100°C; steep time 1 to 3,600 seconds; and infusion count 1 to 20. Invalid individual values are omitted. Keep variant-specific directions in separately approved product details until variant support exists.
+Configure actual India market, fulfilment location, shipping rates, tax, COD eligibility and exclusions in Shopify/provider settings. No rate, threshold, ETA or COD coverage is assumed.
 
-Create and publish Shopify Online Store pages with handles `about` and `contact`. Use the About page for owner-approved brand copy. Use Contact for confirmed email/phone/address/support links. The site does not invent contact details and does not submit a contact form.
+## 7. Customer Account API
 
-Publish Shopify Privacy, Refund, and Terms of Service policies. The storefront maps them to `/pages/privacy-policy`, `/pages/refund-policy`, and `/pages/terms-and-conditions`. Review every policy with the business owner before turning on checkout.
+Configure the Headless customer-account client and allow exact callback URLs:
 
-Enable Shopify customer accounts in Admin. Set `SHOPIFY_CUSTOMER_ACCOUNT_URL` to the exact HTTPS account URL Shopify provides; the app accepts only the store's own Shopify domain or Shopify-owned account hosts and redirects safely.
+    https://<approved-origin>/account/callback
 
-## 6. Markets, shipping, COD, and online payments
+Set SHOPIFY_CUSTOMER_ACCOUNT_CLIENT_ID and the optional client secret if issued. Set SITE_URL separately for each environment. The storefront uses OAuth state, nonce and PKCE; session credentials remain in encrypted server-only cookies. Never put tokens in localStorage or public page data.
 
-The cart sends buyer country `IN`; the launch defaults are India and INR. Configure the Shopify market, INR prices, shipping zones/rates, tax settings, address requirements, and eligible products in Admin. The app cannot override Shopify checkout eligibility.
+Verify login, callback, logout, order history, order ownership, token refresh and address add/edit/delete/default flows with test accounts.
 
-Configure online payment providers in Shopify Admin and verify the merchant account's current eligibility, settlement, test mode, and refund flow. If Razorpay is approved for this merchant, complete its Shopify Admin/app onboarding there. Add Cash on Delivery only through the payment option available to the actual Shopify store and confirm COD coverage, fees, order payment status, and fulfillment rules. Provider availability varies by merchant/account; this code does not implement or claim Razorpay/COD approval.
+## 8. Payment provider and checkout
 
-Checkout stays closed unless all live prerequisites are set and `SHOPIFY_CHECKOUT_ENABLED=true`. That flag is a code gate, not evidence of payment approval. Open it only after the owner has completed the checkout and order tests below.
+The provider remains unselected. Razorpay Magic Checkout for headless Shopify is the technical baseline, not a merchant approval or payment result. The code contains a Razorpay-specific adapter and payment webhook route. Cashfree must not be enabled until a supported headless Shopify flow is verified for Shopify order creation, recovery, COD and refunds.
 
-## 7. Commerce acceptance test
+Runtime options:
+- CHECKOUT_PROVIDER=razorpay: provider adapter, gated by live Shopify setup, checkout flag and required secrets.
+- CHECKOUT_PROVIDER=shopify: Shopify hosted checkout, only when explicitly configured and approved.
+- Cashfree: not implemented; checkout gate stays closed.
 
-On an eligible merchant store with test payment configuration:
+After provider onboarding, the Razorpay webhook URL is:
 
-1. Open a published product; confirm its Shopify title, images, option values, INR price, and availability.
-2. Add it to the cart; refresh and confirm the signed cart persists. Change quantity, remove a line, and check the totals remain Shopify-derived.
-3. Attempt a stale/out-of-stock item and an expired cart; confirm checkout is blocked and the shopper gets a clear recovery message.
-4. Use Buy Now from one product while a different item is in the main cart; verify the separate checkout contains only the selected Buy Now item and the main cart remains unchanged.
-5. Continue to Shopify-hosted checkout. Verify India address/shipping eligibility, test successful, failed, and abandoned online payments, then test COD only if configured.
-6. Confirm the resulting Shopify order, channel attribution, payment/pending-payment status, inventory changes, cancellation, and owner-assisted refund.
+    https://<approved-origin>/api/webhooks/payments/razorpay
 
-Do not represent local cart mocks or an unupgraded development store as a real end-to-end payment test. Keep checkout closed if any test fails.
+Configure its matching signing secret. Server code verifies signatures and captured status before requesting Shopify order completion. An uncertain/captured payment never starts a second payment attempt. Hosted checkout fallback is a separately configured recovery path.
 
-## Official references
+Set SHOPIFY_CHECKOUT_ENABLED=false until tests verify product, pack, INR price, order, inventory, payment/COD status, email and refund. Provider payment success alone is not an end-to-end order test.
 
-- [Shopify Storefront API authentication and private-token headers](https://shopify.dev/docs/api/storefront/latest)
-- [Shopify API authentication and API-specific headers](https://shopify.dev/docs/api/usage/authentication)
-- [Shopify access tokens and token types](https://shopify.dev/docs/apps/build/authentication-authorization/access-tokens)
-- [Set up the Storefront API](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/getting-started)
-- [Manage the Headless sales channel](https://shopify.dev/docs/storefronts/headless/building-with-the-storefront-api/manage-headless-channels)
-- [Shopify custom storefronts and hosted checkout](https://help.shopify.com/en/manual/custom-storefronts)
+## 9. Cache invalidation
+
+Configure HTTPS webhook subscriptions at /api/webhooks/shopify using the Shopify app client secret stored as SHOPIFY_WEBHOOK_SECRET. The handler verifies the raw-body HMAC, exact myshopify store domain and a topic allowlist before invalidating cache tags. Repeated deliveries are safe because the handler only repeats invalidation; webhook payloads never become catalog truth.
+
+Subscribe to supported products create/update/delete, collections create/update/delete, product-publication updates, inventory-level updates, metafield create/update/delete and metaobject create/update/delete topics. Shopify’s current Admin GraphQL topic enum documents these topics and their access requirements. Do not assume article or page update topics exist.
+
+For content changes without a supported webhook, an operator may call POST /api/revalidate with JSON scope catalog, content or all and the REVALIDATE_SECRET bearer token. This endpoint accepts only those scopes and invalidates fixed allowlisted tags. Do not place the secret in browser code or logs.
+
+## 10. Preview, caching and indexing
+
+- Public catalog/content reads use a 60-second server cache.
+- Cart, account and checkout requests are uncached.
+- Checkout refreshes current cart state.
+- Vercel Preview deployments remain noindex and purchase-disabled.
+- Production indexing requires live mode, production runtime and SHOPIFY_INDEXING_ENABLED=true.
+- Payment webhooks are implemented at src/app/api/webhooks/payments/razorpay.
+- Shopify webhook handling is implemented at src/app/api/webhooks/shopify; subscriptions and secret still require merchant setup.
+- Restricted manual invalidation is implemented at src/app/api/revalidate.
+- Test robots, sitemap and canonical URLs after a production domain is selected.
+
+## References
+
+- [Storefront API versioning](https://shopify.dev/docs/api/usage/versioning)
+- [Storefront API authentication](https://shopify.dev/docs/api/storefront/latest)
+- [Customer Account API](https://shopify.dev/docs/api/customer/latest)
+- [Headless customer account setup](https://shopify.dev/docs/storefronts/headless/building-with-the-customer-account-api/getting-started)
+- [Shopify webhook topic reference](https://shopify.dev/docs/api/admin-graphql/latest/enums/WebhookSubscriptionTopic)
+- [Shopify webhook signature verification](https://shopify.dev/docs/apps/build/webhooks/verify-deliveries)
+- [Razorpay Magic Checkout for headless Shopify](https://razorpay.com/docs/payments/magic-checkout/shopify/custom/web-integration-nextjs)

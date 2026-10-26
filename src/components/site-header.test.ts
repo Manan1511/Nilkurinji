@@ -28,6 +28,8 @@ describe("shared storefront header", () => {
 
     expect(markup).toContain("NILKURINJI");
     expect(markup).not.toContain("Food &amp; beverages");
+    expect(markup).toContain("botanical-header-left-refined.webp");
+    expect(markup).toContain("botanical-header-right-refined.webp");
   });
 
   it("does not expose the retired pantry navigation", () => {
@@ -40,12 +42,14 @@ describe("shared storefront header", () => {
     route.search = "";
   });
 
-  it("uses one Shop destination and removes wishlist navigation", () => {
+  it("keeps Shop direct and removes wishlist from the shopper shell", () => {
     route.pathname = "/shop";
     const markup = renderToStaticMarkup(createElement(SiteHeader));
     expect(markup).toContain('href="/shop">Shop</a>');
-    expect(markup).not.toContain("/collections/tea");
-    expect(markup).not.toContain("/wishlist");
+    expect(markup).not.toContain('aria-label="Browse Shop categories"');
+    expect(markup).not.toContain("<details");
+    expect(markup).not.toContain("<summary>Shop</summary>");
+    expect(markup).not.toContain('href="/wishlist"');
     expect(markup).not.toContain("Wishlist");
     route.pathname = "/";
   });
@@ -55,7 +59,7 @@ describe("shared storefront header", () => {
 
     expect(markup).toContain('action="/search"');
     expect(markup).toContain('name="q"');
-    expect(markup).toContain('placeholder="Search tea and tea bags"');
+    expect(markup).toContain('placeholder="Search tea and pantry"');
     expect(markup).not.toContain('href="/search"');
   });
 

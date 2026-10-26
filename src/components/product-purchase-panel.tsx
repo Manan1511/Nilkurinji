@@ -7,6 +7,7 @@ import type { StorefrontProduct, StorefrontVariant } from "@/lib/shopify/types";
 import styles from "./product-purchase-panel.module.css";
 import { postCartAction } from "@/lib/cart-client";
 import { useStorefrontCart } from "@/components/cart-provider";
+import { DeliveryChecker } from "@/components/delivery-checker";
 
 function variantOptions(variants: StorefrontVariant[]): { name: string; values: string[] }[] {
   const values = new Map<string, Set<string>>();
@@ -72,13 +73,15 @@ export function ProductPurchasePanel({
     setBusy(true);
     setMessage("");
     try {
+      if (action === "buy-now" && !cart) throw new Error("Checkout is temporarily unavailable. Please refresh and try again.");
       const cartAction = { action, variantId: selectedVariant.id, quantity } as const;
       const result = cart ? await cart.mutate(cartAction) : await postCartAction(cartAction);
       if (cart && !result) throw new Error("Your cart is being updated. Please try again.");
       if (action === "buy-now") {
         const checkoutUrl = result?.checkoutUrl;
-        if (!checkoutUrl) throw new Error("Shopify did not return a checkout address.");
-        window.location.assign(checkoutUrl);
+        if (checkoutUrl) window.location.assign(checkoutUrl);
+        else if (result && "providerSession" in result && result.providerSession) setMessage("Complete your order in the secure checkout window.");
+        else throw new Error("Checkout could not be prepared. Please try again.");
         return;
       }
       setMessage("Added to your cart.");
@@ -97,6 +100,7 @@ export function ProductPurchasePanel({
   return (
     <div className={styles.panel}>
       {price && <p className="purchase-panel__price">{product.isPreview ? "Sample price: " : ""}{formatMoney(price)}</p>}
+      {!product.isPreview && price && <p className="purchase-panel__tax">Inclusive of all applicable taxes.</p>}
       {product.variants.length > 0 && options.map((option) => (
         <label className="form-field" key={option.name}>
           <span>{option.name}</span>
@@ -127,14 +131,16 @@ export function ProductPurchasePanel({
 
       {purchaseNotice && <p className="purchase-panel__notice" role="status">{purchaseNotice}</p>}
 
-      {!product.isPreview && <div className="purchase-panel__buttons">
+      <DeliveryChecker preview={product.isPreview} />
+
+      <div className="purchase-panel__buttons">
         <button type="button" className="button button--dark" disabled={!purchasable || busy || !selectedVariant} onClick={() => void sendCartAction("add")}>
           <ShoppingBag aria-hidden="true" size={17} /> {busy ? "Updating…" : "Add to cart"}
         </button>
         <button type="button" className="button button--outline" disabled={!purchasable || busy || !selectedVariant} onClick={() => void sendCartAction("buy-now")}>
           Buy now
         </button>
-      </div>}
+      </div>
       <p className="purchase-panel__fine">{product.isPreview ? "Sample prices are shown for layout review only." : "Prices, options and availability are confirmed by Shopify."}</p>
       <p className="purchase-panel__message" role="status" aria-live="polite">{message}</p>
     </div>

@@ -2,5 +2,8 @@
 .button:hover:not(:disabled) { color: var(--forest-hover); text-decoration-thickness: 2px; }
 .button:active:not(:disabled) { transform: translateY(1px); }
 .button:disabled { opacity: .6; }
+.compact { display: grid; place-items: center; width: 42px; height: 42px; min-height: 42px; padding: 0; border: 0; border-radius: 50%; color: var(--paper); background: var(--forest); text-decoration: none; }
+.compact:hover:not(:disabled) { color: var(--paper); background: var(--forest-hover); }
+.compact svg { width: 18px; height: 18px; }
 .message { font-size: 14px; color: var(--ink-secondary); }
 @media (prefers-reduced-motion: reduce) { .button:active:not(:disabled) { transform: none; } }

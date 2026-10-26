@@ -1,17 +1,30 @@
-.card { min-width: 0; }
+.card { min-width: 0; overflow: hidden; border: 1px solid var(--rule); border-radius: var(--radius-card); background: var(--card); }
 .frame { position: relative; overflow: hidden; background: var(--parchment); }
-.imageLink { position: relative; display: block; aspect-ratio: 4/5; overflow: hidden; }
+.imageLink { position: relative; display: block; aspect-ratio: 16/9; overflow: hidden; }
 .image { object-fit: cover; transition: transform var(--motion-image) var(--ease-out); }
-@media (hover: hover) { .imageLink:hover .image { transform: scale(1.025); } }
-.imageLink:focus-visible .image { transform: scale(1.025); }
+@media (hover: hover) { .imageLink:hover .image { transform: scale(1.02); } }
+.imageLink:focus-visible .image { transform: scale(1.02); }
 .fallback { position: absolute; inset: 0; display: grid; place-items: center; padding: 16px; color: var(--ash); text-align: center; font-size: 14px; }
-.details { padding-top: 14px; }
-.details h3 { font: 400 clamp(1.25rem, 1.5vw, 1.55rem)/1.18 var(--font-editorial); overflow-wrap: anywhere; }
+.details { position: relative; min-height: 104px; padding: 10px 12px 12px; }
+.details h3 { padding-right: 42px; color: var(--ink); font: 400 clamp(1rem,1.2vw,1.1rem)/1.2 var(--font-editorial); overflow-wrap: anywhere; }
 .details h3 a { text-decoration: none; }
 .details h3 a:hover { text-decoration: underline; text-decoration-thickness: 1px; }
-.type { margin-top: 6px; color: var(--ash); font-size: 14px; line-height: 1.45; }
-.price { margin-top: 8px; color: var(--ink); font-size: 14px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
-.link { display: inline-flex; align-items: center; min-height: 44px; margin-top: 4px; color: var(--forest); font-size: 14px; }
-.unavailable { margin-top: 6px; color: var(--ash); font-size: 14px; }
-@media (max-width: 767px) { .details { padding-top: 12px; } .type { font-size: 14px; } .price { font-size: 14px; } }
+.type { margin-top: 4px; color: var(--muted); font: 700 11px/1.35 var(--font-body); letter-spacing: .12em; text-transform: uppercase; }
+.pack { margin-top: 3px; color: var(--muted); font-size: 12px; line-height: 1.35; }
+.price { margin-top: 5px; color: var(--ink); font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.link { display: inline-flex; align-items: center; min-height: 36px; margin-top: 2px; color: var(--forest); font-size: 13px; }
+.unavailable { margin-top: 6px; color: var(--ash); font-size: 13px; }
+.quickAdd { position: absolute; right: 10px; bottom: 10px; }
+.quickAdd :global(button) { display: grid; place-items: center; width: 42px; height: 42px; padding: 0; border: 0; border-radius: 50%; color: var(--paper); background: var(--forest); cursor: pointer; }
+.quickAdd :global(button:hover:not(:disabled)) { background: var(--forest-hover); }
+.quickAdd :global(button svg) { width: 18px; height: 18px; }
+.quickAdd :global(p) { position: absolute; right: 0; bottom: calc(100% + 4px); width: 180px; color: var(--forest); font-size: 12px; text-align: right; }
+.cardLinkIcon { position: absolute; right: 10px; bottom: 10px; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; color: var(--paper); background: var(--forest); text-decoration: none; }
+.cardLinkIcon svg { width: 19px; height: 19px; }
+.card.featured { overflow: visible; border: 0; border-radius: 0; background: transparent; }
+.featured .frame { border: 1px solid rgb(22 49 34 / 10%); border-radius: 4px; }
+.featured .imageLink { aspect-ratio: 1.2; }
+.featured .details { min-height: 96px; padding: 9px 4px 12px; }
+.featured .details h3 { padding-right: 0; }
+@media (max-width: 767px) { .details { min-height: 94px; padding: 9px 10px 10px; } .details h3 { padding-right: 0; font-size: 15px; } .type { font-size: 10px; } .pack { font-size: 11px; } .price { font-size: 13px; } }
 @media (prefers-reduced-motion: reduce) { .image { transition: none; } .imageLink:hover .image,.imageLink:focus-visible .image { transform: none; } }

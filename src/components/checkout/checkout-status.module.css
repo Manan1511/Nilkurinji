@@ -1,0 +1,6 @@
+.page { width: min(680px, calc(100% - 40px)); min-height: 52vh; margin: 0 auto; padding-block: clamp(80px, 12vw, 150px); text-align: center; }
+.eyebrow { margin-bottom: 18px; color: var(--forest); font-size: 12px; letter-spacing: .16em; }
+.page h1 { font-size: clamp(34px, 6vw, 54px); }
+.copy { max-width: 48ch; margin: 20px auto 28px; color: var(--muted); }
+.page > :is(a,button) { margin: 6px; }
+@media (max-width: 639px) { .page { width: min(100% - 32px, 680px); min-height: 58vh; padding-block: 72px; } .page > :is(a,button) { width: 100%; margin: 6px 0; } }

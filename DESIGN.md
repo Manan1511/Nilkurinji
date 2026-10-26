@@ -1,151 +1,73 @@
----
-name: Nilkurinji Tea
-description: A tea-first storefront for loose tea and tea bags, guided by the supplied premium tea reference.
-colors:
-  paper: "#FBF9F4"
-  parchment: "#F0EEE9"
-  forest: "#04190F"
-  forest-hover: "#192E23"
-  ink: "#1B1C19"
-  ash: "#53574F"
-  violet: "#6E5D7B"
-  brass: "#AF8C47"
-  rule: "rgb(27 28 25 / 12%)"
-  rule-dark: "rgb(251 249 244 / 24%)"
-  error: "#8C302A"
-typography:
-  display:
-    fontFamily: "Playfair Display, Georgia, serif"
-    fontSize: "clamp(3.1rem, 6vw, 6.6rem)"
-    fontWeight: 400
-    lineHeight: 0.98
-    letterSpacing: "-0.045em"
-  mobileDisplay:
-    fontFamily: "Playfair Display, Georgia, serif"
-    fontSize: "clamp(3.1rem, 12vw, 4.5rem)"
-    fontWeight: 400
-    lineHeight: 0.98
-    letterSpacing: "-0.045em"
-  headline:
-    fontFamily: "Playfair Display, Georgia, serif"
-    fontSize: "clamp(2.4rem, 4vw, 4.2rem)"
-    fontWeight: 400
-    lineHeight: 1.04
-    letterSpacing: "-0.035em"
-  title:
-    fontFamily: "Playfair Display, Georgia, serif"
-    fontSize: "clamp(1.25rem, 1.5vw, 1.55rem)"
-    fontWeight: 400
-    lineHeight: 1.18
-  emptyStateHeading:
-    fontFamily: "Playfair Display, Georgia, serif"
-    fontSize: "1.5rem"
-    fontWeight: 400
-    lineHeight: 1.18
-  body:
-    fontFamily: "DM Sans, Arial, sans-serif"
-    fontSize: "1rem"
-    fontWeight: 400
-    lineHeight: 1.65
-  heroIntro:
-    fontFamily: "DM Sans, Arial, sans-serif"
-    fontSize: "clamp(1rem, 1.15vw, 1.125rem)"
-    fontWeight: 400
-    lineHeight: 1.65
-  label:
-    fontFamily: "DM Sans, Arial, sans-serif"
-    fontSize: "0.875rem"
-    fontWeight: 500
-    lineHeight: 1.4
-  index:
-    fontFamily: "Space Mono, Consolas, monospace"
-    fontSize: "0.75rem"
-    fontWeight: 400
-    lineHeight: 1.5
-rounded:
-  control: "2px"
-spacing:
-  page-gutter: "20px"
-  section: "clamp(60px, 8vw, 112px)"
-components:
-  button-primary:
-    backgroundColor: "{colors.forest}"
-    textColor: "{colors.paper}"
-    typography: "{typography.label}"
-    rounded: "{rounded.control}"
-    padding: "12px 20px"
-    height: "48px"
-  button-secondary:
-    backgroundColor: "transparent"
-    textColor: "{colors.forest}"
-    typography: "{typography.label}"
-    rounded: "{rounded.control}"
-    padding: "12px 20px"
-    height: "48px"
----
+# Nilkurinji design system
 
-# Design System: Nilkurinji Tea
+## Authority
 
-## Overview
+Follow the supplied approved mockups: final homepage (PDF B, page 2), unified Shop adapted from the Tea listing, Tea Bags banner treatment, Tea Guide from Our Tips, and Our Story collage. The old homepage and previous Leaf-to-Cup/tea-only compositions are superseded. The reference screenshots are 1536 × 1024px; they are visual guidance, not vector source files.
 
-**Creative direction: Tea, in two formats.**
+## Visual language
 
-The supplied reference contributes its dark forest surfaces, warm paper, high-contrast serif display type, and product-led rhythm. Nilkurinji keeps its wordmark and sprout while the storefront focuses only on tea and tea bags. A full tea photograph anchors the right side of the homepage hero; transparent cutouts introduce loose tea and tea bags in a separate format section below. One existing transparent leaf spray sits beside the homepage brand note as an editorial signature, not as repeated edge framing. The composition uses open space, exact alignment, and restrained metallic accents rather than decorative circles.
+- Warm paper and muted cream surfaces, forest-green headings and actions, restrained antique-gold detail.
+- Centred sprout and stacked Nilkurinji wordmark with its approved descriptor.
+- Two-row desktop header, left search, right account/cart utilities, and one consistent navigation.
+- Shallow panoramic image banners with copy in the pale left region and merchandise/lifestyle focal point to the right.
+- Five category medallions with a clear photo ground and separate transparent subject, landscape product-card imagery, fine separators, forest trust band and restrained botanical framing.
+- Use a distinct left/right botanical composition for the header, homepage hero, and category row. Keep the hero copy area and category labels clear; do not reuse one pair down the page or mirror the same sprig.
+- When a flower represents Nilkurinji, depict the Neelakurinji (Strobilanthes kunthiana) bloom in blue-violet through pale mauve. Kew records the corolla as pale blue to mauve; do not represent this flower with white jasmine/camellia-like blossoms. Keep ingredient flowers such as jasmine and hibiscus in their own species colors. See [Kew Plants of the World Online](https://powo.science.kew.org/taxon/urn%3Alsid%3Aipni.org%3Anames%3A55761-1/general-information) and [Kerala Tourism](https://www.keralatourism.org/destination/neelakurinji-the-blue-beauty-in-munnar/377//).
+- Tea Guide and Journal cards use editorial landscape photography.
+- Our Story uses layered paper and polaroid-style photographs, with text kept as HTML.
+- Do not repeat foliage as a full-page wallpaper, stretch square artwork into a banner, bake copy into imagery, or filter real product photography.
 
-The brand voice is warm, unhurried, and lightly playful. It welcomes loose tea and tea bags without making either feel like a test of expertise. Use short, sensory everyday copy, as in “No perfect cup required.” Never invent origin, ingredients, health benefits, product facts, or quality claims.
+## Implemented tokens
 
-The shared shell stays short and identical on every route. Search opens as an overlay and does not move the page. The home sequence is a tea editorial hero, a small selection of tea products, compact loose-tea and tea-bag format links, and approved tea-specific brewing information. One Shop page contains both product formats as filters; product, cart, search, About, Contact, account, and policy pages follow the same system. Wishlist functionality has been removed.
+Source of truth: src/app/storefront-tokens.css.
 
-All visible preview products, prices, and product images are illustrative. Each sample price and the global preview notice make that clear. Preview purchases and indexing stay disabled. Shopify remains authoritative for live products, variants, prices, stock, cart totals, and checkout.
+| Token | Value |
+|---|---|
+| paper | #F3EFE3 |
+| paper-light | #F6F2E6 |
+| card | #F1EEDF |
+| parchment / image ground | #ECE0CA |
+| forest | #163122 |
+| forest hover | #254B35 |
+| ink | #142B1C |
+| muted / ash | #525346 |
+| sage | #DEDFD1 |
+| rule | #D3CCBC |
+| brass / gold | #AAA07B |
+| control border | #6F7768 |
+| violet | #6E5D7B |
+| error | #9B302A |
 
-## Palette and typography
+Typography loaded through next/font: Libre Baskerville 400/700 for editorial headings, Lato 400/700 for navigation and commerce, Caveat 400 for short decorative script, Playfair Display 400 for the wordmark, and Space Mono 400/700 for occasional numerical labels. The actual CSS tokens use Libre Baskerville, Lato, Caveat, Playfair Display and Space Mono. Do not replace them with the superseded Playfair/DM Sans proposal without design approval.
 
-- Warm paper (`#FBF9F4`) is the main surface. Parchment (`#F0EEE9`) supports secondary content.
-- Deep forest (`#04190F`) anchors the image stage, main actions, and preview strip. Hover uses `#192E23`.
-- Ink (`#1B1C19`) and ash (`#53574F`) keep copy clear. Brass (`#AF8C47`) appears on dark surfaces and as decoration, never as essential text on paper. Violet remains a rare brand accent.
-- Playfair Display leads headings and the existing wordmark. DM Sans handles navigation, product information, forms, buttons, and prices. Space Mono is limited to small indexes and approved numeric brewing data.
-- The desktop hero uses `clamp(3.5rem, 6vw, 6.6rem)`; below 600px it uses `clamp(3.1rem, 12vw, 4.5rem)`. Introductory copy may use `clamp(1rem, 1.15vw, 1.125rem)`.
-- Essential supporting text remains at least 14px. Index labels remain at least 12px. Do not reduce type to force a title onto one line.
+## Geometry and motion
 
-## Layout and shell
+- Header: 124px desktop, 72px mobile. The separate preview notice is 24px.
+- Desktop homepage hero: 264px panoramic banner; the approved screenshot is roughly 251px.
+- Main gutters: 16px below 360px, 20px default, 32px from 768px, 48px from 1200px.
+- Shop: 224px filter sidebar at wide desktop; four columns at 1280px and above, three at tablet, two from 360px, one below 360px.
+- Product imagery follows the compact landscape reference. Reserve the media ratio before loading.
+- Main controls are at least 44px high and purchase/checkout controls are at least 48px.
+- Use pill-shaped primary actions as in the approved screenshots; product cards have restrained 4px corners.
+- Motion: 160ms action feedback, 180ms navigation reveal, 240ms panel transitions, image hover up to 1.02 over 650ms. Decorative branches sway asynchronously over 8–10 seconds with sub-degree rotation and about 1px of drift; reduced motion disables the sway, image zoom and spatial motion.
 
-- Keep the wordmark and sprout dimensions consistent across routes. Do not restore the removed descriptor.
-- Desktop uses the centred wordmark, left-side Shop and Our Story links, and right utility actions. Mobile uses one compact row with menu, logo, search, and cart. The preview strip and header together stay close to 90px on desktop and under 90px on mobile.
-- Search, menu, cart, and mobile filters are overlays. Opening one never adds a navigation row or pushes page content.
-- Content is capped at 1440px, with responsive page gutters and a section rhythm between 60px and 112px.
-- Controls have 2px corners and at least 44px hit areas. Main actions are at least 48px tall. Editorial images use square frames or natural transparent cutouts. Do not clip cutouts into circles.
-- Product grids use three columns on wide screens, two on tablet and standard mobile, and one below 360px.
+## Content and interaction rules
 
-## Homepage and photography
+The five launch categories are Tea, Tea Bags, Rice, Snacks and Other Foods. One Shop route contains all categories. Pack size, correct variant, price, availability and tax display must remain visible and factual. A multi-variant product uses Choose options. Search and drawers are overlays and never add header height or move page content. Mobile navigation and filters open from the left; cart opens from the right. Only one overlay is active.
 
-- The hero headline is **“Make a little room for tea.”** Its supporting line names loose tea and tea-bag formats. The two actions open the single Shop page with the matching format filter selected.
-- A tea still-life photograph fills the right side of the hero. A selection of up to three teas appears before the transparent loose-tea and tea-bag cutouts. Keep those format links compact, with desktop frames capped at 320px and mobile frames sized to the available width. Set them on parchment, never in circles or masks.
-- The forest image stage uses the actual alpha-transparent loose-tea and tea-bag PNGs. Keep both subjects fully visible with `object-fit: contain`; never add an oval mask or circle behind them.
-- After the tea selection and compact format links, show a concise brewing note. Brewing measurements appear only from an explicitly approved product profile. No speculative origin, taste, health, quality, shipping, or product claims.
-- Keep concept photography disclosed in preview. Do not use landscape, packaging, or generated ingredients to imply a source, estate, harvest, or product recipe.
-- Tea is the complete merchandise range. Do not show pantry foods, teaware, brewing equipment, storage containers, bundles containing accessories, or other merchandise.
+The final homepage category medallions use separate circular photo grounds and transparent category cutouts, so foreground objects can extend beyond the circle. Header, hero, category and banner foliage uses the two distinct transparent branch assets in varied scale and orientation, clipped to each section and kept clear of copy and controls. Never tile the branches as a page background or substitute preview category art in live mode.
 
-## Catalog, transactions, and currency
+Preview prices are labelled Sample price and preview concept imagery is disclosed. Live failures never activate preview content. Brass on paper is decorative only. Focus remains visible, essential text meets contrast requirements, all icon-only actions have accessible names, and reduced-motion preferences are respected.
 
-- Shopify collection handles `tea` and `tea-bags` classify product formats inside the single Shop page. Old `/collections/tea` and `/collections/tea-bags` URLs redirect to the corresponding Shop filter. Catalog, search, direct product lookup, and recommendations expose only products assigned to either collection. No wishlist feature or lookup endpoint remains.
-- Product pages keep Shopify variant choice, quantity, availability, add-to-cart, Buy Now, genuine approved reviews, FAQs, and tea-only recommendations. Preview products have no purchase action.
-- Use the merchant's Shopify price and currency data. There is no currency chooser. Preview prices remain INR sample prices.
-- Keep cart totals and hosted checkout Shopify-authoritative. Never substitute local preview items or prices when live Shopify fails.
+## UI implementation notes
 
-## Motion and accessibility
+- Keep the shared shell dimensions identical across routes.
+- Preserve title wrapping and readable support text; do not shrink text to fit.
+- Product packaging stays colour accurate.
+- Product pages include a “How it’s made” section only when approved, product-specific plain-text process copy is available; preview pages use a clearly marked pending-details message.
+- Generated Kurinji flower art is illustrative; use verified botanical references before describing it as botanically accurate.
+- Use alt text from approved Shopify media; decorative leaves use empty alt text.
+- No invented quality, origin, health, delivery or ingredient claims.
+- Keep responsive differences documented and approved.
 
-- Use the shared `--motion-fast` (150ms), `--motion-control` (180ms), `--motion-panel` (240ms), and `--motion-image` (520ms) timings with the `--ease-out` curve.
-- Keep feedback attached to its cause: buttons press by 1px, only directional arrow icons move, saved hearts fill, product images respond to hover/focus, and FAQ chevrons follow disclosure state.
-- Preserve spatial direction: the left-side menu and filter triggers open panels from the left, the right-side cart opens from the right, and search opens beneath the header without moving page content.
-- Search suggestions, newly added cart lines, and product-gallery changes use brief entrances to make content changes legible. Do not animate static sections merely to make the page feel busy.
-- Do not use autoplay, parallax, perpetual steam, bouncy transitions, cursor effects, or animated grain.
-- Respect reduced-motion preferences by removing spatial movement, image zoom and list entrances while keeping essential color and saved-state feedback. Content, image subjects, and actions remain understandable without animation setup.
-- Keep visible focus, keyboard operation, Escape handling, focus return, accessible image descriptions, and screen-reader result announcements.
-
-## Do and don't
-
-- **Do** preserve the Nilkurinji wordmark, green identity, transparent tea cutouts, product clarity, and consistent shell dimensions.
-- **Do** use straightforward language and only confirmed merchant facts.
-- **Do** disclose concept imagery and sample prices on preview surfaces.
-- **Don't** add a currency chooser, non-tea categories, teaware, storage products, unsupported product claims, or em dashes in shopper-facing copy.
-- **Don't** repeat leaves around the page edges, create circles behind transparent images, or let search increase header height.
+This file describes the current implementation; the approved multi-page reference and detailed decisions are in docs/plan/README.md and its linked section files.

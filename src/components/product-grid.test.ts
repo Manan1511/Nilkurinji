@@ -8,7 +8,7 @@ const gridHelpers = productGrid as unknown as {
 };
 
 describe("shared collection browsing", () => {
-  it("exposes product results and a named tea-type navigation", () => {
+  it("exposes product results and the unified shop category navigation", () => {
     const html = renderToStaticMarkup(createElement(productGrid.ProductGrid, {
       products: [],
       emptyMessage: "No teas",
@@ -17,7 +17,8 @@ describe("shared collection browsing", () => {
       topFilters: [{ label: "All Teas", value: "all", icon: "leaf" }],
     }));
     expect(html).toContain('aria-label="Products"');
-    expect(html).toContain('aria-label="Filter teas by type"');
+    expect(html).toContain('aria-label="Shop categories"');
+    expect(html).toContain('href="/shop?category=other-foods"');
   });
 
   it("uses the selected tea type tag without requiring a duplicate facet", () => {
@@ -50,8 +51,8 @@ describe("shared collection browsing", () => {
       emptyMessage: "No teas",
     }));
 
-    expect(html).toContain('aria-pressed="true"');
-    expect(html).toContain('aria-pressed="false"');
+    expect(html).toContain('aria-current="page"');
+    expect(html).toContain('aria-label="Shop categories"');
     expect(html).toContain('aria-live="polite"');
     expect(html).toContain("0 products found.");
   });

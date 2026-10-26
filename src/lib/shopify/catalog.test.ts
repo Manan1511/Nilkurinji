@@ -4,7 +4,7 @@ import { getProducts } from "./catalog";
 describe("storefront catalog scope", () => {
   afterEach(() => vi.unstubAllEnvs());
 
-  it("returns only tea and tea bags in preview mode", async () => {
+  it("returns every supported category in preview mode", async () => {
     vi.stubEnv("SHOPIFY_MODE", "preview");
 
     const result = await getProducts();
@@ -14,6 +14,8 @@ describe("storefront catalog scope", () => {
     expect(result.data.map(({ collectionHandles }) => collectionHandles)).toEqual(
       expect.arrayContaining([["tea"], ["tea-bags"]]),
     );
-    expect(result.data.every((product) => product.collectionHandles.length > 0 && product.collectionHandles.every((handle) => ["tea", "tea-bags"].includes(handle)))).toBe(true);
+    expect(result.data.map((product) => product.collectionHandles[0])).toEqual(
+      expect.arrayContaining(["tea", "tea-bags", "rice", "snacks", "other-foods"]),
+    );
   });
 });

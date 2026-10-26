@@ -86,5 +86,15 @@ describe("product option feedback", () => {
 
     expect(markup).toContain("Sample price:");
     expect(markup).toContain("Sample prices are shown for layout review only.");
+    expect(markup).toContain("PIN checking is not enabled in this preview.");
+    expect(markup).not.toContain("Inclusive of all applicable taxes.");
+  });
+
+  it("shows the live tax statement and six-digit delivery check", () => {
+    const markup = renderToStaticMarkup(createElement(ProductPurchasePanel, { product, purchasingEnabled: false }));
+
+    expect(markup).toContain("Inclusive of all applicable taxes.");
+    expect(markup).toContain("Check delivery");
+    expect(markup).toContain('pattern="[0-9]{6}"');
   });
 });

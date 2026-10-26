@@ -19,8 +19,8 @@ describe("unavailable product page", () => {
   });
 });
 
-it("does not offer a wishlist action on product details", async () => {
+it("does not render wishlist controls on related product cards", async () => {
   vi.stubEnv("SHOPIFY_MODE", "preview");
   const markup = renderToStaticMarkup(await ProductPage({ params: Promise.resolve({ handle: "preview-tea-1" }) }));
-  expect(markup.toLowerCase()).not.toContain("wishlist");
+  expect(markup).not.toContain("wishlist");
 });

@@ -26,4 +26,6 @@
 .searchField { max-width: 680px; margin-top: 24px; }
 .discovery { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 12px; }
 .discovery a { display: inline-flex; align-items: center; min-height: 44px; color: var(--forest); }
+.discovery form { display: flex; align-items: center; }
+.discovery button { min-height: 44px; border: 0; padding: 8px 0; background: transparent; color: var(--forest); font-size: 14px; text-decoration: underline; text-underline-offset: 4px; }
 @media (max-width: 767px) { .heading { padding-top: 32px; padding-bottom: 24px; } .collectionHeading { grid-template-columns: 1fr; gap: 24px; } .collectionImage { aspect-ratio: 4/3; } .body { padding-bottom: 48px; } }

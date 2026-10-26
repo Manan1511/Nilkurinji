@@ -1,8 +1,9 @@
 "use client";
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { postCartAction, waitForCartMutations } from "@/lib/cart-client";
+import { postCartAction, postCheckoutSession, waitForCartMutations, type EmbeddedCheckoutSession } from "@/lib/cart-client";
 import type { CartAction } from "@/lib/shopify/cart-validation";
 import type { ShopifyCart } from "@/lib/shopify/cart";
+import { MagicCheckoutLauncher } from "@/components/checkout/magic-checkout-launcher";
 
 type CartState = {
   cart: ShopifyCart | null;
@@ -12,13 +13,15 @@ type CartState = {
   loading: boolean;
   busy: boolean;
   message: string;
+  checkoutSession: EmbeddedCheckoutSession | null;
 };
 type CartController = CartState & {
   refresh: () => Promise<void>;
-  mutate: (action: CartAction) => Promise<{ checkoutUrl?: string } | null>;
+  mutate: (action: CartAction) => Promise<{ checkoutUrl?: string; providerSession?: EmbeddedCheckoutSession } | null>;
+  closeCheckout: () => void;
 };
 const CartContext = createContext<CartController | null>(null);
-const initialState: CartState = { cart: null, preview: false, expired: false, enabled: false, loading: true, busy: false, message: "" };
+const initialState: CartState = { cart: null, preview: false, expired: false, enabled: false, loading: true, busy: false, message: "", checkoutSession: null };
 type CartApiResponse = { cart?: ShopifyCart | null; preview?: boolean; purchasingEnabled?: boolean; expired?: boolean; error?: string };
 
 async function readCart(): Promise<CartApiResponse> {
@@ -73,8 +76,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
     readGeneration.current += 1;
     setState((current) => ({ ...current, busy: true, message: "" }));
     try {
+      if (action.action === "checkout" || action.action === "buy-now") {
+        const result = await postCheckoutSession(action);
+        if (result.checkoutUrl) return { checkoutUrl: result.checkoutUrl };
+        if (result.session && result.provider === "razorpay") {
+          window.dispatchEvent(new Event("nilkurinji:cart-close"));
+          setState((current) => ({ ...current, checkoutSession: result.session ?? null }));
+          return { providerSession: result.session };
+        }
+        throw new Error("Checkout could not be prepared. Please try again.");
+      }
       const result = await postCartAction(action);
-      if (action.action === "checkout" || action.action === "buy-now") return { checkoutUrl: result.checkoutUrl };
       setState((current) => ({ ...current, cart: result.cart ?? null, loading: false, message: "" }));
       return {};
     } catch (error) {
@@ -87,8 +99,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const value = useMemo(() => ({ ...state, refresh, mutate }), [state, refresh, mutate]);
-  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+  const closeCheckout = useCallback(() => setState((current) => ({ ...current, checkoutSession: null })), []);
+  const value = useMemo(() => ({ ...state, refresh, mutate, closeCheckout }), [state, refresh, mutate, closeCheckout]);
+  return <CartContext.Provider value={value}>{children}<MagicCheckoutLauncher session={state.checkoutSession} onClose={closeCheckout} /></CartContext.Provider>;
 }
 
 export function useStorefrontCart(): CartController | null {

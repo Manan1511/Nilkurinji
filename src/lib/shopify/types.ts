@@ -65,6 +65,7 @@ export type StorefrontProduct = {
   faqs: ProductFaq[];
   approvedReviews: ApprovedProductReview[];
   teaProfile: TeaProfile | null;
+  howItsMade?: string | null;
   details: string;
   isPreview: boolean;
 }
@@ -96,4 +97,35 @@ export type ShopifyPage = {
   handle: string;
   body: string;
   seo: { title: string | null; description: string | null } | null;
+};
+
+export type StorefrontArticle = {
+  id: string;
+  handle: string;
+  title: string;
+  excerpt: string | null;
+  contentHtml: string;
+  image: ShopifyImage | null;
+  publishedAt: string;
+  author: string | null;
+  tags: string[];
+  blogHandle: string;
+  blogTitle: string;
+  seo: { title: string | null; description: string | null } | null;
+};
+
+export type StorefrontBlog = {
+  id: string;
+  handle: string;
+  title: string;
+  articles: StorefrontArticle[];
+};
+
+export type StorefrontBlogLanding = {
+  heading: string;
+  intro: string;
+  heroImage: ShopifyImage | null;
+  mobileImage: ShopifyImage | null;
+  altText: string;
+  scriptLine: string;
 };

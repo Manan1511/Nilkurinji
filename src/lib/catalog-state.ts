@@ -1,3 +1,5 @@
+import { CATEGORIES } from "@/lib/site-config";
+
 export type CatalogSort = "featured" | "title-asc" | "price-asc" | "price-desc";
 export const TEA_COLLECTIONS = ["tea", "tea-bags"] as const;
 export function isTeaProduct<T extends { collectionHandles: readonly string[] }>(product: T): boolean {
@@ -8,7 +10,7 @@ export function filterTeaProducts<T extends { collectionHandles: readonly string
 }
 export function matchesCategory(collectionHandles: readonly string[], category: string): boolean {
   if (category === "all") return true;
-  if (!TEA_COLLECTIONS.includes(category as (typeof TEA_COLLECTIONS)[number])) return false;
+  if (!CATEGORIES.some((item) => item.handle === category)) return false;
   return collectionHandles.includes(category);
 }
 export type CatalogState = { sort: CatalogSort; category: string; productType: string; priceBand: string; selectedFacets: Record<string, string[]> };

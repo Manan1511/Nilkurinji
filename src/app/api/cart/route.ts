@@ -13,7 +13,7 @@ import {
   ShopifyCartError,
   updateShopifyCartLine,
 } from "@/lib/shopify/cart";
-import { checkoutAllowedHosts, isShopifyCheckoutEnabled } from "@/lib/shopify/checkout-config";
+import { checkoutAllowedHosts, getCheckoutProvider, isShopifyCheckoutEnabled } from "@/lib/shopify/checkout-config";
 import { isSafeCheckoutUrl } from "@/lib/shopify/checkout-url";
 import { canAddCartQuantity, parseCartAction } from "@/lib/shopify/cart-validation";
 import { getStorefrontMode } from "@/lib/shopify/mode";
@@ -111,6 +111,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   if (!parsed.ok) return jsonNoStore({ error: parsed.reason }, 400);
 
   const action = parsed.value;
+  if ((action.action === "checkout" || action.action === "buy-now") && getCheckoutProvider() !== "shopify") {
+    return jsonNoStore({ error: "Use the configured storefront checkout flow." }, 409);
+  }
   const secret = COOKIE_SECRET();
   const signedCart = readCartCookie(request.cookies.get(CART_COOKIE_NAME)?.value, secret);
   const buyerIp = getBuyerIp(request.headers);
