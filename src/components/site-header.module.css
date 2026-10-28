@@ -1,15 +1,15 @@
 .header { position: relative; background: var(--paper); border-bottom: 1px solid var(--rule); }
 .topRow { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0,1fr) minmax(190px,244px) minmax(0,1fr); align-items: center; gap: 24px; width: min(1536px,100%); height: 80px; padding-left: max(var(--page-gutter),8.3vw); padding-right: max(var(--page-gutter),5.7vw); margin-inline: auto; }
-.logo { grid-column: 2; grid-row: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; justify-self: center; width: 244px; min-height: 68px; color: var(--forest); text-decoration: none; }
+.logo { position: absolute; top: 50%; left: 50%; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 244px; min-height: 68px; color: var(--forest); text-decoration: none; transform: translate(-50%,-50%); }
 .mark { width: 24px; height: 20px; margin-bottom: 2px; }
 .name { font: 400 29px/1 var(--font-logo); letter-spacing: .17em; white-space: nowrap; }
 .descriptor { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 6px; color: var(--forest); font: 700 9px/1.2 var(--font-body); letter-spacing: .2em; white-space: nowrap; }
 .descriptor i { display: block; width: 24px; height: 1px; background: var(--rule); }
-.searchTrigger { position: relative; z-index: 2; display: inline-flex; align-items: center; gap: 10px; width: 188px; height: 42px; padding: 0 4px; margin-left: clamp(42px,3.8vw,60px); border: 0; border-bottom: 1px solid var(--control); color: var(--forest); background: transparent; text-align: left; cursor: pointer; }
+.searchTrigger { position: relative; z-index: 2; display: inline-flex; align-items: center; gap: 10px; width: 188px; height: 42px; padding: 0 4px; margin-left: clamp(60px,4.8vw,76px); border: 0; border-bottom: 1px solid var(--control); color: var(--forest); background: transparent; text-align: left; cursor: pointer; }
 .searchTrigger span { color: var(--ink); font: 400 16px/1.4 var(--font-editorial); }
 .searchTrigger svg { width: 20px; height: 20px; stroke-width: 1.6; }
 .mobileSearch { display: none !important; }
-.tools { grid-column: 3; grid-row: 1; display: flex; align-items: center; justify-self: end; gap: 4px; }
+.tools { position: relative; z-index: 2; grid-column: 3; grid-row: 1; display: flex; align-items: center; justify-self: end; gap: 4px; }
 .tool { position: relative; display: inline-grid; place-items: center; width: 44px; height: 44px; flex-shrink: 0; border: 0; border-radius: 50%; color: var(--forest); background: transparent; text-decoration: none; }
 .tool:hover { background: color-mix(in srgb,var(--sage) 55%,transparent); }
 .tool svg { width: 21px; height: 21px; stroke-width: 1.55; transition: transform var(--motion-fast) var(--ease-out); }
@@ -36,9 +36,9 @@
   .topRow { grid-template-columns: 44px minmax(0,1fr) auto; gap: 8px; height: var(--header-height); padding-inline: var(--page-gutter); }
   .menu { display: inline-grid; grid-column: 1; grid-row: 1; }
   .menu svg { width: 22px; height: 22px; }
-  .logo { grid-column: 2; grid-row: 1; justify-self: center; width: min(190px,100%); min-height: 56px; margin: 0; }
+  .logo { width: min(190px,calc(100% - 128px)); min-height: 56px; margin: 0; }
   .mark { width: 19px; height: 16px; margin-bottom: 1px; }
-  .name { font-size: 22px; letter-spacing: .15em; }
+  .name { font-size: clamp(20px,5.64vw,22px); letter-spacing: .12em; }
   .descriptor { display: none; }
   .tools { grid-column: 3; grid-row: 1; gap: 0; }
   .mobileSearch { display: inline-grid !important; }
@@ -46,10 +46,10 @@
   .desktopSearch,.navigation { display: none; }
 }
 @media (max-width: 359px) {
-  .topRow { grid-template-columns: 40px minmax(0,1fr) auto; gap: 2px; }
-  .logo { width: min(160px,100%); }
-  .name { font-size: 18px; letter-spacing: .13em; }
-  .tool { width: 42px; height: 42px; }
+  .topRow { grid-template-columns: 44px minmax(0,1fr) auto; gap: 2px; }
+  .logo { width: min(132px,calc(100% - 132px)); }
+  .name { font-size: 16px; letter-spacing: .08em; }
+  .tool { width: 44px; height: 44px; }
   .tools { gap: 0; }
 }
 @media (prefers-reduced-motion: reduce) {

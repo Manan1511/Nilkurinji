@@ -25,16 +25,15 @@ export function ProductGrid({ products, emptyMessage, initialCategory = "all", s
   const [open, setOpen] = useState(false);
   const trigger = useRef<HTMLButtonElement>(null);
   const compact = useCompactViewport();
-  const types = useMemo(() => [...new Set(products.map((product) => product.productType).filter(Boolean))], [products]);
   const groups = useMemo(() => (facetGroups ?? buildCatalogFacetGroups(products, state.category)).filter((group) => group.options.length), [products, facetGroups, state.category]);
   const tabs = useMemo(() => (topFilters ?? []).filter((tab) => tab.value === "all" || products.some((product) => product.tags.includes(tab.value))), [topFilters, products]);
   const hasPrice = products.some((product) => Number.isFinite(priceOf(product)));
-  const config = useMemo(() => ({ categories: CATEGORIES.map((item) => item.handle), productTypes: types, priceBands: hasPrice ? ["under-300", "300-499", "500-plus"] : [], facets: [...groups.map((group) => ({ id: group.id, values: group.options.map((item) => item.value) })), ...(tabs.length ? [{ id: "type", values: tabs.filter((tab) => tab.value !== "all").map((tab) => tab.value) }] : [])] }), [types, hasPrice, groups, tabs]);
+  const config = useMemo(() => ({ categories: CATEGORIES.map((item) => item.handle), productTypes: [], priceBands: hasPrice ? ["under-300", "300-499", "500-plus"] : [], facets: [...groups.map((group) => ({ id: group.id, values: group.options.map((item) => item.value) })), ...(tabs.length ? [{ id: "type", values: tabs.filter((tab) => tab.value !== "all").map((tab) => tab.value) }] : [])] }), [hasPrice, groups, tabs]);
   useEffect(() => { const sync = () => setState(parseCatalogQuery(new URLSearchParams(window.location.search), config)); sync(); window.addEventListener("popstate", sync); return () => window.removeEventListener("popstate", sync); }, [config]);
   useEffect(() => { const media = window.matchMedia?.("(max-width: 1023px)"); const close = () => setOpen(false); media?.addEventListener("change", close); return () => media?.removeEventListener("change", close); }, []);
   const commit = (next: CatalogState) => { setState(next); const params = writeCatalogQuery(new URLSearchParams(window.location.search), next); const query = params.toString(); window.history.replaceState(window.history.state, "", `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`); };
   const visible = selectProducts(products, state);
-  const active = state.productType !== "all" || state.priceBand !== "all" || Object.values(state.selectedFacets).some((values) => values.length);
+  const active = state.priceBand !== "all" || Object.values(state.selectedFacets).some((values) => values.length);
   const clearFilters = (value: CatalogState) => ({ ...emptyCatalogState(), category: value.category });
   const priceLabels: Record<string, string> = { "under-300": "Under ₹300", "300-499": "₹300–₹499", "500-plus": "₹500 and above" };
   const activeChips = [
@@ -50,7 +49,6 @@ export function ProductGrid({ products, emptyMessage, initialCategory = "all", s
   function fields(value: CatalogState, change: (next: CatalogState) => void) {
     return <div className={styles.fields}>
       {groups.map((group) => <fieldset key={group.id}><legend>{group.label}</legend>{group.options.map((option) => <label key={option.value}><input type="checkbox" checked={value.selectedFacets[group.id]?.includes(option.value) ?? false} onChange={() => { const previous = value.selectedFacets[group.id] ?? []; change({ ...value, selectedFacets: { ...value.selectedFacets, [group.id]: previous.includes(option.value) ? previous.filter((item) => item !== option.value) : [...previous, option.value] } }); }} />{option.label}</label>)}</fieldset>)}
-      {types.length > 1 && <label>Product type<select value={value.productType} onChange={(event) => change({ ...value, productType: event.target.value })}><option value="all">All types</option>{types.map((type) => <option key={type}>{type}</option>)}</select></label>}
       {config.priceBands.length > 0 && <label>Price<select value={value.priceBand} onChange={(event) => change({ ...value, priceBand: event.target.value })}><option value="all">Any price</option><option value="under-300">Under ₹300</option><option value="300-499">₹300–₹499</option><option value="500-plus">₹500 and above</option></select></label>}
     </div>;
   }
@@ -59,7 +57,6 @@ export function ProductGrid({ products, emptyMessage, initialCategory = "all", s
     {showToolbar && <div className={styles.toolbar}><div className={styles.toolbarStart}>{showFilters && <button ref={trigger} className={styles.mobileFilter} type="button" aria-label="Open filters" aria-expanded={open && compact} aria-controls="catalog-filter-panel" onClick={() => { setDraft(state); setOpen(true); }}><SlidersHorizontal size={17} aria-hidden="true" />Filters</button>}<p>{visible.length} {visible.length === 1 ? "product" : "products"}</p>{active && <button className={styles.clear} type="button" onClick={() => commit(clearFilters(state))}>Clear filters</button>}</div><label className={styles.sort}>Sort by<select value={state.sort} onChange={(event) => commit({ ...state, sort: event.target.value as CatalogSort })}><option value="featured">Featured</option><option value="title-asc">Name, A to Z</option><option value="price-asc">Price, low to high</option><option value="price-desc">Price, high to low</option></select></label></div>}
     {activeChips.length > 0 && <div className={styles.activeFilters} aria-label="Active filters">{activeChips.map((chip) => <button key={`${chip.id}-${chip.value}`} type="button" aria-label={chip.ariaLabel} onClick={() => {
       if (chip.id === "price") commit({ ...state, priceBand: "all" });
-      else if (chip.id === "productType") commit({ ...state, productType: "all" });
       else commit({ ...state, selectedFacets: { ...state.selectedFacets, [chip.id]: (state.selectedFacets[chip.id] ?? []).filter((value) => value !== chip.value) } });
     }}>{chip.label}<X size={13} aria-hidden="true" /></button>)}</div>}
     <div className={`${styles.layout} ${!showFilters ? styles.noRail : ""}`}>

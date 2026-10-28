@@ -42,7 +42,7 @@
 .drawer .titleRow strong { display: block; margin-top: 4px; }
 .drawer .titleRow p { font-size: 14px; }
 .drawer .controls { gap: 12px; margin-top: 12px; }
-.drawer .quantity button { width: 38px; height: 38px; }
+.drawer .quantity button { width: 44px; height: 44px; }
 .drawer .summary { flex: 0 0 auto; padding: 18px 0 0; border-top: 1px solid var(--rule); background: var(--paper); }
 .drawer .summary h2 { margin-bottom: 12px; font-size: 22px; }
 .drawer .summary > button { min-height: 48px; margin-top: 14px; }

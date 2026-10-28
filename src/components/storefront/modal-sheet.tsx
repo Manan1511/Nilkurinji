@@ -5,10 +5,11 @@ import { IconButton } from "./action";
 import styles from "./modal-sheet.module.css";
 let activeDialogCount = 0;
 let savedBodyOverflow = "";
+let savedBodyPaddingRight = "";
 const OVERLAY_OPEN_EVENT = "nilkurinji:modal-open";
 export type CloseReason = "escape" | "outside" | "close" | "navigation" | "viewport";
-export type ModalSheetProps = { open: boolean; id?: string; label: string; placement: "left" | "right" | "top"; triggerRef: RefObject<HTMLElement | null>; initialFocusRef?: RefObject<HTMLElement | null>; onClose: (reason: CloseReason) => void; children: ReactNode };
-export function ModalSheet({ open, id, label, placement, triggerRef, initialFocusRef, onClose, children }: ModalSheetProps) {
+export type ModalSheetProps = { open: boolean; id?: string; label: string; placement: "left" | "right" | "top"; size?: "default" | "menu"; triggerRef: RefObject<HTMLElement | null>; initialFocusRef?: RefObject<HTMLElement | null>; onClose: (reason: CloseReason) => void; children: ReactNode };
+export function ModalSheet({ open, id, label, placement, size = "default", triggerRef, initialFocusRef, onClose, children }: ModalSheetProps) {
   const ref = useRef<HTMLDialogElement>(null);
   const closeReason = useRef<CloseReason>("close");
   const onCloseRef = useRef(onClose);
@@ -18,7 +19,15 @@ export function ModalSheet({ open, id, label, placement, triggerRef, initialFocu
     if (!dialog || !open) return;
     const trigger = triggerRef.current;
     closeReason.current = "close";
-    if (activeDialogCount === 0) savedBodyOverflow = document.body.style.overflow;
+    if (activeDialogCount === 0) {
+      savedBodyOverflow = document.body.style.overflow;
+      savedBodyPaddingRight = document.body.style.paddingRight;
+      const scrollbarWidth = Math.max(0, window.innerWidth - document.documentElement.clientWidth);
+      if (scrollbarWidth > 0) {
+        const bodyPaddingRight = Number.parseFloat(getComputedStyle(document.body).paddingRight) || 0;
+        document.body.style.paddingRight = `${bodyPaddingRight + scrollbarWidth}px`;
+      }
+    }
     activeDialogCount += 1;
     document.body.style.overflow = "hidden";
     if (typeof dialog.showModal === "function") dialog.showModal();
@@ -48,14 +57,17 @@ export function ModalSheet({ open, id, label, placement, triggerRef, initialFocu
         else dialog.removeAttribute("open");
       }
       activeDialogCount = Math.max(0, activeDialogCount - 1);
-      if (activeDialogCount === 0) document.body.style.overflow = savedBodyOverflow;
+      if (activeDialogCount === 0) {
+        document.body.style.overflow = savedBodyOverflow;
+        document.body.style.paddingRight = savedBodyPaddingRight;
+      }
       if (closeReason.current !== "outside" && closeReason.current !== "viewport") {
         if (trigger?.isConnected && getComputedStyle(trigger).display !== "none") trigger.focus({ preventScroll: true });
         else document.querySelector<HTMLElement>('a[aria-label="Nilkurinji home"]')?.focus({ preventScroll: true });
       }
     };
   }, [open, initialFocusRef, triggerRef, placement]);
-  return <dialog ref={ref} id={id} data-placement={placement} className={`${styles.sheet} ${placement === "top" ? styles.top : placement === "left" ? styles.left : ""}`} aria-label={label} onCancel={(event) => { event.preventDefault(); closeReason.current = "escape"; onCloseRef.current("escape"); }} onClick={(event) => { if (event.target === event.currentTarget) { const rect = event.currentTarget.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) { closeReason.current = "outside"; onCloseRef.current("outside"); } } }}>
+  return <dialog ref={ref} id={id} data-placement={placement} className={`${styles.sheet} ${placement === "top" ? styles.top : placement === "left" ? styles.left : ""} ${size === "menu" ? styles.menu : ""}`} aria-label={label} onCancel={(event) => { event.preventDefault(); closeReason.current = "escape"; onCloseRef.current("escape"); }} onClick={(event) => { if (event.target === event.currentTarget) { const rect = event.currentTarget.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) { closeReason.current = "outside"; onCloseRef.current("outside"); } } }}>
     <div className={styles.heading}><h2>{label}</h2><IconButton aria-label={`Close ${label.toLowerCase()}`} onClick={() => onClose("close")}><X aria-hidden="true" /></IconButton></div>
     {children}
   </dialog>;

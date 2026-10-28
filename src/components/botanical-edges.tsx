@@ -32,9 +32,22 @@ const assets: Record<BotanicalPlacement, BotanicalPair> = {
 /** Section-specific transparent foliage; each composition has its own silhouette. */
 export function BotanicalEdges({ placement }: { placement: BotanicalPlacement }) {
   const pair = assets[placement];
-  const sizes = placement === "header" || placement === "home-hero"
-    ? "(max-width: 767px) 1px, 12vw"
-    : "(max-width: 767px) 1px, 18vw";
+  const mobileSize = {
+    header: "22vw",
+    "home-hero": "36vw",
+    featured: "32vw",
+    banner: "28vw",
+    story: "30vw",
+  }[placement];
+  const narrowMobileSize = {
+    header: "24vw",
+    "home-hero": "36vw",
+    featured: "35vw",
+    banner: "28vw",
+    story: "33vw",
+  }[placement];
+  const desktopSize = placement === "header" || placement === "home-hero" ? "12vw" : "18vw";
+  const sizes = `(max-width: 359px) ${narrowMobileSize}, (max-width: 767px) ${mobileSize}, ${desktopSize}`;
   return (
     <span className={`${styles.edges} ${styles[placement]}`} aria-hidden="true">
       <Image className={styles.left} src={pair.left.src} alt="" width={pair.left.width} height={pair.left.height} sizes={sizes} />

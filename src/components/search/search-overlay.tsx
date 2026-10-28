@@ -8,6 +8,7 @@ import { ModalSheet, type CloseReason } from "@/components/storefront/modal-shee
 import { usePredictiveSearch } from "@/hooks/use-predictive-search";
 import { formatMoney } from "@/lib/format";
 import { normalizeSearchQuery } from "@/lib/search/query";
+import { CATEGORIES } from "@/lib/site-config";
 import styles from "./search-overlay.module.css";
 type Props = { open: boolean; compact: boolean; query: string; onQueryChange: (value: string) => void; onClose: (reason: CloseReason) => void; triggerRef: RefObject<HTMLElement | null> };
 export function SearchOverlay({ open, compact, query, onQueryChange, onClose, triggerRef }: Props) {
@@ -18,7 +19,7 @@ export function SearchOverlay({ open, compact, query, onQueryChange, onClose, tr
     <div className={styles.scroll}>
     {(state.status === "idle" || state.status === "empty" || state.status === "error") && <>
       <p className={styles.label}>Browse collections</p>
-      <nav className={styles.browse} aria-label="Browse the shop"><Link href="/shop?category=tea" onClick={() => onClose("navigation")}>Tea</Link><Link href="/shop?category=tea-bags" onClick={() => onClose("navigation")}>Tea bags</Link><Link href="/shop" onClick={() => onClose("navigation")}>Shop all</Link></nav>
+      <nav className={styles.browse} aria-label="Browse the shop"><Link href="/shop" onClick={() => onClose("navigation")}>Shop all</Link>{CATEGORIES.map((category) => <Link key={category.handle} href={category.href} onClick={() => onClose("navigation")}>{category.label}</Link>)}</nav>
     </>}
     <p role="status" aria-live="polite" className={state.status === "results" ? "sr-only" : styles.status}>{state.status === "loading" ? "Searching…" : state.status === "results" ? `${state.items.length} suggestions${state.hasMore ? ", with more on the results page" : ""}.` : state.status === "empty" ? "No products found." : state.message}</p>
     {state.status === "error" && <button type="button" className={styles.retry} onClick={state.retry}>Try search again</button>}

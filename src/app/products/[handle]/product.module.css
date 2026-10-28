@@ -28,6 +28,6 @@
 .grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; }
 @media (max-width: 1279px) { .layout { gap: 32px; } }
 @media (max-width: 1023px) { .layout { grid-template-columns: 1fr; } .detail[data-sticky="true"] { position: static; } .grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
-@media (max-width: 767px) { .page { padding-top: 20px; } .breadcrumb { margin-bottom: 20px; } .detail h1 { font-size: 32px; } .howItsMade { grid-template-columns: 1fr; gap: 12px; margin-top: 36px; padding-block: 24px; } .content { margin-top: 32px; } .grid { gap: 16px; } }
+@media (max-width: 767px) { .page { padding-top: 20px; padding-bottom: calc(104px + env(safe-area-inset-bottom)); } .breadcrumb { margin-bottom: 20px; } .detail h1 { font-size: 32px; } .howItsMade { grid-template-columns: 1fr; gap: 12px; margin-top: 36px; padding-block: 24px; } .content { margin-top: 32px; } .grid { gap: 16px; } }
 @media (max-width: 359px) { .grid { gap: 12px; } }
 @media (prefers-reduced-motion: reduce) { .content summary,.content summary::after { transition: none; } .content details[open] summary::after { transform: translateY(2px) rotate(225deg); } }

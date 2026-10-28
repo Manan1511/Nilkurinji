@@ -129,7 +129,7 @@ export function SiteHeader() {
       </Suspense>
 
       <SearchOverlay open={panel === "search"} compact={compact} query={query} onQueryChange={setQuery} onClose={close} triggerRef={compact ? mobileSearchRef : desktopSearchRef} />
-      <ModalSheet open={panel === "menu" && compact} id="header-menu-panel" label="Menu" placement="left" triggerRef={menuRef} onClose={close}>
+      <ModalSheet open={panel === "menu" && compact} id="header-menu-panel" label="Menu" placement="left" size="menu" triggerRef={menuRef} onClose={close}>
         <MobileNavigation onNavigate={close} />
       </ModalSheet>
       <ModalSheet open={panel === "cart"} id="header-cart-panel" label="Your cart" placement="right" triggerRef={cartRef} onClose={close}>

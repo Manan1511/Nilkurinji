@@ -41,9 +41,10 @@
 @media (max-width: 1023px) { .mobileFilter { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; border: 1px solid var(--control); background: transparent; padding: 8px 12px; color: var(--brand); font-size: 14px; } }
 @media (max-width: 767px) {
   .catalog { padding-bottom: 48px; }
-  .categories { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 0; min-height: 0; overflow: visible; padding-block: 4px; }
-  .categories a { justify-content: center; min-width: 0; min-height: 44px; padding-inline: 4px; font-size: 14px; text-align: center; white-space: nowrap; }
-  .categories a::after { right: 12%; bottom: 1px; left: 12%; }
+  .categories { gap: 14px; min-height: 0; overflow-x: auto; overflow-y: hidden; overscroll-behavior-inline: contain; padding: 4px var(--page-gutter); margin-inline: calc(var(--page-gutter) * -1); scrollbar-width: none; }
+  .categories::-webkit-scrollbar { display: none; }
+  .categories a { justify-content: center; min-width: max-content; min-height: 48px; padding-inline: 0; font-size: 14px; text-align: center; white-space: nowrap; }
+  .categories a::after { bottom: 1px; }
   .toolbar { flex-wrap: wrap; padding-block: 16px; gap: 12px; }
   .sort { justify-content: space-between; width: 100%; }
   .sort select { flex: 1; max-width: 220px; }

@@ -5,7 +5,7 @@
 .overlayForm input:focus-visible { outline: none; }
 .overlayForm button { min-height: 44px; padding: 8px 16px; border-radius: var(--radius-control); background: var(--forest); color: var(--paper); }
 .overlayForm button:hover { background: var(--forest-hover); }
-.overlayForm button[aria-label="Clear search"] { flex: 0 0 36px; width: 36px; min-width: 36px; min-height: 36px; padding: 8px; border-radius: 50%; background: transparent; color: var(--ash); }
+.overlayForm button[aria-label="Clear search"] { flex: 0 0 44px; width: 44px; min-width: 44px; min-height: 44px; padding: 12px; border-radius: 50%; background: transparent; color: var(--ash); }
 .overlayForm button[aria-label="Clear search"]:hover { background: var(--parchment); color: var(--forest); }
 .overlayForm input::-webkit-search-cancel-button { display: none; }
 .scroll { min-height: 0; overflow-y: auto; overscroll-behavior: contain; }

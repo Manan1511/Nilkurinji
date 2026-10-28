@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Minus, Plus, ShoppingBag } from "lucide-react";
 import { formatMoney } from "@/lib/format";
 import type { StorefrontProduct, StorefrontVariant } from "@/lib/shopify/types";
@@ -60,7 +60,19 @@ export function ProductPurchasePanel({
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const mutationLock = useRef(false);
+  const buttonsRef = useRef<HTMLDivElement>(null);
+  const [showStickyPurchase, setShowStickyPurchase] = useState(false);
   const cart = useStorefrontCart();
+
+  useEffect(() => {
+    const target = buttonsRef.current;
+    if (!target || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(([entry]) => {
+      setShowStickyPurchase(!entry.isIntersecting);
+    }, { threshold: 0 });
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, []);
 
   const selectedVariant = findSelectedVariant(product.variants, selectedOptions)
     ?? (options.length === 0 ? firstVariant : undefined);
@@ -96,8 +108,10 @@ export function ProductPurchasePanel({
   }
 
   const price = product.variants.length ? selectedVariant?.price : product.priceRange?.minVariantPrice;
+  const selectedPack = selectedVariant?.selectedOptions.map((option) => option.value).join(" · ");
 
   return (
+    <>
     <div className={styles.panel}>
       {price && <p className="purchase-panel__price">{product.isPreview ? "Sample price: " : ""}{formatMoney(price)}</p>}
       {!product.isPreview && price && <p className="purchase-panel__tax">Inclusive of all applicable taxes.</p>}
@@ -131,9 +145,7 @@ export function ProductPurchasePanel({
 
       {purchaseNotice && <p className="purchase-panel__notice" role="status">{purchaseNotice}</p>}
 
-      <DeliveryChecker preview={product.isPreview} />
-
-      <div className="purchase-panel__buttons">
+      <div className="purchase-panel__buttons" ref={buttonsRef}>
         <button type="button" className="button button--dark" disabled={!purchasable || busy || !selectedVariant} onClick={() => void sendCartAction("add")}>
           <ShoppingBag aria-hidden="true" size={17} /> {busy ? "Updating…" : "Add to cart"}
         </button>
@@ -142,7 +154,24 @@ export function ProductPurchasePanel({
         </button>
       </div>
       <p className="purchase-panel__fine">{product.isPreview ? "Sample prices are shown for layout review only." : "Prices, options and availability are confirmed by Shopify."}</p>
+      <DeliveryChecker preview={product.isPreview} />
       <p className="purchase-panel__message" role="status" aria-live="polite">{message}</p>
     </div>
+    {showStickyPurchase && <aside className={styles.stickyPurchase} aria-label="Quick purchase options">
+      <div className={styles.stickyInfo}>
+        <span>{selectedPack || "Selected option"}</span>
+        <strong>{price ? <>{product.isPreview ? "Sample price: " : ""}{formatMoney(price)}</> : "Price unavailable"}</strong>
+      </div>
+      <div className={styles.stickyButtons}>
+        <button type="button" className="button button--dark" disabled={!purchasable || busy || !selectedVariant} onClick={() => void sendCartAction("add")}>
+          {busy ? "Updating…" : "Add to cart"}
+        </button>
+        <button type="button" className="button button--outline" disabled={!purchasable || busy || !selectedVariant} onClick={() => void sendCartAction("buy-now")}>
+          Buy now
+        </button>
+      </div>
+      {message && <p className={styles.stickyMessage}>{message}</p>}
+    </aside>}
+    </>
   );
 }

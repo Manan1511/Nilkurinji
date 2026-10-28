@@ -15,26 +15,39 @@
 
 @keyframes foliage-sway {
   0%, 100% { rotate: 0deg; translate: 0 0; }
-  24% { rotate: 1.8deg; translate: 2px -0.7px; }
-  53% { rotate: -1.05deg; translate: -1.4px 0.5px; }
-  79% { rotate: 0.75deg; translate: 1px -0.35px; }
+  24% { rotate: .45deg; translate: .8px -.3px; }
+  53% { rotate: -.32deg; translate: -.7px .25px; }
+  79% { rotate: .2deg; translate: .4px -.1px; }
 }
 
 /* The hero cutout has cropped edges; keep its stem anchored and sway only a few pixels. */
 @keyframes home-hero-left-sway {
   0%, 100% { rotate: 0deg; translate: 0 0; }
-  28% { rotate: .48deg; translate: .35px -.1px; }
-  62% { rotate: -.36deg; translate: -.25px .1px; }
-  83% { rotate: .16deg; translate: .1px 0; }
+  28% { rotate: .55deg; translate: .95px -.2px; }
+  62% { rotate: -.4deg; translate: -.8px .15px; }
+  83% { rotate: .22deg; translate: .45px 0; }
+}
+
+@keyframes mobile-foliage-sway {
+  0%, 100% { rotate: 0deg; translate: 0 0; }
+  34% { rotate: .42deg; translate: .95px -.25px; }
+  68% { rotate: -.32deg; translate: -.75px .18px; }
+}
+
+@keyframes mobile-foliage-sway-reverse {
+  0%, 100% { rotate: 0deg; translate: 0 0; }
+  32% { rotate: -.36deg; translate: -.8px -.18px; }
+  70% { rotate: .27deg; translate: .65px .12px; }
 }
 
 /* Header corners use their own flowering tea branches, cropped to the paper edge. */
-.header .left,.header .right { top: 0; bottom: 0; width: clamp(80px,12vw,184px); height: 100%; object-fit: cover; transform: none; }
+.header .left,.header .right { top: 0; bottom: 0; width: clamp(80px,7.2vw,110px); height: 100%; object-fit: cover; transform: none; }
 .header .left { left: 0; object-position: left center; }
-.header .right { right: 0; object-position: right center; }
+.header .right { right: -36px; object-position: right center; }
 
 /* Home uses a separate asymmetrical flowering pair, contained at the banner edges. */
 .home-hero .left,.home-hero .right { top: 0; bottom: 0; width: clamp(72px,12vw,184px); height: 100%; object-fit: cover; transform: none; }
+.home-hero { z-index: 1; }
 .home-hero .left {
   top: 50%;
   bottom: auto;
@@ -70,7 +83,7 @@
 .banner .right,.story .right { animation-delay: -2.1s; }
 
 @media (min-width: 768px) and (max-width: 1279px) {
-  .header .left,.header .right { width: clamp(80px,11vw,140px); }
+  .header .left,.header .right { width: clamp(80px,8vw,110px); }
   .home-hero .left,.home-hero .right { width: clamp(64px,9vw,112px); object-fit: cover; transform: none; }
   .home-hero .left { top: 50%; bottom: auto; left: -3px; width: clamp(88px,10vw,124px); height: auto; object-fit: contain; object-position: left center; transform: translateY(-50%); --foliage-origin: 2% 96%; }
   .featured .left { left: -95px; width: 180px; }
@@ -80,10 +93,86 @@
 }
 
 @media (max-width: 767px) {
-  .header .left,.header .right { display: none; }
-  /* The hero copy stacks above its image on phones, so foliage would cross text. */
-  .home-hero .left,.home-hero .right,.featured .left,.featured .right { display: none; }
-  .banner .left,.banner .right,.story .left,.story .right { display: none; }
+  .edges img { animation-duration: 13s; }
+  .edges .left { animation-name: mobile-foliage-sway; }
+  .edges .right { animation-name: mobile-foliage-sway-reverse; animation-duration: 14.5s; }
+
+  /* Keep the flowering corners outside the 44px header controls. */
+  .header .left,.header .right {
+    top: 50%;
+    bottom: auto;
+    width: clamp(58px, 16vw, 68px);
+    height: 72px;
+    object-fit: cover;
+    transform: translateY(-50%);
+    opacity: .36;
+  }
+  .header .left { left: -12px; object-position: left center; --foliage-origin: 0 50%; }
+  .header .right { right: -24px; object-position: right center; --foliage-origin: 100% 50%; }
+
+  /* The copy remains on paper; the paired kurinji branches frame only the hero photograph. */
+  .home-hero { top: auto; bottom: 0; height: 62.5vw; }
+  .home-hero .left,.home-hero .right {
+    width: clamp(116px, 34vw, 136px);
+    height: auto;
+    object-fit: contain;
+    opacity: .92;
+  }
+  .home-hero .left {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    transform: none;
+    --foliage-origin: 0 96%;
+    animation-name: home-hero-left-sway;
+    animation-duration: 12.8s;
+  }
+  .home-hero .right {
+    top: 0;
+    right: 8px;
+    bottom: auto;
+    width: clamp(112px, 31vw, 124px);
+    object-position: right top;
+    transform: none;
+    --foliage-origin: 100% 8%;
+  }
+
+  /* Let a restrained edge of foliage appear around the shelf, behind its product cards. */
+  .featured .left,.featured .right {
+    width: clamp(112px, 33vw, 130px);
+    opacity: .46;
+  }
+  .featured .left { top: clamp(104px, 30vw, 126px); left: -54px; transform: none; --foliage-origin: 0 82%; }
+  .featured .right { right: -26px; bottom: 8px; --foliage-origin: 100% 18%; }
+
+  /* Shop and editorial banners keep foliage at the edges, with copy layered above it. */
+  .banner .left,.banner .right { width: clamp(88px, 27vw, 108px); opacity: .48; }
+  .banner .left { top: -8px; left: clamp(-26px, -6vw, -18px); transform: rotate(-9deg); --foliage-origin: 0 78%; }
+  .banner .right { top: -4px; right: clamp(12px, 4vw, 18px); bottom: auto; transform: rotate(12deg); --foliage-origin: 100% 20%; }
+
+  /* The story hero stacks copy before its photo, so confine its leaves to that photo frame. */
+  .story.edges { z-index: 2; top: auto; bottom: 0; height: calc(75vw - 8px); }
+  .story .left,.story .right { top: 0; bottom: auto; width: clamp(104px, 30vw, 120px); opacity: .9; }
+  .story .left { top: auto; bottom: -8px; left: -10px; transform: rotate(-11deg); --foliage-origin: 0 80%; }
+  .story .right { right: 20px; transform: rotate(10deg); --foliage-origin: 100% 18%; }
+}
+
+@media (max-width: 359px) {
+  .header .left,.header .right { width: 54px; }
+  .header .left { left: -12px; }
+  .header .right { right: -24px; }
+  .home-hero .left,.home-hero .right { width: 112px; }
+  .home-hero .left { left: 0; }
+  .home-hero .right { right: 8px; width: 100px; }
+  .featured .left,.featured .right { width: 112px; }
+  .featured .left { top: 104px; left: -54px; }
+  .featured .right { right: -36px; }
+  .banner .left,.banner .right { width: 88px; }
+  .banner .left { left: -18px; }
+  .banner .right { right: 12px; }
+  .story .left,.story .right { width: 104px; }
+  .story .left { top: auto; bottom: -8px; left: -10px; }
+  .story .right { right: 20px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
