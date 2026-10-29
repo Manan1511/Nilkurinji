@@ -30,20 +30,27 @@
 
 @keyframes mobile-foliage-sway {
   0%, 100% { rotate: 0deg; translate: 0 0; }
-  34% { rotate: .42deg; translate: .95px -.25px; }
-  68% { rotate: -.32deg; translate: -.75px .18px; }
+  30% { rotate: .82deg; translate: 1.9px -.4px; }
+  68% { rotate: -.58deg; translate: .7px .25px; }
 }
 
 @keyframes mobile-foliage-sway-reverse {
   0%, 100% { rotate: 0deg; translate: 0 0; }
-  32% { rotate: -.36deg; translate: -.8px -.18px; }
-  70% { rotate: .27deg; translate: .65px .12px; }
+  32% { rotate: -.72deg; translate: -1.8px -.3px; }
+  70% { rotate: .52deg; translate: -.6px .2px; }
 }
 
-/* Header corners use their own flowering tea branches, cropped to the paper edge. */
-.header .left,.header .right { top: 0; bottom: 0; width: clamp(80px,7.2vw,110px); height: 100%; object-fit: cover; transform: none; }
-.header .left { left: 0; object-position: left center; }
-.header .right { right: -36px; object-position: right center; }
+@keyframes mobile-home-hero-left-sway {
+  0%, 100% { rotate: 0deg; translate: 0 0; }
+  28% { rotate: .88deg; translate: 2px -.35px; }
+  62% { rotate: -.62deg; translate: .7px .25px; }
+  83% { rotate: .34deg; translate: 1.5px 0; }
+}
+
+/* Header branches stay inside the paper edge and retain their full silhouettes. */
+.header .left,.header .right { top: 6px; bottom: 6px; width: clamp(96px,8.5vw,128px); height: calc(100% - 12px); object-fit: contain; transform: none; }
+.header .left { left: clamp(8px,1vw,14px); object-position: left center; }
+.header .right { right: clamp(8px,1vw,14px); object-position: right center; }
 
 /* Home uses a separate asymmetrical flowering pair, contained at the banner edges. */
 .home-hero .left,.home-hero .right { top: 0; bottom: 0; width: clamp(72px,12vw,184px); height: 100%; object-fit: cover; transform: none; }
@@ -72,6 +79,14 @@
 .story .left { top: -22px; left: -65px; width: 216px; transform: rotate(-11deg); }
 .story .right { right: -68px; bottom: -57px; width: 214px; transform: rotate(10deg); }
 
+/* The menu uses separate top and bottom pairs, framing the navigation from its open corners. */
+.menu-top { top: 0; bottom: auto; height: clamp(108px, 19vh, 152px); overflow: hidden; }
+.menu-top .left { top: -18px; left: 0; width: clamp(88px, 23vw, 132px); opacity: .2; --foliage-origin: 4% 8%; }
+.menu-top .right { top: -20px; right: 0; width: clamp(92px, 24vw, 138px); opacity: .22; --foliage-origin: 96% 8%; }
+.menu { top: auto; bottom: 0; height: clamp(132px, 24vh, 190px); overflow: hidden; }
+.menu .left { left: 0; bottom: -18px; width: clamp(96px, 29vw, 126px); opacity: .22; --foliage-origin: 4% 96%; }
+.menu .right { right: 0; bottom: -14px; width: clamp(108px, 31vw, 136px); opacity: .26; --foliage-origin: 96% 12%; }
+
 /* Offset each branch so the paired artwork moves like a light, uneven breeze. */
 .header .left { animation-delay: -2.4s; }
 .header .right { animation-delay: -7.2s; }
@@ -81,9 +96,11 @@
 .featured .right { animation-delay: -3.2s; }
 .banner .left,.story .left { animation-delay: -5.5s; }
 .banner .right,.story .right { animation-delay: -2.1s; }
+.menu-top .left { animation-delay: -3.6s; }
+.menu-top .right { animation-delay: -7.4s; }
 
 @media (min-width: 768px) and (max-width: 1279px) {
-  .header .left,.header .right { width: clamp(80px,8vw,110px); }
+  .header .left,.header .right { width: clamp(88px,9vw,118px); }
   .home-hero .left,.home-hero .right { width: clamp(64px,9vw,112px); object-fit: cover; transform: none; }
   .home-hero .left { top: 50%; bottom: auto; left: -3px; width: clamp(88px,10vw,124px); height: auto; object-fit: contain; object-position: left center; transform: translateY(-50%); --foliage-origin: 2% 96%; }
   .featured .left { left: -95px; width: 180px; }
@@ -93,22 +110,27 @@
 }
 
 @media (max-width: 767px) {
-  .edges img { animation-duration: 13s; }
+  .edges img { animation-duration: 8.8s; }
   .edges .left { animation-name: mobile-foliage-sway; }
-  .edges .right { animation-name: mobile-foliage-sway-reverse; animation-duration: 14.5s; }
+  .edges .right { animation-name: mobile-foliage-sway-reverse; animation-duration: 10s; }
 
-  /* Keep the flowering corners outside the 44px header controls. */
+  /* Keep both flowering corners in-bounds, softly behind the header controls. */
   .header .left,.header .right {
     top: 50%;
     bottom: auto;
-    width: clamp(58px, 16vw, 68px);
-    height: 72px;
-    object-fit: cover;
+    width: clamp(64px, 18vw, 80px);
+    height: auto;
+    max-height: 72px;
+    object-fit: contain;
     transform: translateY(-50%);
-    opacity: .36;
+    opacity: .46;
   }
-  .header .left { left: -12px; object-position: left center; --foliage-origin: 0 50%; }
-  .header .right { right: -24px; object-position: right center; --foliage-origin: 100% 50%; }
+  .header .left {
+    left: clamp(4px, 1vw, 8px);
+    object-position: left center;
+    --foliage-origin: 0 50%;
+  }
+  .header .right { right: clamp(4px, 1vw, 8px); object-position: right center; --foliage-origin: 100% 50%; }
 
   /* The copy remains on paper; the paired kurinji branches frame only the hero photograph. */
   .home-hero { top: auto; bottom: 0; height: 62.5vw; }
@@ -124,8 +146,8 @@
     left: 0;
     transform: none;
     --foliage-origin: 0 96%;
-    animation-name: home-hero-left-sway;
-    animation-duration: 12.8s;
+    animation-name: mobile-home-hero-left-sway;
+    animation-duration: 8.8s;
   }
   .home-hero .right {
     top: 0;
@@ -155,12 +177,19 @@
   .story .left,.story .right { top: 0; bottom: auto; width: clamp(104px, 30vw, 120px); opacity: .9; }
   .story .left { top: auto; bottom: -8px; left: -10px; transform: rotate(-11deg); --foliage-origin: 0 80%; }
   .story .right { right: 20px; transform: rotate(10deg); --foliage-origin: 100% 18%; }
+
+  .menu { height: clamp(118px, 22vh, 170px); }
+  .menu .left { bottom: -14px; width: clamp(88px, 29vw, 112px); opacity: .28; }
+  .menu .right { bottom: -10px; width: clamp(98px, 31vw, 120px); opacity: .32; }
+  .menu-top { height: clamp(104px, 19vh, 140px); }
+  .menu-top .left { top: -12px; width: clamp(78px, 23vw, 120px); opacity: .2; }
+  .menu-top .right { top: -14px; width: clamp(82px, 24vw, 126px); opacity: .22; }
 }
 
 @media (max-width: 359px) {
-  .header .left,.header .right { width: 54px; }
-  .header .left { left: -12px; }
-  .header .right { right: -24px; }
+  .header .left,.header .right { width: 64px; }
+  .header .left { left: 4px; }
+  .header .right { right: 4px; }
   .home-hero .left,.home-hero .right { width: 112px; }
   .home-hero .left { left: 0; }
   .home-hero .right { right: 8px; width: 100px; }
@@ -173,6 +202,21 @@
   .story .left,.story .right { width: 104px; }
   .story .left { top: auto; bottom: -8px; left: -10px; }
   .story .right { right: 20px; }
+  .menu { height: 118px; }
+  .menu .left { bottom: -12px; width: 88px; }
+  .menu .right { bottom: -8px; width: 98px; }
+  .menu-top { height: 102px; }
+  .menu-top .left { top: -10px; width: 74px; }
+  .menu-top .right { top: -12px; width: 78px; }
+}
+
+@media (max-height: 560px) and (max-width: 767px) {
+  .menu { height: 92px; }
+  .menu .left { width: 76px; opacity: .2; }
+  .menu .right { width: 84px; opacity: .22; }
+  .menu-top { height: 84px; }
+  .menu-top .left { top: -8px; width: 70px; opacity: .16; }
+  .menu-top .right { top: -9px; width: 74px; opacity: .18; }
 }
 
 @media (prefers-reduced-motion: reduce) {

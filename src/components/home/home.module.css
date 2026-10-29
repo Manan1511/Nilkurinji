@@ -96,36 +96,54 @@
 
 @media (max-width: 599px) {
   .hero { display: flex; flex-direction: column; align-items: stretch; height: auto; min-height: 0; background: var(--paper); }
-  .heroMedia { position: relative; z-index: 0; order: 2; height: auto; aspect-ratio: 16/10; }
+  .heroMedia { position: relative; z-index: 0; order: 2; height: auto; aspect-ratio: 16/9; }
   .heroPhoto { object-position: 67% 56%; }
   .heroFade { display: none; }
-  .heroCopy { order: 1; padding: 24px var(--page-gutter) 18px; }
+  .heroCopy { order: 1; padding: 20px var(--page-gutter) 14px; }
   .heroCopy h1 { max-width: 14ch; margin-top: 8px; font-size: clamp(1.95rem,8.5vw,2.4rem); line-height: 1.08; }
   .heroDescription { max-width: 42ch; font-size: 15px; }
-  .heroActions { margin-top: 14px; }
+  .heroActions { margin-top: 10px; }
   .heroDisclosure { right: 12px; bottom: 10px; }
-  .categories { padding-block: 16px 18px; }
+  .categories { padding-block: 12px 12px; }
   .categoryHeading h2 { font-size: 1.55rem; }
   .categoryHeading p { max-width: 38ch; }
   .categoryRail { grid-template-columns: repeat(5,128px); width: calc(100% + var(--page-gutter) * 2); padding-inline: var(--page-gutter); margin-left: calc(var(--page-gutter) * -1); overflow-x: auto; overscroll-behavior-inline: contain; scroll-snap-type: x mandatory; scrollbar-width: none; }
+  .categoryRail { margin-top: 8px; }
   .categoryRail::-webkit-scrollbar { display: none; }
   .categoryItem { scroll-snap-align: start; }
   .categoryItem:not(:last-child)::after { right: 0; }
   .categoryItem { min-height: 0; }
-  .categoryArt { width: 128px; height: 100px; }
-  .categoryMedallion,.categoryImageFallback { width: 88px; height: 88px; }
-  .categoryCutout { top: -10px; width: 116px; height: 116px; }
-  .categoryLabel { min-height: 30px; margin-top: 4px; font-size: 15px; }
-  .featured { padding-block: 18px; }
-  .featuredContent { gap: 14px; padding-inline: clamp(18px, 8.7vw, 34px); }
-  .featuredEditorial { grid-template-columns: 1fr; gap: 8px; }
+  .categoryArt { width: 128px; height: 94px; }
+  .categoryMedallion,.categoryImageFallback { width: 84px; height: 84px; }
+  .categoryCutout { top: -9px; width: 112px; height: 112px; }
+  .categoryLabel { min-height: 28px; margin-top: 2px; font-size: 15px; }
+  .featured { padding-block: 14px; }
+  .featuredContent { grid-template-columns: minmax(0,1fr); gap: 12px; padding-inline: var(--page-gutter); }
+  .featuredEditorial { grid-template-columns: 1fr; gap: 6px; }
   .featuredCopy .eyebrow { font-size: 12px; }
   .featuredCopy h2 { max-width: 19ch; font-size: 1.65rem; }
-  .featuredAction { flex-direction: row; align-items: center; justify-content: space-between; gap: 12px; }
-  .featuredAction p { max-width: 25ch; font-size: 13px; }
+  .featuredAction { display: flex; align-items: center; justify-content: flex-start; min-width: 0; gap: 0; }
+  .featuredAction p { display: none; }
   .featuredAction > a { gap: 7px; min-height: 44px; padding-inline: 15px; font-size: 13px; }
-  .productRail { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px 12px; }
+  .productRail {
+    display: flex;
+    gap: 12px;
+    width: calc(100% + var(--page-gutter) * 2);
+    min-width: 0;
+    margin-inline: calc(var(--page-gutter) * -1);
+    padding: 0 var(--page-gutter) 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-padding-inline: var(--page-gutter);
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .productRail::-webkit-scrollbar { display: none; }
+  .productRail > * { flex: 0 0 min(78%, 280px); scroll-snap-align: start; }
   .productRail > :nth-child(n+4) { display: block; }
+  .productRail:focus-visible { outline: 2px solid var(--violet); outline-offset: -2px; }
   .deliveryItem { grid-template-columns: 30px 1fr; column-gap: 6px; padding: 5px 8px; }
   .deliveryItem > svg { width: 22px; height: 22px; }
   .deliveryItem h3 { font-size: 14px; }
@@ -139,5 +157,10 @@
 }
 
 @media (max-width: 359px) {
-  .featuredContent { padding-inline: 18px; }
+  .featuredContent { padding-inline: 16px; }
+  .heroCopy h1 { max-width: 18ch; font-size: clamp(1.85rem,8.2vw,2rem); }
+  .categoryHeading > div { gap: 8px; }
+  .categoryHeading h2 { font-size: 1.35rem; }
+  .headingRule { width: 28px; }
+  .productRail { width: calc(100% + 32px); margin-inline: -16px; padding-inline: 16px; }
 }

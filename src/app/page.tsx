@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Flower2, Landmark, Leaf, ShieldCheck, Truck } from "lucide-react";
 import { HomeHero } from "@/components/home/home-hero";
+import { HomeReviews } from "@/components/home/home-reviews";
 import { BotanicalEdges } from "@/components/botanical-edges";
 import { BrandMark } from "@/components/brand-mark";
 import { ProductCard } from "@/components/product-card";
@@ -128,9 +129,11 @@ export default async function HomePage() {
             <Link href="/shop">Shop all <ArrowRight size={16} aria-hidden="true" /></Link>
           </div>
         </div>
-        {catalog.source === "unavailable" ? <div className={styles.empty} role="status"><p>The range is temporarily unavailable.</p><Link href="/shop">Browse the shop</Link></div> : shownProducts.length ? <div className={styles.productRail}>{shownProducts.map((product) => <ProductCard key={product.id} product={product} purchasingEnabled={isShopifyCheckoutEnabled()} variant="featured" />)}</div> : <div className={styles.empty}><p>The product range is being prepared.</p><Link href="/shop">Explore the shop</Link></div>}
+        {catalog.source === "unavailable" ? <div className={styles.empty} role="status"><p>The range is temporarily unavailable.</p><Link href="/shop">Browse the shop</Link></div> : shownProducts.length ? <div className={styles.productRail} role="region" aria-label="Featured products" tabIndex={0}>{shownProducts.map((product) => <ProductCard key={product.id} product={product} purchasingEnabled={isShopifyCheckoutEnabled()} variant="featured" />)}</div> : <div className={styles.empty}><p>The product range is being prepared.</p><Link href="/shop">Explore the shop</Link></div>}
       </div>
     </section>
+
+    <HomeReviews products={products} preview={preview} />
 
     <DeliveryBand />
   </div>;

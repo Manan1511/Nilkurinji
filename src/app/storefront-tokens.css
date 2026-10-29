@@ -35,6 +35,10 @@
   --control: #6F7768;
   --violet: #6E5D7B;
   --error: #9B342A;
+  --scrollbar-thumb: #808C7F;
+  --scrollbar-thumb-hover: #6A796B;
+  --scrollbar-thumb: color-mix(in srgb, var(--forest) 52%, var(--paper));
+  --scrollbar-thumb-hover: color-mix(in srgb, var(--forest) 62%, var(--paper));
   --brand: #163122;
   --brand-hover: #254b35;
   --surface: #F3EFE3;

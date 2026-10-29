@@ -13,7 +13,7 @@
   .top[open] { transform: translateY(-6px); }
   .sheet[open]::backdrop { background-color: transparent; }
 }
-.heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
+.heading { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
 .heading h2 { font: 400 28px/1.2 var(--font-editorial); }
 .top .heading { position: relative; justify-content: flex-end; margin: 0; }
 .top .heading h2 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }

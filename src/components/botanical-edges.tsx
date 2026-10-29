@@ -1,7 +1,7 @@
 import Image from "next/image";
 import styles from "./botanical-edges.module.css";
 
-type BotanicalPlacement = "header" | "home-hero" | "featured" | "banner" | "story";
+type BotanicalPlacement = "header" | "home-hero" | "featured" | "banner" | "story" | "menu-top" | "menu";
 
 type BotanicalAsset = { src: string; width: number; height: number };
 type BotanicalPair = { left: BotanicalAsset; right: BotanicalAsset };
@@ -27,6 +27,14 @@ const assets: Record<BotanicalPlacement, BotanicalPair> = {
     left: { src: "/images/botanical/botanical-editorial-left.webp", width: 1024, height: 683 },
     right: { src: "/images/botanical/botanical-editorial-right-kurinji.webp", width: 1024, height: 683 },
   },
+  menu: {
+    left: { src: "/images/botanical/botanical-editorial-left.webp", width: 1024, height: 683 },
+    right: { src: "/images/botanical/botanical-categories-right-kurinji.webp", width: 1024, height: 683 },
+  },
+  "menu-top": {
+    left: { src: "/images/botanical/botanical-home-hero-left-refined.webp", width: 1327, height: 1186 },
+    right: { src: "/images/botanical/botanical-home-hero-right-refined.webp", width: 1327, height: 1186 },
+  },
 };
 
 /** Section-specific transparent foliage; each composition has its own silhouette. */
@@ -38,6 +46,8 @@ export function BotanicalEdges({ placement }: { placement: BotanicalPlacement })
     featured: "32vw",
     banner: "28vw",
     story: "30vw",
+    "menu-top": "23vw",
+    menu: "36vw",
   }[placement];
   const narrowMobileSize = {
     header: "24vw",
@@ -45,8 +55,10 @@ export function BotanicalEdges({ placement }: { placement: BotanicalPlacement })
     featured: "35vw",
     banner: "28vw",
     story: "33vw",
+    "menu-top": "26vw",
+    menu: "40vw",
   }[placement];
-  const desktopSize = placement === "header" || placement === "home-hero" ? "12vw" : "18vw";
+  const desktopSize = placement === "header" || placement === "home-hero" ? "12vw" : placement === "menu-top" ? "14vw" : "18vw";
   const sizes = `(max-width: 359px) ${narrowMobileSize}, (max-width: 767px) ${mobileSize}, ${desktopSize}`;
   return (
     <span className={`${styles.edges} ${styles[placement]}`} aria-hidden="true">
