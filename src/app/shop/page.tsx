@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 import Link from "next/link";
 import { ProductGrid } from "@/components/product-grid";
 import { BotanicalEdges } from "@/components/botanical-edges";
@@ -27,9 +27,19 @@ const categoryCopy: Record<string, { heading: string; body: string }> = {
 };
 
 function ShopBanner({ category, image, mobileImage, copy, preview }: { category: string; image: ShopifyImage | null; mobileImage: ShopifyImage | null; copy: { eyebrow?: string; heading?: string; body?: string; altText?: string } | null; preview: boolean }) {
+  const alt = copy?.altText || image?.altText || "";
+  const mobileImageProps = mobileImage ? getImageProps({
+    src: mobileImage.url,
+    alt,
+    width: mobileImage.width ?? 1600,
+    height: mobileImage.height ?? 900,
+    quality: 85,
+    sizes: "100vw",
+  }).props : null;
+
   return <header className={styles.banner}>
     {image && <div className={styles.media}>
-      <picture className={styles.picture}>{mobileImage && <source media="(max-width: 599px)" srcSet={mobileImage.url} />}<Image src={image.url} alt={copy?.altText || image.altText || ""} fill priority sizes="100vw" /></picture>
+      <picture className={styles.picture}>{mobileImageProps && <source media="(max-width: 599px)" srcSet={mobileImageProps.srcSet} sizes="100vw" />}<Image src={image.url} alt={alt} fill quality={85} fetchPriority="high" loading="eager" sizes="100vw" /></picture>
       <span className={styles.fade} aria-hidden="true" />
       {preview && image.url.includes("preview-") && <span className={styles.disclosure}>Illustrative concept imagery</span>}
     </div>}

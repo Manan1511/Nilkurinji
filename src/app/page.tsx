@@ -7,7 +7,7 @@ import { MobileContactCard } from "@/components/site-footer";
 import { BotanicalEdges } from "@/components/botanical-edges";
 import { BrandMark } from "@/components/brand-mark";
 import { ProductCard } from "@/components/product-card";
-import { getCollection, getProducts } from "@/lib/shopify/catalog";
+import { getProducts } from "@/lib/shopify/catalog";
 import { DRAFT_HOMEPAGE_CONTENT, getHomepageContent } from "@/lib/shopify/content";
 import { getStorefrontMode } from "@/lib/shopify/mode";
 import { isTeaProduct } from "@/lib/catalog-state";
@@ -17,7 +17,7 @@ import styles from "@/components/home/home.module.css";
 import type { Metadata } from "next";
 import type { CSSProperties } from "react";
 import { getEnabledCategoryHandles } from "@/lib/shopify/shop-category";
-import type { StorefrontCollection, StorefrontProduct } from "@/lib/shopify/types";
+import type { StorefrontProduct } from "@/lib/shopify/types";
 
 export const revalidate = 60;
 export const metadata: Metadata = { alternates: { canonical: "/" } };
@@ -29,7 +29,7 @@ const FALLBACK_HERO = {
   height: 768,
 };
 
-const PREVIEW_CATEGORY_CUTOUTS: Record<string, string> = {
+const CATEGORY_CUTOUTS: Record<string, string> = {
   tea: "/images/category-icon-tea-kurinji.webp",
   "tea-bags": "/images/category-icon-tea-bags-kurinji.webp",
   rice: "/images/category-icon-rice.png",
@@ -50,12 +50,7 @@ function featuredProducts(products: StorefrontProduct[]): StorefrontProduct[] {
   return selected.slice(0, 4);
 }
 
-async function categoryCollections(): Promise<Map<string, StorefrontCollection | null>> {
-  const results = await Promise.all(CATEGORIES.map(async ({ handle }) => [handle, await getCollection(handle)] as const));
-  return new Map(results.map(([handle, result]) => [handle, result.source === "unavailable" ? null : result.data]));
-}
-
-function HomeCategories({ collections, enabled }: { collections: Map<string, StorefrontCollection | null>; enabled: string[] }) {
+function HomeCategories({ enabled }: { enabled: string[] }) {
   const categories = CATEGORIES.filter((category) => enabled.includes(category.handle));
   if (!categories.length) return null;
   return <section className={styles.categories} aria-labelledby="home-categories-heading">
@@ -66,16 +61,12 @@ function HomeCategories({ collections, enabled }: { collections: Map<string, Sto
     </div>
     <nav className={styles.categoryRail} aria-label="Shop by category" style={{ "--category-count": categories.length, "--category-rail-width": `${categories.length * 188}px`, "--category-mobile-width": `${categories.length * 128}px` } as CSSProperties}>
       {categories.map((category) => {
-        const image = collections.get(category.handle)?.image;
-        const backdrop = image?.url;
-        const cutout = backdrop ? undefined : PREVIEW_CATEGORY_CUTOUTS[category.handle];
-        const hasImage = Boolean(backdrop || cutout);
+        const cutout = CATEGORY_CUTOUTS[category.handle];
         return <Link href={category.href} className={styles.categoryItem} key={category.handle}>
-          {hasImage ? <span className={styles.categoryArt}>
+          {cutout ? <span className={styles.categoryArt}>
             <span className={styles.categoryMedallion} aria-hidden="true">
-              {backdrop && <Image src={backdrop} alt="" fill sizes="(max-width: 599px) 76px, 104px" />}
             </span>
-            {cutout && <Image className={styles.categoryCutout} src={cutout} alt="" width={160} height={160} sizes="(max-width: 599px) 104px, 140px" />}
+            <Image className={styles.categoryCutout} src={cutout} alt="" width={160} height={160} quality={85} sizes="(max-width: 599px) 112px, 140px" />
           </span> : <span className={styles.categoryImageFallback}><Flower2 aria-hidden="true" /></span>}
           <span className={styles.categoryLabel}>{category.label}</span>
         </Link>;
@@ -103,7 +94,6 @@ export default async function HomePage() {
   const [catalog, homepage, enabledCategories] = await Promise.all([getProducts(), getHomepageContent(), getEnabledCategoryHandles()]);
   const preview = getStorefrontMode().mode === "preview";
   const purchasingEnabled = isShopifyCheckoutEnabled();
-  const collections = await categoryCollections();
   const content = homepage.source === "unavailable" ? null : homepage.data;
   const products = catalog.source === "unavailable" ? [] : catalog.data;
   const heroImage = content?.heroImage ?? FALLBACK_HERO;
@@ -119,7 +109,7 @@ export default async function HomePage() {
       showProductPack={usesFallbackHero}
     />
 
-    <HomeCategories collections={collections} enabled={enabledCategories} />
+    <HomeCategories enabled={enabledCategories} />
 
     <section className={styles.featured} data-reveal="section" aria-labelledby="home-featured-heading">
       <BotanicalEdges placement="featured" />

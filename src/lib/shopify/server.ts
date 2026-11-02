@@ -15,6 +15,10 @@ export class ShopifyRequestError extends Error {
 
 export function getBuyerIp(headers: Headers): string | undefined {
   const candidates = [
+    // Netlify exposes its trusted client address separately from the
+    // user-controlled X-Forwarded-For chain. SITE_NAME is available in
+    // Netlify Functions at runtime, unlike its build-only NETLIFY flag.
+    ...(process.env.SITE_NAME ? [headers.get("x-nf-client-connection-ip")] : []),
     // Vercel overwrites this value at the edge, so clients cannot supply an
     // arbitrary address to Shopify's private Storefront API.
     headers.get("x-vercel-forwarded-for"),

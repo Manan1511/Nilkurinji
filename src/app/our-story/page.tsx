@@ -25,7 +25,7 @@ export default async function OurStoryPage() {
         <a className="button button--dark" href="#story">Read our story <span aria-hidden="true">↓</span></a>
       </div>
       <figure className={styles.heroPhoto}>
-        {preview && <Image src="/images/tea-hero-editorial.webp" alt="Illustrative tea and landscape concept imagery" fill priority sizes="(max-width: 767px) 100vw, 55vw" />}
+        {preview && <Image src="/images/tea-hero-editorial.webp" alt="Illustrative tea and landscape concept imagery" fill quality={85} preload sizes="(max-width: 767px) 100vw, 55vw" />}
         {preview && <figcaption>Illustrative concept imagery</figcaption>}
       </figure>
     </header>
@@ -37,8 +37,8 @@ export default async function OurStoryPage() {
         <Link href="/shop" className="text-link">Explore the shop</Link>
       </div>
       <div className={styles.collage} aria-label={preview ? "Illustrative Nilkurinji concept imagery" : undefined}>
-        {preview && <Image className={styles.photoOne} src="/images/preview-about-leaves.png" alt="Illustrative tea leaf concept image" width={640} height={800} />}
-        {preview && <Image className={styles.photoTwo} src="/images/tea-hero-editorial.webp" alt="Illustrative tea landscape concept image" width={900} height={650} />}
+        {preview && <Image className={styles.photoOne} src="/images/preview-about-leaves.png" alt="Illustrative tea leaf concept image" width={640} height={800} quality={85} sizes="(max-width: 767px) 48vw, 270px" />}
+        {preview && <Image className={styles.photoTwo} src="/images/tea-hero-editorial.webp" alt="Illustrative tea landscape concept image" width={900} height={650} quality={85} sizes="(max-width: 767px) 48vw, 260px" />}
         {preview && <span className={styles.collageNote}>Concept imagery</span>}
       </div>
     </section>

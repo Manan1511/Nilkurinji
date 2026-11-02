@@ -72,10 +72,10 @@ export function HomeReviews({ products, preview }: { products: StorefrontProduct
 
   return <section className={styles.section} aria-labelledby="home-reviews-heading">
     <span className={styles.foliage} aria-hidden="true">
-      <Image className={styles.leafTopLeft} src="/images/botanical/botanical-editorial-left.webp" alt="" width={1024} height={683} sizes="(max-width: 599px) 35vw, 180px" />
-      <Image className={styles.leafTopRight} src="/images/botanical/botanical-editorial-right-kurinji.webp" alt="" width={1024} height={683} sizes="(max-width: 599px) 35vw, 180px" />
-      <Image className={styles.leafBottomLeft} src="/images/botanical/botanical-categories-left.webp" alt="" width={683} height={1024} sizes="(max-width: 599px) 38vw, 180px" />
-      <Image className={styles.leafBottomRight} src="/images/botanical/botanical-categories-right-kurinji.webp" alt="" width={1024} height={683} sizes="(max-width: 599px) 42vw, 190px" />
+      <Image className={styles.leafTopLeft} src="/images/botanical/botanical-editorial-left.webp" alt="" width={1024} height={683} quality={85} sizes="(max-width: 599px) clamp(115px, 36vw, 155px), 190px" />
+      <Image className={styles.leafTopRight} src="/images/botanical/botanical-editorial-right-kurinji.webp" alt="" width={1024} height={683} quality={85} sizes="(max-width: 599px) clamp(115px, 36vw, 155px), 190px" />
+      <Image className={styles.leafBottomLeft} src="/images/botanical/botanical-categories-left.webp" alt="" width={683} height={1024} quality={85} sizes="(max-width: 599px) clamp(115px, 36vw, 155px), 190px" />
+      <Image className={styles.leafBottomRight} src="/images/botanical/botanical-categories-right-kurinji.webp" alt="" width={1024} height={683} quality={85} sizes="(max-width: 599px) clamp(115px, 36vw, 155px), 190px" />
     </span>
     <div className={styles.inner}>
       <header className={styles.heading}>
@@ -100,7 +100,7 @@ export function HomeReviews({ products, preview }: { products: StorefrontProduct
               {review.date && <time dateTime={review.date}>{new Intl.DateTimeFormat("en-IN", { dateStyle: "medium" }).format(new Date(`${review.date}T00:00:00`))}</time>}
             </div>
             </div>
-            <div className={styles.photo}><Image src={photo} alt="" fill sizes="(max-width: 599px) 32vw, 180px" /></div>
+            <div className={styles.photo}><Image src={photo} alt="" fill sizes="(max-width: 359px) 100px, (max-width: 599px) calc((100vw - 40px) * 0.35), 250px" /></div>
           </article>;
         })}
       </ReviewRail> : <p className={styles.empty}>Approved customer reviews will appear here when available.</p>}

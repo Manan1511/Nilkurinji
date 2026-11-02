@@ -14,7 +14,7 @@ export function ArticlePage({ article, sectionTitle }: { article: StorefrontArti
       {article.excerpt && <p className={styles.articleExcerpt}>{article.excerpt}</p>}
       <p className={styles.byline}>{article.author && <span>{article.author}</span>}{article.author && article.publishedAt && <span aria-hidden="true"> · </span>}{article.publishedAt && <time dateTime={article.publishedAt}>{formatDate(article.publishedAt)}</time>}</p>
     </header>
-    {article.image && <figure className={styles.articleImage}><Image src={article.image.url} alt={article.image.altText || ""} fill priority sizes="(max-width: 767px) 100vw, 80vw" /></figure>}
+    {article.image && <figure className={styles.articleImage}><Image src={article.image.url} alt={article.image.altText || article.title} fill quality={85} preload sizes="(max-width: 767px) 100vw, 80vw" /></figure>}
     {body ? <div className={styles.articleBody} dangerouslySetInnerHTML={{ __html: body }} /> : <p className={styles.notice}>This article is not available yet.</p>}
     <footer className={styles.articleFooter}><Link href={`/${article.blogHandle}`} className="text-link">Back to {sectionTitle}</Link></footer>
   </article>;

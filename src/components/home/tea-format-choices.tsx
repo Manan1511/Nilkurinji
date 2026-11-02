@@ -46,6 +46,7 @@ export function TeaFormatChoices({ teaImage, teaBagsImage }: { teaImage: Shopify
             alt={format.image.altText || format.alt}
             width={format.image.width ?? 1254}
             height={format.image.height ?? 1254}
+            quality={85}
             sizes="(max-width: 359px) 88vw, (max-width: 599px) 43vw, 40vw"
           /> : <span className={styles.formatFallback} aria-hidden="true">{format.title}</span>}
         </div>

@@ -6,7 +6,9 @@ const nextConfig: NextConfig = {
   turbopack: { root: process.cwd() },
   images: {
     qualities: [75, 85],
-    remotePatterns: [{ protocol: "https", hostname: "cdn.shopify.com" }],
+    formats: ["image/avif", "image/webp"],
+    localPatterns: [{ pathname: "/images/**" }],
+    remotePatterns: [{ protocol: "https", hostname: "cdn.shopify.com", pathname: "/s/files/**" }],
   },
   async redirects() {
     return [{ source: "/wishlist", destination: "/shop", permanent: true }];

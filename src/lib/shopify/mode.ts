@@ -9,7 +9,11 @@ const SHOP_DOMAIN_PATTERN = /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.myshopify\.com$/i
 const API_VERSION_PATTERN = /^20\d{2}-(01|04|07|10)$/;
 
 export function resolveStorefrontMode(env: Environment): StorefrontMode {
-  if (env.SHOPIFY_MODE?.trim().toLowerCase() !== "live") return { mode: "preview" };
+  const requestedMode = env.SHOPIFY_MODE?.trim().toLowerCase();
+  if (requestedMode === "preview" || (!requestedMode && env.NODE_ENV !== "production")) return { mode: "preview" };
+  if (requestedMode && requestedMode !== "live") {
+    return { mode: "unavailable", reason: "SHOPIFY_MODE must be set to live or preview." };
+  }
 
   const storeDomain = env.SHOPIFY_STORE_DOMAIN?.trim().toLowerCase() ?? "";
   const apiVersion = env.SHOPIFY_API_VERSION?.trim() ?? "";

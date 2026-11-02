@@ -19,7 +19,7 @@ export function BlogLanding({ title, blog, landing, previewImage }: Props) {
 
   return <div className={styles.page}>
     <header className={styles.hero}>
-      {image && <Image src={image} alt={content?.altText || (blog.source === "preview" ? "Illustrative Nilkurinji concept imagery" : "")} fill sizes="100vw" priority className={styles.heroImage} />}
+      {image && <Image src={image} alt={content?.altText || (blog.source === "preview" ? "Illustrative Nilkurinji concept imagery" : "")} fill quality={85} sizes="100vw" preload className={styles.heroImage} />}
       <BotanicalEdges placement="banner" />
       <div className={styles.heroCopy}>
         <p className={styles.eyebrow}>NILKURINJI / {title.toUpperCase()}</p>

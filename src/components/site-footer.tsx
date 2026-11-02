@@ -8,7 +8,12 @@ import type { SocialLink } from "@/lib/shopify/social-links";
 import styles from "./site-footer.module.css";
 
 export function MobileContactCard() {
+  const preview = getStorefrontMode().mode === "preview";
+  const image = preview ? "/images/preview-hero-home-kurinji.webp" : "/images/nilkurinji-hero-elaichi-mobile.webp";
+
   return <div className={styles.mobileFeature}>
+    <Image className={styles.mobileFeatureImage} src={image} alt="" fill quality={85} sizes="(max-width: 359px) calc(100vw - 32px), (max-width: 767px) calc(100vw - 40px), 0px" />
+    <span className={styles.mobileFeatureScrim} aria-hidden="true" />
     <h2>Get in touch</h2>
     <p>Questions about a product or order?</p>
     <Link href="/contact">Contact Nilkurinji <ArrowUpRight size={16} aria-hidden="true" /></Link>
