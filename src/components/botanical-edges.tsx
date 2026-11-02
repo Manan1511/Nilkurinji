@@ -37,6 +37,18 @@ const assets: Record<BotanicalPlacement, BotanicalPair> = {
   },
 };
 
+/** Pale background branches add depth to the menu without obscuring its links. */
+export function MenuBackgroundFoliage() {
+  return <span className={`${styles.edges} ${styles.menuBackground}`} aria-hidden="true">
+    <Image className={styles.backgroundLeft} src="/images/botanical/botanical-categories-left.webp" alt="" width={683} height={1024} sizes="55vw" />
+    <Image className={styles.backgroundRight} src="/images/botanical/botanical-editorial-right-kurinji.webp" alt="" width={1024} height={683} sizes="48vw" />
+    <Image className={styles.backgroundRightLower} src="/images/botanical/botanical-categories-right-kurinji.webp" alt="" width={1024} height={683} sizes="48vw" />
+    <Image className={styles.backgroundLeftUpper} src="/images/botanical/botanical-editorial-left.webp" alt="" width={1024} height={683} sizes="45vw" />
+    <Image className={styles.backgroundMidLeft} src="/images/botanical/botanical-header-left-refined.webp" alt="" width={1433} height={1098} sizes="45vw" />
+    <Image className={styles.backgroundMidRight} src="/images/botanical/botanical-header-right-refined.webp" alt="" width={1350} height={1165} sizes="50vw" />
+  </span>;
+}
+
 /** Section-specific transparent foliage; each composition has its own silhouette. */
 export function BotanicalEdges({ placement }: { placement: BotanicalPlacement }) {
   const pair = assets[placement];

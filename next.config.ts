@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   turbopack: { root: process.cwd() },
   images: {
+    qualities: [75, 85],
     remotePatterns: [{ protocol: "https", hostname: "cdn.shopify.com" }],
   },
   async redirects() {

@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import { CATEGORIES } from "@/lib/site-config";
+import { CATEGORIES, DEFAULT_CATEGORY_HANDLES } from "@/lib/site-config";
 import { getStorefrontMode } from "@/lib/shopify/mode";
 import { SHOP_CATEGORY_BANNER_QUERY } from "@/lib/shopify/queries";
 import { getBuyerIp, shopifyQuery } from "@/lib/shopify/server";
@@ -19,6 +19,25 @@ type RawCategoryField = {
   value: string | null;
   reference?: { image?: ShopifyImage | null; fields?: RawCategoryField[] } | null;
 };
+
+/** Category metaobjects can override the launch defaults with an enabled boolean. */
+export async function getEnabledCategoryHandles(): Promise<string[]> {
+  const mode = getStorefrontMode();
+  if (mode.mode !== "live") return [...DEFAULT_CATEGORY_HANDLES];
+  const results = await Promise.all(CATEGORIES.map(async ({ handle }) => {
+    try {
+      const result = await shopifyQuery<{ metaobject: { fields: RawCategoryField[] } | null }>(
+        SHOP_CATEGORY_BANNER_QUERY, { handle },
+        { buyerIp: getBuyerIp(await headers()), tags: [`shopify-category-${handle}`] },
+      );
+      const value = result.metaobject?.fields.find((field) => field.key === "enabled")?.value;
+      return value === "true" ? handle : value === "false" ? null : DEFAULT_CATEGORY_HANDLES.includes(handle) ? handle : null;
+    } catch {
+      return DEFAULT_CATEGORY_HANDLES.includes(handle) ? handle : null;
+    }
+  }));
+  return results.filter((handle): handle is NonNullable<typeof handle> => handle !== null);
+}
 
 export function normalizeShopCategoryBanner(fields: RawCategoryField[]): ShopCategoryBanner | null {
   const categoryFields = new Map(fields.map((field) => [field.key, field]));

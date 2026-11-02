@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { SlidersHorizontal, X } from "lucide-react";
-import { CATEGORIES } from "@/lib/site-config";
+import { CATEGORIES, DEFAULT_CATEGORY_HANDLES } from "@/lib/site-config";
 import { ProductCard } from "@/components/product-card";
 import { ModalSheet } from "@/components/storefront/modal-sheet";
 import { useCompactViewport } from "@/hooks/use-compact-viewport";
@@ -19,7 +19,7 @@ function selectProducts(products: StorefrontProduct[], state: CatalogState): Sto
   if (state.sort === "price-asc" || state.sort === "price-desc") selected.sort((a,b) => { const left = priceOf(a), right = priceOf(b); if (!Number.isFinite(left)) return Number.isFinite(right) ? 1 : 0; if (!Number.isFinite(right)) return -1; return state.sort === "price-asc" ? left - right : right - left; });
   return selected;
 }
-export function ProductGrid({ products, emptyMessage, initialCategory = "all", showCategoryNavigation = true, showFilters = true, showToolbar = true, purchasingEnabled = false, facetGroups, topFilters }: { products: StorefrontProduct[]; emptyMessage: string; initialCategory?: string; allowCategoryFilter?: boolean; showCategoryNavigation?: boolean; showFilters?: boolean; showToolbar?: boolean; purchasingEnabled?: boolean; facetGroups?: ProductFilterGroup[]; topFilters?: ProductTopFilter[]; cardVariant?: "standard" | "collection"; shopLayout?: boolean }) {
+export function ProductGrid({ products, emptyMessage, initialCategory = "all", showCategoryNavigation = true, showFilters = true, showToolbar = true, purchasingEnabled = false, facetGroups, topFilters, enabledCategories = DEFAULT_CATEGORY_HANDLES }: { products: StorefrontProduct[]; emptyMessage: string; initialCategory?: string; allowCategoryFilter?: boolean; showCategoryNavigation?: boolean; showFilters?: boolean; showToolbar?: boolean; purchasingEnabled?: boolean; facetGroups?: ProductFilterGroup[]; topFilters?: ProductTopFilter[]; cardVariant?: "standard" | "collection"; shopLayout?: boolean; enabledCategories?: string[] }) {
   const [state, setState] = useState<CatalogState>(() => ({ ...emptyCatalogState(), category: initialCategory }));
   const [draft, setDraft] = useState<CatalogState>(emptyCatalogState);
   const [open, setOpen] = useState(false);
@@ -28,7 +28,7 @@ export function ProductGrid({ products, emptyMessage, initialCategory = "all", s
   const groups = useMemo(() => (facetGroups ?? buildCatalogFacetGroups(products, state.category)).filter((group) => group.options.length), [products, facetGroups, state.category]);
   const tabs = useMemo(() => (topFilters ?? []).filter((tab) => tab.value === "all" || products.some((product) => product.tags.includes(tab.value))), [topFilters, products]);
   const hasPrice = products.some((product) => Number.isFinite(priceOf(product)));
-  const config = useMemo(() => ({ categories: CATEGORIES.map((item) => item.handle), productTypes: [], priceBands: hasPrice ? ["under-300", "300-499", "500-plus"] : [], facets: [...groups.map((group) => ({ id: group.id, values: group.options.map((item) => item.value) })), ...(tabs.length ? [{ id: "type", values: tabs.filter((tab) => tab.value !== "all").map((tab) => tab.value) }] : [])] }), [hasPrice, groups, tabs]);
+  const config = useMemo(() => ({ categories: enabledCategories, productTypes: [], priceBands: hasPrice ? ["under-300", "300-499", "500-plus"] : [], facets: [...groups.map((group) => ({ id: group.id, values: group.options.map((item) => item.value) })), ...(tabs.length ? [{ id: "type", values: tabs.filter((tab) => tab.value !== "all").map((tab) => tab.value) }] : [])] }), [enabledCategories, hasPrice, groups, tabs]);
   useEffect(() => { const sync = () => setState(parseCatalogQuery(new URLSearchParams(window.location.search), config)); sync(); window.addEventListener("popstate", sync); return () => window.removeEventListener("popstate", sync); }, [config]);
   useEffect(() => { const media = window.matchMedia?.("(max-width: 1023px)"); const close = () => setOpen(false); media?.addEventListener("change", close); return () => media?.removeEventListener("change", close); }, []);
   const commit = (next: CatalogState) => { setState(next); const params = writeCatalogQuery(new URLSearchParams(window.location.search), next); const query = params.toString(); window.history.replaceState(window.history.state, "", `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`); };
@@ -53,7 +53,7 @@ export function ProductGrid({ products, emptyMessage, initialCategory = "all", s
     </div>;
   }
   return <div className={styles.catalog}>
-    {showCategoryNavigation && <nav className={styles.categories} aria-label="Shop categories"><Link href="/shop" aria-current={state.category === "all" ? "page" : undefined}>All</Link>{CATEGORIES.map((item) => <Link href={item.href} key={item.handle} aria-current={state.category === item.handle ? "page" : undefined}>{item.label}</Link>)}</nav>}
+    {showCategoryNavigation && <nav className={styles.categories} aria-label="Shop categories"><Link href="/shop" aria-current={state.category === "all" ? "page" : undefined}>All</Link>{CATEGORIES.filter((item) => enabledCategories.includes(item.handle)).map((item) => <Link href={item.href} key={item.handle} aria-current={state.category === item.handle ? "page" : undefined}>{item.label}</Link>)}</nav>}
     {showToolbar && <div className={styles.toolbar}><div className={styles.toolbarStart}>{showFilters && <button ref={trigger} className={styles.mobileFilter} type="button" aria-label="Open filters" aria-expanded={open && compact} aria-controls="catalog-filter-panel" onClick={() => { setDraft(state); setOpen(true); }}><SlidersHorizontal size={17} aria-hidden="true" />Filters</button>}<p>{visible.length} {visible.length === 1 ? "product" : "products"}</p>{active && <button className={styles.clear} type="button" onClick={() => commit(clearFilters(state))}>Clear filters</button>}</div><label className={styles.sort}>Sort by<select value={state.sort} onChange={(event) => commit({ ...state, sort: event.target.value as CatalogSort })}><option value="featured">Featured</option><option value="title-asc">Name, A to Z</option><option value="price-asc">Price, low to high</option><option value="price-desc">Price, high to low</option></select></label></div>}
     {activeChips.length > 0 && <div className={styles.activeFilters} aria-label="Active filters">{activeChips.map((chip) => <button key={`${chip.id}-${chip.value}`} type="button" aria-label={chip.ariaLabel} onClick={() => {
       if (chip.id === "price") commit({ ...state, priceBand: "all" });

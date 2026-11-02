@@ -21,7 +21,7 @@ export function ProductCard({ product, purchasingEnabled = false, variant = "sta
   return <article className={`${styles.card} ${variant === "featured" ? styles.featured : ""}`}>
     <div className={styles.frame}>
       <Link href={`/products/${product.handle}`} className={styles.imageLink} aria-label={`View ${product.title}`}>
-        {image ? <Image src={image.url} alt={image.altText || product.title} fill sizes={variant === "featured" ? "(max-width: 599px) 46vw, (max-width: 899px) 30vw, (max-width: 1199px) 25vw, 17vw" : "(max-width: 599px) 46vw, (max-width: 899px) 30vw, (max-width: 1199px) 23vw, 19vw"} className={styles.image} /> : <span className={styles.fallback}>Image coming soon</span>}
+        {image ? <Image src={image.url} alt={image.altText || product.title} fill quality={85} sizes={variant === "featured" ? "(max-width: 359px) 78vw, (max-width: 599px) 280px, (max-width: 899px) 32vw, (max-width: 1199px) 25vw, 20vw" : "(max-width: 359px) 90vw, (max-width: 599px) 46vw, (max-width: 899px) 32vw, (max-width: 1199px) 25vw, 20vw"} className={styles.image} /> : <span className={styles.fallback}>Image coming soon</span>}
       </Link>
     </div>
     <div className={styles.details}>
@@ -33,7 +33,7 @@ export function ProductCard({ product, purchasingEnabled = false, variant = "sta
       {!product.isPreview && purchasingEnabled && available ? product.variants.length > 1
         ? compact ? <Link href={`/products/${product.handle}`} className={styles.cardLinkIcon} aria-label={`Choose options for ${product.title}`}><ShoppingCart aria-hidden="true" /></Link> : <Link href={`/products/${product.handle}`} className={styles.link}>Choose options</Link>
         : canQuickAdd && compact ? <div className={styles.quickAdd}><QuickAddButton product={product} purchasingEnabled={purchasingEnabled} compact /></div> : <QuickAddButton product={product} purchasingEnabled={purchasingEnabled} />
-        : <Link href={`/products/${product.handle}`} className={styles.link}>View details{variant === "featured" && <ArrowRight size={14} aria-hidden="true" />}</Link>}
+        : <Link href={`/products/${product.handle}`} className={styles.link} aria-label={`View ${product.title}`}>View product <ArrowRight size={14} aria-hidden="true" /></Link>}
     </div>
   </article>;
 }

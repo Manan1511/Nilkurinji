@@ -39,11 +39,23 @@ function parseApprovedHowItsMade(content: string | null | undefined, approved: s
   return text;
 }
 
+const CLIENT_PRODUCT_IMAGES: Record<string, ShopifyImage> = {
+  "premium-tea": { url: "/images/client-supplied/premium-tea-1kg-back-label.jpg", altText: "Back label of Nilkurinji Premium Tea, 1 kg", width: 1448, height: 1086 },
+  "rose-tea": { url: "/images/client-supplied/rose-tea-campaign.jpg", altText: "Nilkurinji Rose Tea, 500 g, in a campaign image", width: 1448, height: 1086 },
+  "elaichi-tea": { url: "/images/client-supplied/elaichi-tea-500g-pack.jpg", altText: "Nilkurinji Elaichi Tea, 500 g, in a campaign image", width: 1448, height: 1086 },
+};
+
 export function normalizeProduct(raw: RawProduct): StorefrontProduct {
   const variants = raw.variants?.nodes ?? [];
-  const images = raw.images?.nodes?.length ? raw.images.nodes : raw.featuredImage ? [raw.featuredImage] : [];
+  const fallbackImage = CLIENT_PRODUCT_IMAGES[raw.handle] ?? null;
+  const images = raw.images?.nodes?.length ? raw.images.nodes : raw.featuredImage ? [raw.featuredImage] : fallbackImage ? [fallbackImage] : [];
   const minVariantPrice = raw.priceRange?.minVariantPrice ?? variants[0]?.price ?? null;
   const maxVariantPrice = raw.priceRange?.maxVariantPrice ?? minVariantPrice;
+  const collectionHandles = raw.collections?.nodes?.map(({ handle }) => handle) ?? [];
+  // Imported products may have a Shopify product type before category collections are configured.
+  if (raw.productType?.trim().toLowerCase() === "tea" && !collectionHandles.some((handle) => handle === "tea" || handle === "tea-bags")) {
+    collectionHandles.push("tea");
+  }
 
   return {
     id: raw.id,
@@ -63,7 +75,7 @@ export function normalizeProduct(raw: RawProduct): StorefrontProduct {
       quantityAvailable: variant.quantityAvailable ?? null,
     })),
     priceRange: minVariantPrice && maxVariantPrice ? { minVariantPrice, maxVariantPrice } : null,
-    collectionHandles: raw.collections?.nodes?.map(({ handle }) => handle) ?? [],
+    collectionHandles,
     faqs: parseFaqs(raw.faqs?.value),
     approvedReviews: parseApprovedReviews(raw.reviews?.value),
     teaProfile: parseTeaProfile(raw.teaProfile?.value),

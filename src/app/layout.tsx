@@ -12,6 +12,7 @@ import { DEFAULT_DESCRIPTION, SITE_NAME } from "@/lib/site-config";
 import { getHomepageContent } from "@/lib/shopify/content";
 import { getStorefrontMode } from "@/lib/shopify/mode";
 import { isIndexableSite, isShopifyCheckoutEnabled } from "@/lib/shopify/checkout-config";
+import { getEnabledCategoryHandles } from "@/lib/shopify/shop-category";
 
 const displayFont = Libre_Baskerville({
   subsets: ["latin"],
@@ -35,8 +36,11 @@ export async function generateMetadata(): Promise<Metadata> {
   const base = metadataBase();
   const homepage = await getHomepageContent();
   const image = mode.mode === "preview"
-    ? "/images/preview-hero-home-kurinji.webp"
+    ? "/images/client-supplied/nilkurinji-kurinji-hills-artwork.jpg"
     : homepage.source === "shopify" ? homepage.data.heroImage?.url : undefined;
+  const imageAlt = mode.mode === "preview"
+    ? "Nilkurinji brand artwork over a hillside with blue-purple flowers."
+    : "Nilkurinji homepage";
   return {
     ...(base ? { metadataBase: base } : {}),
     title: { default: `${SITE_NAME} · Tea, tea bags and pantry`, template: `%s · ${SITE_NAME}` },
@@ -49,7 +53,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: SITE_NAME,
       title: `${SITE_NAME} · Tea, tea bags and pantry`,
       description: DEFAULT_DESCRIPTION,
-      ...(base && image ? { images: [{ url: image, alt: mode.mode === "preview" ? "Illustrative Nilkurinji tea concept artwork" : "Nilkurinji homepage" }] } : {}),
+      ...(base && image ? { images: [{ url: image, alt: imageAlt }] } : {}),
     },
     twitter: {
       card: image ? "summary_large_image" : "summary",
@@ -67,7 +71,7 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const settings = await getHomepageContent();
+  const [settings, enabledCategories] = await Promise.all([getHomepageContent(), getEnabledCategoryHandles()]);
   const socialLinks = settings.source === "unavailable" ? [] : settings.data.socialLinks;
   const notice = getStorefrontMode().mode !== "live" || !isShopifyCheckoutEnabled();
   return (
@@ -75,10 +79,10 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       <body data-notice={String(notice)}>
         <CartProvider>
           <a className="skip-link" href="#main-content">Skip to content</a>
-          <div className="site-shell"><StoreNotice /><SiteHeader /></div>
+          <div className="site-shell"><StoreNotice /><SiteHeader enabledCategories={enabledCategories} /></div>
           <RouteTransition>{children}</RouteTransition>
           <ScrollRevealObserver />
-          <SiteFooter socialLinks={socialLinks} />
+          <SiteFooter socialLinks={socialLinks} enabledCategories={enabledCategories} />
         </CartProvider>
       </body>
     </html>

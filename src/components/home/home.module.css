@@ -2,6 +2,8 @@
 .hero { position: relative; display: flex; align-items: center; height: 264px; min-height: 264px; isolation: isolate; background: var(--paper); }
 .heroMedia { position: absolute; z-index: -1; inset: 0; overflow: hidden; background: var(--paper); }
 .heroPhoto { object-fit: cover; object-position: 64% 57%; }
+.heroArtworkDesktop,.heroArtworkMobile { position: absolute; inset: 0; width: 100%; height: 100%; }
+.heroArtworkMobile { display: none; }
 .heroFade { position: absolute; inset: 0; background: linear-gradient(90deg, var(--paper) 0%, rgb(243 239 227 / 98%) 28%, rgb(243 239 227 / 82%) 40%, rgb(243 239 227 / 20%) 55%, transparent 67%); pointer-events: none; }
 .heroCopy { position: relative; z-index: 2; width: min(1536px,100%); padding: 18px 12.9%; margin-inline: auto; }
 .heroEyebrow,.eyebrow { color: var(--forest); font: 700 12px/1.5 var(--font-body); letter-spacing: .18em; text-transform: uppercase; }
@@ -10,7 +12,6 @@
 .heroStatus { width: fit-content; margin-top: 8px; color: var(--muted); font-size: 13px; line-height: 1.4; }
 .heroActions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
 .heroActions :global(.button) { min-height: 44px; padding-inline: 22px; }
-.heroDisclosure { position: absolute; right: 20px; bottom: 14px; z-index: 2; padding: 4px 8px; color: var(--paper); background: rgb(22 49 34 / 78%); font-size: 12px; line-height: 1.4; }
 
 .categories { position: relative; min-height: 240px; padding: 14px var(--page-gutter) 8px; overflow: hidden; isolation: isolate; border-bottom: 1px solid var(--rule); background: var(--paper); }
 .categoryHeading,.categoryRail { position: relative; z-index: 1; }
@@ -20,7 +21,7 @@
 .categoryHeading h2 { color: var(--ink); font: 400 clamp(1.55rem,2vw,1.9rem)/1.1 var(--font-editorial); letter-spacing: -.02em; }
 .headingRule { display: block; width: clamp(36px,5vw,64px); height: 1px; background: var(--brass); }
 .categoryHeading p { color: var(--muted); font-size: 13px; line-height: 1.45; }
-.categoryRail { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); width: min(940px,100%); margin: 12px auto 0; }
+.categoryRail { display: grid; grid-template-columns: repeat(var(--category-count, 5),minmax(0,1fr)); width: min(var(--category-rail-width, 940px),100%); margin: 12px auto 0; }
 .categoryItem { position: relative; display: flex; flex-direction: column; align-items: center; min-width: 0; min-height: 125px; color: var(--ink); text-decoration: none; }
 .categoryItem:not(:last-child)::after { position: absolute; top: 18px; right: 0; width: 1px; height: 48px; background: var(--rule); content: ""; }
 .categoryArt { position: relative; display: block; width: 118px; height: 108px; }
@@ -97,17 +98,18 @@
 @media (max-width: 599px) {
   .hero { display: flex; flex-direction: column; align-items: stretch; height: auto; min-height: 0; background: var(--paper); }
   .heroMedia { position: relative; z-index: 0; order: 2; height: auto; aspect-ratio: 16/9; }
+  .heroArtworkDesktop { display: none; }
+  .heroArtworkMobile { display: block; }
   .heroPhoto { object-position: 67% 56%; }
   .heroFade { display: none; }
   .heroCopy { order: 1; padding: 20px var(--page-gutter) 14px; }
   .heroCopy h1 { max-width: 14ch; margin-top: 8px; font-size: clamp(1.95rem,8.5vw,2.4rem); line-height: 1.08; }
   .heroDescription { max-width: 42ch; font-size: 15px; }
   .heroActions { margin-top: 10px; }
-  .heroDisclosure { right: 12px; bottom: 10px; }
   .categories { padding-block: 12px 12px; }
   .categoryHeading h2 { font-size: 1.55rem; }
   .categoryHeading p { max-width: 38ch; }
-  .categoryRail { grid-template-columns: repeat(5,128px); width: calc(100% + var(--page-gutter) * 2); padding-inline: var(--page-gutter); margin-left: calc(var(--page-gutter) * -1); overflow-x: auto; overscroll-behavior-inline: contain; scroll-snap-type: x mandatory; scrollbar-width: none; }
+  .categoryRail { grid-template-columns: repeat(var(--category-count, 5),128px); width: min(calc(var(--category-mobile-width, 640px) + var(--page-gutter) * 2), calc(100% + var(--page-gutter) * 2)); padding-inline: var(--page-gutter); margin-inline: auto; overflow-x: auto; overscroll-behavior-inline: contain; scroll-snap-type: x mandatory; scrollbar-width: none; }
   .categoryRail { margin-top: 8px; }
   .categoryRail::-webkit-scrollbar { display: none; }
   .categoryItem { scroll-snap-align: start; }

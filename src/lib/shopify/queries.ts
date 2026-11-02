@@ -18,7 +18,6 @@ export const PRODUCT_FIELDS = `
       id
       title
       availableForSale
-      quantityAvailable
       price { amount currencyCode }
       compareAtPrice { amount currencyCode }
       selectedOptions { name value }

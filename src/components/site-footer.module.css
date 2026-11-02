@@ -1,4 +1,5 @@
 .footer { color: var(--paper); background: var(--forest); }
+.mobileFeature { display: none; }
 .signature { position: relative; display: grid; grid-template-columns: 1.15fr 1.15fr 1fr 1fr; align-items: center; width: min(1536px,100%); min-height: 132px; padding: 20px var(--page-gutter); margin-inline: auto; isolation: isolate; }
 .signatureWithoutSocial { grid-template-columns: 1.15fr 1.15fr 1fr; }
 .botanical { position: absolute; z-index: 0; top: 50%; display: block; width: 84px; height: 72px; object-fit: contain; opacity: .72; transform: translateY(-50%); transform-origin: 50% 50%; animation: footer-leaf-sway 13s ease-in-out infinite; pointer-events: none; }
@@ -13,6 +14,20 @@
   0%,100% { rotate: 0deg; }
   32% { rotate: -.28deg; }
   68% { rotate: .2deg; }
+}
+@keyframes footer-leaf-sway-desktop {
+  0%,100% { rotate: 0deg; translate: 0 0; }
+  35% { rotate: 2.2deg; translate: 1px -.4px; }
+  70% { rotate: -1.55deg; translate: -1px .3px; }
+}
+@keyframes footer-leaf-sway-desktop-reverse {
+  0%,100% { rotate: 0deg; translate: 0 0; }
+  32% { rotate: -2deg; translate: -1px -.35px; }
+  68% { rotate: 1.4deg; translate: 1px .25px; }
+}
+@media (min-width: 768px) {
+  .botanical { animation-name: footer-leaf-sway-desktop; }
+  .botanicalRight { animation-name: footer-leaf-sway-desktop-reverse; }
 }
 .brand,.contact,.socialBlock,.signoff { position: relative; z-index: 1; min-height: 70px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-inline: 20px; text-align: center; }
 .contact,.socialBlock,.signoff { border-left: 1px solid var(--rule-dark); }
@@ -86,4 +101,35 @@
 @media (prefers-reduced-motion: reduce) {
   .botanical { animation: none; rotate: none; }
   .links a,.contact > a,.socials a { transition: none; }
+}
+
+@media (max-width: 767px) {
+  .footer { display: flex; flex-direction: column; color: var(--forest); background: var(--paper); }
+  .mobileFeature { display: flex; flex-direction: column; align-items: flex-start; margin: 28px var(--page-gutter) 20px; padding: 26px 38% 26px 22px; min-height: 170px; border-radius: 12px; color: var(--paper); background: linear-gradient(90deg, #163122 38%, transparent 100%), url('/images/preview-hero-home-kurinji.webp') center / cover; }
+  :global(body:has([data-homepage="true"])) .footer .mobileFeature { display: none; }
+  .mobileFeature h2 { font: 400 clamp(25px, 7vw, 34px)/1.1 var(--font-editorial); }
+  .mobileFeature p { margin-top: 10px; font-size: 13px; line-height: 1.5; }
+  .mobileFeature a { display: inline-flex; gap: 6px; align-items: center; min-height: 40px; margin-top: 12px; padding: 0 14px; border: 1px solid currentColor; border-radius: 999px; font-size: 13px; }
+  .links { order: 1; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border: 0; padding-block: 18px 24px; }
+  .links nav { padding-inline: 10px; border-left: 1px solid var(--rule); }
+  .links nav:first-child { padding-left: 0; border: 0; }
+  .links nav:last-child { grid-column: auto; }
+  .links h2 { color: var(--forest); font: 400 clamp(16px, 4.4vw, 21px)/1.2 var(--font-editorial); letter-spacing: 0; text-transform: none; }
+  .links ul { display: block; }
+  .links li a { min-height: 30px; color: var(--ink); font-size: 12px; }
+  .signature,.signatureWithoutSocial { order: 2; display: flex; flex-direction: column; justify-content: center; min-height: auto; padding: 12px var(--page-gutter); }
+  .signature .brand,.signatureWithoutSocial .brand { min-height: auto; padding: 0 16px; }
+  .logo,.descriptor { color: var(--forest); }
+  .signature .contact,.signature .signoff,.signature .botanical { display: none; }
+  .signature .socialBlock { display: flex; min-height: auto; padding: 12px 0 0; border: 0; }
+  .socialBlock h2 { color: var(--forest); }
+  .socials a { color: var(--forest); }
+  .bottom { order: 3; align-items: center; text-align: center; border: 0; color: var(--muted); padding-bottom: 24px; }
+  .bottom p:last-child { text-align: center; }
+}
+
+@media (max-width: 399px) {
+  .mobileFeature { padding: 26px 30% 26px 22px; }
+  .mobileFeature h2 { font-size: 22px; }
+  .mobileFeature a { padding-inline: 10px; font-size: 12px; }
 }

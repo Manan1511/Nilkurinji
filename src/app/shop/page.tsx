@@ -6,7 +6,7 @@ import { BotanicalEdges } from "@/components/botanical-edges";
 import { getProducts } from "@/lib/shopify/catalog";
 import { isShopifyCheckoutEnabled } from "@/lib/shopify/checkout-config";
 import { getStorefrontMode } from "@/lib/shopify/mode";
-import { getShopCategoryBanner } from "@/lib/shopify/shop-category";
+import { getEnabledCategoryHandles, getShopCategoryBanner } from "@/lib/shopify/shop-category";
 import type { ShopifyImage } from "@/lib/shopify/types";
 import { CATEGORIES } from "@/lib/site-config";
 import { getShopBannerImage } from "@/lib/shopify/shop-banner";
@@ -45,7 +45,8 @@ function ShopBanner({ category, image, mobileImage, copy, preview }: { category:
 export default async function ShopPage({ searchParams }: ShopProps) {
   const { category } = await searchParams;
   const requestedCategory = Array.isArray(category) ? category[0] : category;
-  const initialCategory = CATEGORIES.some((item) => item.handle === requestedCategory) ? requestedCategory! : "all";
+  const enabledCategories = await getEnabledCategoryHandles();
+  const initialCategory = requestedCategory && enabledCategories.includes(requestedCategory) ? requestedCategory : "all";
   const [result, bannerResult] = await Promise.all([
     getProducts(),
     getShopCategoryBanner(initialCategory),
@@ -56,6 +57,6 @@ export default async function ShopPage({ searchParams }: ShopProps) {
 
   return <>
     <ShopBanner category={initialCategory} image={bannerImage} mobileImage={bannerContent?.mobileImage ?? null} copy={bannerContent} preview={preview} />
-    {result.source === "unavailable" ? <div className={styles.notice} role="status"><p>Shop listings are temporarily unavailable.</p><Link href="/" className="button button--outline">Back to Nilkurinji home</Link></div> : <ProductGrid products={result.data} emptyMessage="The product range is being prepared." initialCategory={initialCategory} showCategoryNavigation purchasingEnabled={isShopifyCheckoutEnabled()} />}
+    {result.source === "unavailable" ? <div className={styles.notice} role="status"><p>Shop listings are temporarily unavailable.</p><Link href="/" className="button button--outline">Back to Nilkurinji home</Link></div> : <ProductGrid products={result.data} emptyMessage="The product range is being prepared." initialCategory={initialCategory} showCategoryNavigation purchasingEnabled={isShopifyCheckoutEnabled()} enabledCategories={enabledCategories} />}
   </>;
 }

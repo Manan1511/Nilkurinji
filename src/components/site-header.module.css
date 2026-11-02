@@ -22,7 +22,7 @@
 .navigation > a::after { position: absolute; inset: auto 0 2px; height: 1px; background: var(--forest); content: ""; transform: scaleX(0); transform-origin: left; transition: transform var(--motion-control) var(--ease-out); }
 .navigation > a:hover::after,.navigation > a:focus-visible::after,.navigation > a[aria-current="page"]::after { transform: scaleX(1); }
 .mobileNav { position: relative; z-index: 1; display: flex; flex-direction: column; }
-.mobileNav > a { display: flex; align-items: center; min-height: 50px; padding-block: 8px; border-bottom: 1px solid var(--rule); color: var(--ink); font: 400 23px/1.2 var(--font-editorial); text-decoration: none; }
+.mobileNav > a { display: flex; align-items: center; min-height: 53px; padding-block: 8px; border-bottom: 1px solid var(--rule); color: var(--ink); font: 400 clamp(24px, 6.4vw, 30px)/1.2 var(--font-editorial); text-decoration: none; }
 .mobileNav > a:hover { color: var(--forest); }
 @media (max-width: 1199px) and (min-width: 1024px) {
   .topRow { grid-template-columns: minmax(0,1fr) 220px minmax(0,1fr); gap: 12px; }

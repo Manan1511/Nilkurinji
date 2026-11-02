@@ -1,5 +1,11 @@
-import { describe, expect, it } from "vitest";
-import { normalizeShopCategoryBanner } from "@/lib/shopify/shop-category";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+vi.mock("next/headers", () => ({ headers: async () => new Headers() }));
+vi.mock("@/lib/shopify/mode", () => ({ getStorefrontMode: () => ({ mode: "live" }) }));
+vi.mock("@/lib/shopify/server", () => ({ shopifyQuery: vi.fn(), getBuyerIp: () => undefined }));
+import { getEnabledCategoryHandles, normalizeShopCategoryBanner } from "@/lib/shopify/shop-category";
+import { shopifyQuery } from "@/lib/shopify/server";
+
+beforeEach(() => vi.resetAllMocks());
 
 describe("Shop category banner content", () => {
   it("reads heading, copy, desktop/mobile media and accessible text from the Shopify metaobject", () => {
@@ -23,5 +29,27 @@ describe("Shop category banner content", () => {
 
   it("does not invent a banner when the Shopify entry has no usable content", () => {
     expect(normalizeShopCategoryBanner([])).toBeNull();
+  });
+});
+
+describe("category visibility", () => {
+  it("defaults to all categories when category entries are missing", async () => {
+    vi.mocked(shopifyQuery).mockResolvedValue({ metaobject: null });
+    expect(await getEnabledCategoryHandles()).toEqual(["tea", "tea-bags", "rice", "snacks", "other-foods"]);
+  });
+
+  it("honours explicit Shopify enabled and disabled values", async () => {
+    vi.mocked(shopifyQuery)
+      .mockResolvedValueOnce({ metaobject: { fields: [{ key: "enabled", value: "false" }] } })
+      .mockResolvedValueOnce({ metaobject: { fields: [{ key: "enabled", value: "true" }] } })
+      .mockResolvedValueOnce({ metaobject: { fields: [{ key: "enabled", value: "true" }] } })
+      .mockResolvedValueOnce({ metaobject: { fields: [{ key: "enabled", value: "false" }] } })
+      .mockResolvedValueOnce({ metaobject: null });
+    expect(await getEnabledCategoryHandles()).toEqual(["tea-bags", "rice"]);
+  });
+
+  it("uses defaults when Shopify is unavailable", async () => {
+    vi.mocked(shopifyQuery).mockRejectedValue(new Error("unavailable"));
+    expect(await getEnabledCategoryHandles()).toEqual(["tea", "tea-bags", "rice", "snacks", "other-foods"]);
   });
 });

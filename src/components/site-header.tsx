@@ -5,17 +5,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, Search, ShoppingBag, UserRound } from "lucide-react";
 import { BrandMark } from "@/components/brand-mark";
-import { BotanicalEdges } from "@/components/botanical-edges";
+import { BotanicalEdges, MenuBackgroundFoliage } from "@/components/botanical-edges";
 import { CartPanel } from "@/components/cart-panel";
 import { useStorefrontCart } from "@/components/cart-provider";
 import { SearchOverlay } from "@/components/search/search-overlay";
 import { ModalSheet } from "@/components/storefront/modal-sheet";
-import { PRIMARY_NAV } from "@/lib/site-config";
+import { DEFAULT_CATEGORY_HANDLES, PRIMARY_NAV } from "@/lib/site-config";
 import styles from "./site-header.module.css";
 
 type HeaderPanel = "menu" | "search" | "cart" | null;
 
-export function SiteHeader() {
+export function SiteHeader({ enabledCategories = DEFAULT_CATEGORY_HANDLES }: { enabledCategories?: string[] }) {
   const pathname = usePathname();
   const [panel, setPanel] = useState<HeaderPanel>(null);
   const [compact, setCompact] = useState(false);
@@ -128,8 +128,9 @@ export function SiteHeader() {
         />
       </Suspense>
 
-      <SearchOverlay open={panel === "search"} compact={compact} query={query} onQueryChange={setQuery} onClose={close} triggerRef={compact ? mobileSearchRef : desktopSearchRef} />
+      <SearchOverlay open={panel === "search"} compact={compact} query={query} onQueryChange={setQuery} onClose={close} triggerRef={compact ? mobileSearchRef : desktopSearchRef} enabledCategories={enabledCategories} />
       <ModalSheet open={panel === "menu" && compact} id="header-menu-panel" label="Menu" placement="left" size="menu" triggerRef={menuRef} onClose={close}>
+        <MenuBackgroundFoliage />
         <BotanicalEdges placement="menu-top" />
         <BotanicalEdges placement="menu" />
         <MobileNavigation onNavigate={close} />

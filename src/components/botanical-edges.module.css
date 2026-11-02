@@ -10,41 +10,43 @@
   transform-origin: var(--foliage-origin, 50% 82%);
   animation: foliage-sway var(--foliage-duration, 8.8s) ease-in-out infinite;
 }
-.edges .left { --foliage-duration: 8.4s; }
-.edges .right { --foliage-duration: 10.1s; animation-delay: -4.6s; }
+.edges .left { --foliage-duration: 7.8s; }
+.edges .right { --foliage-duration: 9.2s; animation-delay: -4.6s; }
 
 @keyframes foliage-sway {
   0%, 100% { rotate: 0deg; translate: 0 0; }
-  24% { rotate: .45deg; translate: .8px -.3px; }
-  53% { rotate: -.32deg; translate: -.7px .25px; }
-  79% { rotate: .2deg; translate: .4px -.1px; }
+  24% { rotate: 1.45deg; translate: 1.8px -.45px; }
+  53% { rotate: -1deg; translate: -1.4px .35px; }
+  79% { rotate: .52deg; translate: .8px -.15px; }
 }
 
-/* The hero cutout has cropped edges; keep its stem anchored and sway only a few pixels. */
+/* Keep the hero stem anchored while giving the broad branch a readable, slow sway. */
 @keyframes home-hero-left-sway {
   0%, 100% { rotate: 0deg; translate: 0 0; }
-  28% { rotate: .55deg; translate: .95px -.2px; }
-  62% { rotate: -.4deg; translate: -.8px .15px; }
-  83% { rotate: .22deg; translate: .45px 0; }
+  28% { rotate: 1.35deg; translate: 1.8px -.3px; }
+  62% { rotate: -.92deg; translate: -1.3px .2px; }
+  83% { rotate: .48deg; translate: .7px 0; }
 }
 
 @keyframes mobile-foliage-sway {
   0%, 100% { rotate: 0deg; translate: 0 0; }
-  30% { rotate: .82deg; translate: 1.9px -.4px; }
-  68% { rotate: -.58deg; translate: .7px .25px; }
+  28% { rotate: 1.08deg; translate: 2.6px -.45px; }
+  62% { rotate: -.78deg; translate: -1.5px .3px; }
+  84% { rotate: .36deg; translate: .8px -.1px; }
 }
 
 @keyframes mobile-foliage-sway-reverse {
   0%, 100% { rotate: 0deg; translate: 0 0; }
-  32% { rotate: -.72deg; translate: -1.8px -.3px; }
-  70% { rotate: .52deg; translate: -.6px .2px; }
+  30% { rotate: -.98deg; translate: -2.5px -.4px; }
+  66% { rotate: .72deg; translate: 1.4px .28px; }
+  86% { rotate: -.32deg; translate: -.7px -.1px; }
 }
 
 @keyframes mobile-home-hero-left-sway {
   0%, 100% { rotate: 0deg; translate: 0 0; }
-  28% { rotate: .88deg; translate: 2px -.35px; }
-  62% { rotate: -.62deg; translate: .7px .25px; }
-  83% { rotate: .34deg; translate: 1.5px 0; }
+  28% { rotate: 1.16deg; translate: 2.8px -.45px; }
+  62% { rotate: -.82deg; translate: -1.5px .3px; }
+  84% { rotate: .4deg; translate: 1px -.1px; }
 }
 
 /* Bleed header foliage beyond the paper edge so source-canvas cuts stay offscreen. */
@@ -65,7 +67,7 @@
   object-position: left center;
   transform: translateY(-50%);
   --foliage-origin: 2% 96%;
-  animation: home-hero-left-sway 11.2s ease-in-out infinite;
+  animation: home-hero-left-sway 9.8s ease-in-out infinite;
 }
 .home-hero .right { right: 0; object-position: right center; --foliage-origin: 98% 8%; }
 
@@ -86,6 +88,15 @@
 .menu { top: auto; bottom: 0; height: clamp(132px, 24vh, 190px); overflow: hidden; }
 .menu .left { left: 0; bottom: -18px; width: clamp(96px, 29vw, 126px); opacity: .22; --foliage-origin: 4% 96%; }
 .menu .right { right: 0; bottom: -14px; width: clamp(108px, 31vw, 136px); opacity: .26; --foliage-origin: 96% 12%; }
+
+/* A separate, faded layer sits behind the navigation and foreground branches. */
+.menuBackground img { filter: saturate(.45); opacity: .16; }
+.menuBackground .backgroundLeft { left: -65px; bottom: 5%; width: clamp(150px, 53vw, 220px); --foliage-origin: 0 90%; animation: mobile-foliage-sway 13s ease-in-out -2s infinite; }
+.menuBackground .backgroundRight { right: -50px; top: 21%; width: clamp(150px, 50vw, 200px); --foliage-origin: 100% 20%; animation: mobile-foliage-sway-reverse 15s ease-in-out -5s infinite; }
+.menuBackground .backgroundRightLower { right: -55px; bottom: 23%; width: clamp(145px, 48vw, 195px); --foliage-origin: 100% 75%; animation: mobile-foliage-sway 14s ease-in-out -8s infinite; }
+.menuBackground .backgroundLeftUpper { left: -75px; top: 1%; width: clamp(130px, 45vw, 180px); --foliage-origin: 0 10%; animation: mobile-foliage-sway-reverse 16s ease-in-out -3s infinite; }
+.menuBackground .backgroundMidLeft { left: -55px; top: 32%; width: clamp(140px, 45vw, 180px); --foliage-origin: 0 75%; animation: mobile-foliage-sway 15s ease-in-out -6s infinite; }
+.menuBackground .backgroundMidRight { right: -65px; top: 43%; width: clamp(145px, 48vw, 190px); --foliage-origin: 100% 25%; animation: mobile-foliage-sway-reverse 13s ease-in-out -9s infinite; }
 
 /* Offset each branch so the paired artwork moves like a light, uneven breeze. */
 .header .left { animation-delay: -2.4s; }
@@ -143,7 +154,7 @@
   .home-hero .left {
     top: auto;
     bottom: 0;
-    left: 0;
+    left: -16px;
     transform: none;
     --foliage-origin: 0 96%;
     animation-name: mobile-home-hero-left-sway;
@@ -151,7 +162,7 @@
   }
   .home-hero .right {
     top: 0;
-    right: 8px;
+    right: -16px;
     bottom: auto;
     width: clamp(112px, 31vw, 124px);
     object-position: right top;
@@ -191,8 +202,8 @@
   .header .left { left: -8px; }
   .header .right { right: -8px; }
   .home-hero .left,.home-hero .right { width: 112px; }
-  .home-hero .left { left: 0; }
-  .home-hero .right { right: 8px; width: 100px; }
+  .home-hero .left { left: -16px; }
+  .home-hero .right { right: -16px; width: 100px; }
   .featured .left,.featured .right { width: 112px; }
   .featured .left { top: 104px; left: -54px; }
   .featured .right { right: -36px; }
@@ -221,4 +232,14 @@
 
 @media (prefers-reduced-motion: reduce) {
   .edges img { animation: none; rotate: none; }
+  .menuBackground .backgroundLeft,.menuBackground .backgroundRight,.menuBackground .backgroundRightLower,.menuBackground .backgroundLeftUpper,.menuBackground .backgroundMidLeft,.menuBackground .backgroundMidRight { animation: none; rotate: none; }
+}
+
+@media (max-width: 767px) and (min-height: 561px) {
+  .menu-top { height: clamp(100px, 16vh, 155px); }
+  .menu-top .left { left: -12px; top: -24px; width: clamp(110px, 32vw, 150px); opacity: .7; }
+  .menu-top .right { right: -15px; top: -30px; width: clamp(110px, 32vw, 150px); opacity: .65; }
+  .menu { height: clamp(150px, 25vh, 220px); }
+  .menu .left { left: -12px; bottom: -18px; width: clamp(190px, 62vw, 270px); opacity: .72; }
+  .menu .right { right: -14px; bottom: -18px; width: clamp(190px, 62vw, 270px); opacity: .74; }
 }

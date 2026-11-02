@@ -2,15 +2,24 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { BrandMark } from "@/components/brand-mark";
-import { CATEGORIES } from "@/lib/site-config";
+import { CATEGORIES, DEFAULT_CATEGORY_HANDLES } from "@/lib/site-config";
 import { getStorefrontMode } from "@/lib/shopify/mode";
 import type { SocialLink } from "@/lib/shopify/social-links";
 import styles from "./site-footer.module.css";
 
-export function SiteFooter({ socialLinks = [] }: { socialLinks?: SocialLink[] }) {
+export function MobileContactCard() {
+  return <div className={styles.mobileFeature}>
+    <h2>Get in touch</h2>
+    <p>Questions about a product or order?</p>
+    <Link href="/contact">Contact Nilkurinji <ArrowUpRight size={16} aria-hidden="true" /></Link>
+  </div>;
+}
+
+export function SiteFooter({ socialLinks = [], enabledCategories = DEFAULT_CATEGORY_HANDLES }: { socialLinks?: SocialLink[]; enabledCategories?: string[] }) {
   const preview = getStorefrontMode().mode === "preview";
 
   return <footer className={styles.footer}>
+    <MobileContactCard />
     <div className={`${styles.signature} ${socialLinks.length ? "" : styles.signatureWithoutSocial}`}>
       <div className={styles.brand}>
         <Link href="/" aria-label="Nilkurinji home" className={styles.logo}>
@@ -40,7 +49,7 @@ export function SiteFooter({ socialLinks = [] }: { socialLinks?: SocialLink[] })
         <h2>Shop</h2>
         <ul>
           <li><Link href="/shop">Shop all</Link></li>
-          {CATEGORIES.map((category) => <li key={category.handle}><Link href={category.href}>{category.label}</Link></li>)}
+          {CATEGORIES.filter((category) => enabledCategories.includes(category.handle)).map((category) => <li key={category.handle}><Link href={category.href}>{category.label}</Link></li>)}
         </ul>
       </nav>
       <nav aria-label="Discover Nilkurinji">

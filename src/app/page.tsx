@@ -3,6 +3,7 @@ import Image from "next/image";
 import { ArrowRight, Flower2, Landmark, Leaf, ShieldCheck, Truck } from "lucide-react";
 import { HomeHero } from "@/components/home/home-hero";
 import { HomeReviews } from "@/components/home/home-reviews";
+import { MobileContactCard } from "@/components/site-footer";
 import { BotanicalEdges } from "@/components/botanical-edges";
 import { BrandMark } from "@/components/brand-mark";
 import { ProductCard } from "@/components/product-card";
@@ -14,16 +15,18 @@ import { CATEGORIES } from "@/lib/site-config";
 import { isShopifyCheckoutEnabled } from "@/lib/shopify/checkout-config";
 import styles from "@/components/home/home.module.css";
 import type { Metadata } from "next";
+import type { CSSProperties } from "react";
+import { getEnabledCategoryHandles } from "@/lib/shopify/shop-category";
 import type { StorefrontCollection, StorefrontProduct } from "@/lib/shopify/types";
 
 export const revalidate = 60;
 export const metadata: Metadata = { alternates: { canonical: "/" } };
 
-const PREVIEW_HERO = {
-  url: "/images/preview-hero-home-kurinji.webp",
-  altText: "Illustrative Nilkurinji tea scene with blue-violet blossoms, loose tea and a cup",
-  width: 2172,
-  height: 724,
+const FALLBACK_HERO = {
+  url: "/images/nilkurinji-hero-elaichi-desktop.webp",
+  altText: "Nilkurinji Elaichi Tea and a glass of tea in a green landscape",
+  width: 2048,
+  height: 768,
 };
 
 const PREVIEW_CATEGORY_CUTOUTS: Record<string, string> = {
@@ -52,18 +55,20 @@ async function categoryCollections(): Promise<Map<string, StorefrontCollection |
   return new Map(results.map(([handle, result]) => [handle, result.source === "unavailable" ? null : result.data]));
 }
 
-function HomeCategories({ collections, preview }: { collections: Map<string, StorefrontCollection | null>; preview: boolean }) {
+function HomeCategories({ collections, enabled }: { collections: Map<string, StorefrontCollection | null>; enabled: string[] }) {
+  const categories = CATEGORIES.filter((category) => enabled.includes(category.handle));
+  if (!categories.length) return null;
   return <section className={styles.categories} aria-labelledby="home-categories-heading">
     <div className={styles.categoryHeading}>
       <BrandMark className={styles.categoryMark} />
       <div><span className={styles.headingRule} /><h2 id="home-categories-heading">Our Categories</h2><span className={styles.headingRule} /></div>
-      <p>Browse tea, tea bags, rice, snacks, and pantry foods.</p>
+      <p>Explore the Nilkurinji collection.</p>
     </div>
-    <nav className={styles.categoryRail} aria-label="Shop by category">
-      {CATEGORIES.map((category) => {
+    <nav className={styles.categoryRail} aria-label="Shop by category" style={{ "--category-count": categories.length, "--category-rail-width": `${categories.length * 188}px`, "--category-mobile-width": `${categories.length * 128}px` } as CSSProperties}>
+      {categories.map((category) => {
         const image = collections.get(category.handle)?.image;
-        const backdrop = preview ? undefined : image?.url;
-        const cutout = preview ? PREVIEW_CATEGORY_CUTOUTS[category.handle] : undefined;
+        const backdrop = image?.url;
+        const cutout = backdrop ? undefined : PREVIEW_CATEGORY_CUTOUTS[category.handle];
         const hasImage = Boolean(backdrop || cutout);
         return <Link href={category.href} className={styles.categoryItem} key={category.handle}>
           {hasImage ? <span className={styles.categoryArt}>
@@ -95,26 +100,26 @@ function DeliveryBand() {
 }
 
 export default async function HomePage() {
-  const [catalog, homepage] = await Promise.all([getProducts(), getHomepageContent()]);
+  const [catalog, homepage, enabledCategories] = await Promise.all([getProducts(), getHomepageContent(), getEnabledCategoryHandles()]);
   const preview = getStorefrontMode().mode === "preview";
+  const purchasingEnabled = isShopifyCheckoutEnabled();
   const collections = await categoryCollections();
   const content = homepage.source === "unavailable" ? null : homepage.data;
-  const showDraftContent = preview;
   const products = catalog.source === "unavailable" ? [] : catalog.data;
-  const heroImage = content?.heroImage ?? (showDraftContent ? PREVIEW_HERO : null);
+  const heroImage = content?.heroImage ?? FALLBACK_HERO;
+  const usesFallbackHero = !content?.heroImage;
   const shownProducts = featuredProducts(products);
 
-  return <div className={styles.home}>
+  return <div className={styles.home} data-homepage="true">
     <HomeHero
-      eyebrow={content?.eyebrow || (showDraftContent ? DRAFT_HOMEPAGE_CONTENT.eyebrow : "NILKURINJI")}
-      heading={content?.heading || (showDraftContent ? DRAFT_HOMEPAGE_CONTENT.heading : "Explore the Nilkurinji range.")}
-      description={content?.description || (showDraftContent ? DRAFT_HOMEPAGE_CONTENT.description : "Browse tea, tea bags and pantry products from the shop.")}
+      eyebrow={content?.eyebrow || DRAFT_HOMEPAGE_CONTENT.eyebrow}
+      heading={content?.heading || DRAFT_HOMEPAGE_CONTENT.heading}
+      description={content?.description || DRAFT_HOMEPAGE_CONTENT.description}
       image={heroImage}
-      preview={preview}
-      status={!preview && !content ? "Homepage content is temporarily unavailable." : undefined}
+      showProductPack={usesFallbackHero}
     />
 
-    <HomeCategories collections={collections} preview={preview} />
+    <HomeCategories collections={collections} enabled={enabledCategories} />
 
     <section className={styles.featured} data-reveal="section" aria-labelledby="home-featured-heading">
       <BotanicalEdges placement="featured" />
@@ -129,11 +134,13 @@ export default async function HomePage() {
             <Link href="/shop">Shop all <ArrowRight size={16} aria-hidden="true" /></Link>
           </div>
         </div>
-        {catalog.source === "unavailable" ? <div className={styles.empty} role="status"><p>The range is temporarily unavailable.</p><Link href="/shop">Browse the shop</Link></div> : shownProducts.length ? <div className={styles.productRail} role="region" aria-label="Featured products" tabIndex={0}>{shownProducts.map((product) => <ProductCard key={product.id} product={product} purchasingEnabled={isShopifyCheckoutEnabled()} variant="featured" />)}</div> : <div className={styles.empty}><p>The product range is being prepared.</p><Link href="/shop">Explore the shop</Link></div>}
+        {catalog.source === "unavailable" ? <div className={styles.empty} role="status"><p>The range is temporarily unavailable.</p><Link href="/shop">Browse the shop</Link></div> : shownProducts.length ? <div className={styles.productRail} role="region" aria-label="Featured products" tabIndex={0}>{shownProducts.map((product) => <ProductCard key={product.id} product={product} purchasingEnabled={purchasingEnabled} variant="featured" />)}</div> : <div className={styles.empty}><p>The product range is being prepared.</p><Link href="/shop">Explore the shop</Link></div>}
       </div>
     </section>
 
-    <HomeReviews products={products} preview={preview} />
+    <HomeReviews products={products} preview={preview || !purchasingEnabled} />
+
+    <MobileContactCard />
 
     <DeliveryBand />
   </div>;

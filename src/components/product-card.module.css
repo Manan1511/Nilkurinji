@@ -12,7 +12,9 @@
 .type { margin-top: 4px; color: var(--muted); font: 700 12px/1.35 var(--font-body); letter-spacing: .12em; text-transform: uppercase; }
 .pack { margin-top: 3px; color: var(--muted); font-size: 12px; line-height: 1.35; }
 .price { margin-top: 5px; color: var(--ink); font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
-.link { display: inline-flex; align-items: center; min-height: 44px; margin-top: 2px; color: var(--forest); font-size: 13px; }
+.link { display: inline-flex; align-items: center; justify-content: center; gap: 8px; max-width: 100%; min-height: 44px; padding: 0 12px; margin-top: 10px; border: 1px solid var(--forest); border-radius: 999px; color: var(--forest); font-size: 13px; font-weight: 700; line-height: 1.2; text-decoration: none; transition: color 160ms ease, background-color 160ms ease; }
+.link:hover { color: var(--paper); background: var(--forest); }
+.link:focus-visible { outline: 2px solid var(--forest); outline-offset: 3px; }
 .unavailable { margin-top: 6px; color: var(--ash); font-size: 13px; }
 .quickAdd { position: absolute; right: 10px; bottom: 10px; }
 .quickAdd :global(button) { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; color: var(--paper); background: var(--forest); cursor: pointer; }
