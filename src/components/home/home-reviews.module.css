@@ -11,10 +11,14 @@
 .heading { display: block; max-width: 760px; margin: 0 auto 14px; text-align: center; }
 .heading h2 { color: var(--ink); font: 400 clamp(1.85rem, 2.5vw, 2.25rem)/1.12 var(--font-editorial); letter-spacing: -.025em; }
 .heading > p { max-width: 50ch; margin: 6px auto 0; color: var(--muted); font: 400 clamp(16px, 1.35vw, 18px)/1.4 var(--font-editorial); }
-.grid { display: flex; gap: 16px; width: min(1100px, 100%); padding-bottom: 4px; margin-inline: auto; overflow-x: auto; overflow-y: hidden; border: 0; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-.grid::-webkit-scrollbar { display: none; }
-.review { display: flex; flex: 0 0 100%; min-width: 0; min-height: clamp(190px, 16vw, 228px); flex-direction: row; align-items: stretch; gap: clamp(16px, 2vw, 24px); padding: clamp(16px, 1.6vw, 22px); border: 1px solid var(--rule); border-radius: 14px; background: var(--paper-light); scroll-snap-align: start; }
-.review + .review { border: 1px solid var(--rule); }
+.grid { display: block; width: min(1400px, 100%); padding-block: 4px; margin-inline: auto; overflow: hidden; }
+.track { display: flex; width: max-content; align-items: stretch; animation: reviewGlide var(--review-glide-duration, 60s) linear infinite; }
+.track[data-loop="false"] { animation: none; }
+.group { display: flex; flex: 0 0 auto; align-items: stretch; gap: 16px; width: max-content; padding-right: 16px; }
+.duplicate { pointer-events: none; }
+.grid:hover .track,.grid:focus-within .track { animation-play-state: paused; }
+@keyframes reviewGlide { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.review { display: flex; box-sizing: border-box; flex: 0 0 clamp(360px, 30vw, 430px); min-width: 0; min-height: clamp(190px, 16vw, 228px); flex-direction: row; align-items: stretch; gap: clamp(16px, 2vw, 24px); padding: clamp(16px, 1.6vw, 22px); border: 1px solid var(--rule); border-radius: 14px; background: var(--paper-light); }
 .body { max-width: 48ch; margin: 0; color: var(--muted); font-size: clamp(14px, 1.05vw, 16px); line-height: 1.5; }
 .byline { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; margin-top: auto; padding-top: 14px; color: var(--ink); font-size: 12px; line-height: 1.4; }
 .byline > cite { color: var(--ink); font-style: normal; font-weight: 700; }
@@ -25,20 +29,17 @@
 .copy { display: flex; flex: 1; min-width: 0; flex-direction: column; align-items: flex-start; }
 .photo { display: block; position: relative; flex: 0 0 clamp(144px, 15vw, 184px); align-self: center; height: clamp(144px, 15vw, 184px); overflow: hidden; border-radius: 10px; }
 .photo img { object-fit: cover; }
-.carouselControls { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 8px auto 0; color: var(--muted); }
-.carouselButton { display: grid; width: 44px; height: 44px; place-items: center; padding: 0; border: 1px solid var(--rule); border-radius: 50%; background: transparent; color: var(--ink); cursor: pointer; transition: background-color 160ms ease, border-color 160ms ease, opacity 160ms ease; }
-.carouselButton:hover:not(:disabled) { border-color: var(--forest); background: var(--paper-light); }
-.carouselButton:disabled { cursor: default; opacity: .42; }
-.carouselButton:focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }
-.counter { min-width: 38px; color: var(--ink); font-size: 13px; font-variant-numeric: tabular-nums; text-align: center; }
-.progress { display: block; width: clamp(56px, 10vw, 112px); height: 2px; overflow: hidden; border-radius: 99px; background: var(--rule); }
-.progressFill { display: block; height: 100%; background: var(--forest); transition: width 220ms ease; }
 .grid:focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }
 
 @media (min-width: 600px) {
   .foliage img { animation-name: reviewLeafSwayDesktop; }
   .copy { justify-content: center; }
   .byline { margin-top: 18px; }
+}
+
+@media (min-width: 600px) and (max-width: 1023px) {
+  .review { flex-basis: clamp(300px, 42vw, 360px); }
+  .photo { flex-basis: 132px; height: 148px; }
 }
 
 @media (max-width: 599px) {
@@ -54,42 +55,20 @@
   .ornament svg { width: 22px; height: 22px; }
   .heading h2 { font-size: clamp(1.7rem, 6.8vw, 2.2rem); }
   .heading > p { max-width: 40ch; margin: 6px auto 0; font: 400 16px/1.4 var(--font-editorial); }
-  .grid {
-    display: flex;
-    gap: 12px;
-    width: auto;
-    margin-inline: calc(var(--page-gutter) * -1);
-    padding: 0 var(--page-gutter) 8px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    border: 0;
-    overscroll-behavior-x: contain;
-    scroll-padding-inline: var(--page-gutter);
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-  }
-  .grid::-webkit-scrollbar { display: none; }
-  .review {
-    flex: 0 0 100%;
-    display: flex;
-    flex-direction: row;
-    gap: 14px;
-    min-height: 184px;
-    padding: 13px;
-    border: 1px solid var(--rule);
-    border-radius: 14px;
-    background: var(--paper-light);
-    scroll-snap-align: start;
-  }
-  .review + .review { border: 1px solid var(--rule); }
+  .grid { width: auto; padding: 4px var(--page-gutter) 8px; margin-inline: calc(var(--page-gutter) * -1); }
+  .group { gap: 12px; padding-right: 12px; }
+  .review { flex-basis: 84vw; min-height: 184px; gap: 14px; padding: 13px; border-radius: 14px; }
   .body { font-size: 13px; line-height: 1.45; }
   .byline { gap: 4px 8px; padding-top: 10px; font-size: 11px; }
-  .photo { flex: 0 0 31%; align-self: center; height: 144px; min-height: 0; border-radius: 9px; }
+  .photo { flex: 0 0 31%; height: 144px; min-height: 0; border-radius: 9px; }
   .photo img { object-fit: cover; }
-  .carouselControls { margin-top: 10px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .foliage img { animation: none; }
+  .grid { overflow-x: auto; overscroll-behavior-inline: contain; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .grid::-webkit-scrollbar { display: none; }
+  .track { width: max-content; animation: none; transform: none; }
+  .duplicate { display: none; }
+  .review { scroll-snap-align: start; }
 }

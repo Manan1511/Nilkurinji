@@ -22,13 +22,9 @@ export function HomeReviews() {
       </header>
 
       <ReviewRail count={HOMEPAGE_REVIEWS.length}>
-        {HOMEPAGE_REVIEWS.map((review, index) => <article
+        {HOMEPAGE_REVIEWS.map((review) => <article
           className={styles.review}
           key={review.id}
-          id={`home-review-${index + 1}`}
-          role="group"
-          aria-roledescription="slide"
-          aria-label={`Review ${index + 1} of ${HOMEPAGE_REVIEWS.length}`}
         >
           <div className={styles.copy}>
             <blockquote className={styles.body}>{review.body}</blockquote>
