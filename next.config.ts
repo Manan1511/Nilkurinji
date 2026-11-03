@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   turbopack: { root: process.cwd() },
   images: {
-    qualities: [75, 85],
+    qualities: [75, 85, 95],
     formats: ["image/avif", "image/webp"],
     localPatterns: [{ pathname: "/images/**" }],
     remotePatterns: [{ protocol: "https", hostname: "cdn.shopify.com", pathname: "/s/files/**" }],

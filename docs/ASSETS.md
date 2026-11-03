@@ -43,6 +43,14 @@ References: [Kew Plants of the World Online](https://powo.science.kew.org/taxon/
 
 The corrected product-scene derivatives are used only by the non-purchasable preview catalog. Jasmine and hibiscus preview products intentionally keep white jasmine and red hibiscus flowers because those images depict named ingredients, not the Nilkurinji brand flower. These generated packs remain illustrative and must not be mistaken for approved product packaging.
 
+## Client-supplied photo library
+
+The homepage fallback uses the product-in-scene desktop and mobile photographs in `public/images/nilkurinji-hero-elaichi-{desktop,mobile}.webp` (2048 × 768). The Elaichi pack is already integrated into each tea-table scene, so do not add a separate pack overlay. Shopify's configured homepage image takes precedence when available. The newer product-free tea-only concept remains in `public/images/nilkurinji-home-hero-{desktop,mobile}.webp` with its original master at `design/masters/nilkurinji-home-hero-tea-only-master.png`.
+
+The ten original 1448 × 1086 PNGs remain unchanged in `Nilkurinji-photos/`. Optimized, metadata-stripped JPEG derivatives are in `public/images/client-supplied/`; the photos keep their original framing and total 4.1 MB, down from 22.3 MB. The preview Open Graph image uses the supplied Nilkurinji hillside artwork. The companion `docs/shopify/nilkurinji-photo-upload-map.csv` maps source files to optimized paths, alt text, product handles, and publication review notes.
+
+The folder includes campaign layouts with embedded copy as well as pack images. Treat that copy as unverified until approved. In particular, review health claims in `IMG_0486.PNG` and the Assam sourcing claim in `IMG_0499.PNG`. Use the pack candidates only after confirming they match the sellable stock. The Shopify import draft contains three products and four pack variants identified from readable product names and net weights. It keeps products as drafts, with no prices or hosted image URLs; Shopify defaults a blank price to zero, and product images need public HTTPS URLs before they can be attached by CSV.
+
 ## Required client product photography
 
 For every sellable product and materially different pack:
@@ -81,3 +89,13 @@ The Tea Bags photograph must match the client’s real bag format once approved.
 A missing live product image reserves its frame and uses a neutral labelled fallback. Never show a broken-image glyph, generated pack or another product’s image. A missing banner retains readable copy and the shallow composition. Production approval requires the planned compositions and real product photography.
 
 See the [approved plan](plan/README.md), [asset manifest](plan/09-asset-inventory.md) and [current design system](../DESIGN.md).
+
+## Generated botanical refresh
+
+Three distinct transparent Nilkurinji branch cutouts reduce repeated artwork in the mobile menu and homepage journal. The tall branch and cascading branch frame the menu header; the wide flowering branch replaces one repeated journal edge. The alpha channel was cleaned of near-transparent background haze, and the production derivatives were resized and encoded as WebP.
+
+| Use | Optimized derivative | Source master |
+|---|---|---|
+| Mobile menu top left | `public/images/botanical/kurinji-branch-tall.webp` | `design/masters/kurinji-flowers/botanical-refresh/kurinji-branch-tall.png` |
+| Mobile menu top right | `public/images/botanical/kurinji-branch-cascade.webp` | `design/masters/kurinji-flowers/botanical-refresh/kurinji-branch-cascade.png` |
+| Homepage journal top left | `public/images/botanical/kurinji-branch-horizontal.webp` | `design/masters/kurinji-flowers/botanical-refresh/kurinji-branch-horizontal.png` |

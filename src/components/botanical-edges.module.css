@@ -12,12 +12,30 @@
 }
 .edges .left { --foliage-duration: 7.8s; }
 .edges .right { --foliage-duration: 9.2s; animation-delay: -4.6s; }
+.edges .depthLeft,.edges .depthRight { z-index: 0; opacity: .2; filter: saturate(.52); }
+.edges .depthLeft { --foliage-duration: 12.5s; animation-name: foliage-depth-sway; animation-delay: -5.4s; }
+.edges .depthRight { --foliage-duration: 14s; animation-name: foliage-depth-sway-reverse; animation-delay: -9.2s; }
+.edges .left,.edges .right { z-index: 1; }
 
 @keyframes foliage-sway {
   0%, 100% { rotate: 0deg; translate: 0 0; }
-  24% { rotate: 1.45deg; translate: 1.8px -.45px; }
-  53% { rotate: -1deg; translate: -1.4px .35px; }
-  79% { rotate: .52deg; translate: .8px -.15px; }
+  24% { rotate: 1.8deg; translate: 2.6px -.55px; }
+  53% { rotate: -1.25deg; translate: -2px .4px; }
+  79% { rotate: .65deg; translate: 1.1px -.2px; }
+}
+
+@keyframes foliage-depth-sway {
+  0%, 100% { rotate: 0deg; translate: 0 0; }
+  28% { rotate: 1.9deg; translate: 3.4px -.65px; }
+  62% { rotate: -1.4deg; translate: -2.5px .45px; }
+  84% { rotate: .72deg; translate: 1.3px -.2px; }
+}
+
+@keyframes foliage-depth-sway-reverse {
+  0%, 100% { rotate: 0deg; translate: 0 0; }
+  30% { rotate: -1.75deg; translate: -3.2px -.55px; }
+  64% { rotate: 1.28deg; translate: 2.2px .4px; }
+  86% { rotate: -.64deg; translate: -1.2px -.2px; }
 }
 
 /* Keep the hero stem anchored while giving the broad branch a readable, slow sway. */
@@ -30,29 +48,46 @@
 
 @keyframes mobile-foliage-sway {
   0%, 100% { rotate: 0deg; translate: 0 0; }
-  28% { rotate: 1.08deg; translate: 2.6px -.45px; }
-  62% { rotate: -.78deg; translate: -1.5px .3px; }
-  84% { rotate: .36deg; translate: .8px -.1px; }
+  28% { rotate: 1.45deg; translate: 3.2px -.55px; }
+  62% { rotate: -1.05deg; translate: -2px .35px; }
+  84% { rotate: .48deg; translate: 1px -.1px; }
 }
 
 @keyframes mobile-foliage-sway-reverse {
   0%, 100% { rotate: 0deg; translate: 0 0; }
-  30% { rotate: -.98deg; translate: -2.5px -.4px; }
-  66% { rotate: .72deg; translate: 1.4px .28px; }
-  86% { rotate: -.32deg; translate: -.7px -.1px; }
+  30% { rotate: -1.35deg; translate: -3.2px -.5px; }
+  66% { rotate: 1deg; translate: 1.9px .3px; }
+  86% { rotate: -.46deg; translate: -.9px -.1px; }
+}
+
+@keyframes mobile-depth-sway {
+  0%, 100% { rotate: 0deg; translate: 0 0; }
+  28% { rotate: 1.7deg; translate: 3.7px -.65px; }
+  62% { rotate: -1.22deg; translate: -2.8px .45px; }
+  84% { rotate: .6deg; translate: 1.4px -.2px; }
+}
+
+@keyframes mobile-depth-sway-reverse {
+  0%, 100% { rotate: 0deg; translate: 0 0; }
+  30% { rotate: -1.58deg; translate: -3.6px -.55px; }
+  66% { rotate: 1.12deg; translate: 2.6px .4px; }
+  86% { rotate: -.54deg; translate: -1.2px -.1px; }
 }
 
 @keyframes mobile-home-hero-left-sway {
   0%, 100% { rotate: 0deg; translate: 0 0; }
-  28% { rotate: 1.16deg; translate: 2.8px -.45px; }
-  62% { rotate: -.82deg; translate: -1.5px .3px; }
-  84% { rotate: .4deg; translate: 1px -.1px; }
+  28% { rotate: 1.55deg; translate: 3.4px -.55px; }
+  62% { rotate: -1.12deg; translate: -2px .35px; }
+  84% { rotate: .52deg; translate: 1.2px -.1px; }
 }
 
 /* Bleed header foliage beyond the paper edge so source-canvas cuts stay offscreen. */
 .header .left,.header .right { top: 6px; bottom: 6px; width: clamp(96px,8.5vw,128px); height: calc(100% - 12px); object-fit: contain; transform: none; }
 .header .left { left: clamp(-20px,-1vw,-12px); object-position: left center; }
 .header .right { right: clamp(-20px,-1vw,-12px); object-position: right center; }
+.header .depthLeft,.header .depthRight { top: -8px; height: calc(100% + 16px); width: auto; max-height: none; object-fit: contain; opacity: .14; filter: saturate(.42); --foliage-duration: 14s; }
+.header .depthLeft { left: 8px; }
+.header .depthRight { right: 8px; animation-delay: -8s; }
 
 /* Home uses a separate asymmetrical flowering pair, contained at the banner edges. */
 .home-hero .left,.home-hero .right { top: 0; bottom: 0; width: clamp(72px,12vw,184px); height: 100%; object-fit: cover; transform: none; }
@@ -70,10 +105,28 @@
   animation: home-hero-left-sway 9.8s ease-in-out infinite;
 }
 .home-hero .right { right: 0; object-position: right center; --foliage-origin: 98% 8%; }
+.home-hero .depthLeft { top: -26px; left: -94px; width: clamp(210px,18vw,280px); --foliage-origin: 0 8%; --foliage-duration: 14s; animation-delay: -7s; }
+.home-hero .depthRight { right: -112px; bottom: -32px; width: clamp(225px,19vw,300px); --foliage-origin: 100% 90%; --foliage-duration: 16s; animation-delay: -11s; }
+
+/* Category foliage stays at the outer edges, away from the clear image medallions. */
+.categories .left { left: 0; bottom: 0; width: clamp(118px, 10.5vw, 160px); opacity: .34; --foliage-origin: 0 92%; }
+.categories .right { top: 0; right: 0; width: clamp(172px, 16vw, 238px); opacity: 1; --foliage-origin: 100% 12%; }
+.categories .depthLeft { top: 0; left: 0; width: clamp(150px, 14vw, 210px); opacity: .16; --foliage-origin: 0 10%; --foliage-duration: 15s; animation-delay: -8s; }
+.categories .depthRight { right: 0; bottom: 0; width: clamp(172px, 15vw, 225px); opacity: .37; --foliage-origin: 100% 92%; --foliage-duration: 17s; animation-delay: -12s; }
 
 /* The featured shelf carries the category foliage so the five medallions stay clear. */
 .featured .left { top: 50%; left: -105px; width: clamp(170px,15vw,220px); transform: translateY(-50%); }
 .featured .right { right: -12px; bottom: -20px; width: clamp(220px,19vw,280px); }
+.featured .depthLeft { top: -32px; left: -86px; width: clamp(205px,18vw,270px); --foliage-origin: 0 8%; --foliage-duration: 15s; animation-delay: -9s; }
+.featured .depthRight { right: -96px; bottom: -54px; width: clamp(225px,20vw,305px); --foliage-origin: 100% 92%; --foliage-duration: 17s; animation-delay: -13s; }
+
+/* Pale and flowering stems frame the dark information band without competing with its copy. */
+.delivery .left,.delivery .right { opacity: .34; filter: brightness(1.24) saturate(.82); }
+.delivery .left { top: -20px; left: 0; width: clamp(174px, 15vw, 226px); --foliage-origin: 0 8%; }
+.delivery .right { right: 0; bottom: -24px; width: clamp(188px, 16vw, 240px); --foliage-origin: 100% 92%; }
+.delivery .depthLeft,.delivery .depthRight { opacity: .16; filter: brightness(1.34) saturate(.55); }
+.delivery .depthLeft { left: 24px; bottom: 0; width: clamp(148px, 13vw, 196px); --foliage-origin: 0 90%; --foliage-duration: 15s; animation-delay: -8s; }
+.delivery .depthRight { top: -18px; right: 18px; width: clamp(158px, 14vw, 210px); --foliage-origin: 100% 10%; --foliage-duration: 17s; animation-delay: -12s; }
 
 /* Editorial pages use their own branch pair; these are not the home assets. */
 .banner .left { top: -13px; left: -58px; width: 195px; transform: rotate(-9deg); }
@@ -83,8 +136,9 @@
 
 /* The menu uses separate top and bottom pairs, framing the navigation from its open corners. */
 .menu-top { top: 0; bottom: auto; height: clamp(108px, 19vh, 152px); overflow: hidden; }
-.menu-top .left { top: -18px; left: 0; width: clamp(88px, 23vw, 132px); opacity: .2; --foliage-origin: 4% 8%; }
-.menu-top .right { top: -20px; right: 0; width: clamp(92px, 24vw, 138px); opacity: .22; --foliage-origin: 96% 8%; }
+.menu-top .left,.menu-top .right { top: 7%; bottom: auto; height: 86%; max-height: 86%; width: auto; max-width: 46vw; object-fit: contain; }
+.menu-top .left { left: 0; opacity: .2; --foliage-origin: 4% 8%; }
+.menu-top .right { right: 0; opacity: .22; --foliage-origin: 96% 8%; }
 .menu { top: auto; bottom: 0; height: clamp(132px, 24vh, 190px); overflow: hidden; }
 .menu .left { left: 0; bottom: -18px; width: clamp(96px, 29vw, 126px); opacity: .22; --foliage-origin: 4% 96%; }
 .menu .right { right: 0; bottom: -14px; width: clamp(108px, 31vw, 136px); opacity: .26; --foliage-origin: 96% 12%; }
@@ -114,8 +168,12 @@
   .header .left,.header .right { width: clamp(88px,9vw,118px); }
   .home-hero .left,.home-hero .right { width: clamp(64px,9vw,112px); object-fit: cover; transform: none; }
   .home-hero .left { top: 50%; bottom: auto; left: -3px; width: clamp(88px,10vw,124px); height: auto; object-fit: contain; object-position: left center; transform: translateY(-50%); --foliage-origin: 2% 96%; }
+  .home-hero .depthLeft { top: -18px; left: -62px; width: clamp(132px,16vw,190px); }
+  .home-hero .depthRight { right: -74px; bottom: -24px; width: clamp(150px,18vw,210px); }
   .featured .left { left: -95px; width: 180px; }
   .featured .right { right: -12px; width: 235px; }
+  .featured .depthLeft { top: -24px; left: -70px; width: clamp(150px,18vw,215px); }
+  .featured .depthRight { right: -78px; bottom: -44px; width: clamp(175px,20vw,240px); }
   .banner .left,.story .left { width: 150px; }
   .banner .right,.story .right { width: 152px; }
 }
@@ -124,6 +182,8 @@
   .edges img { animation-duration: 8.8s; }
   .edges .left { animation-name: mobile-foliage-sway; }
   .edges .right { animation-name: mobile-foliage-sway-reverse; animation-duration: 10s; }
+  .edges .depthLeft { animation-name: mobile-depth-sway; }
+  .edges .depthRight { animation-name: mobile-depth-sway-reverse; }
 
   /* Keep both flowering corners in-bounds, softly behind the header controls. */
   .header .left,.header .right {
@@ -142,6 +202,9 @@
     --foliage-origin: 0 50%;
   }
   .header .right { right: clamp(-12px, -2.5vw, -8px); object-position: right center; --foliage-origin: 100% 50%; }
+  .header .depthLeft,.header .depthRight { top: 50%; height: calc(100% - 4px); max-height: 68px; opacity: .15; transform: translateY(-50%); }
+  .header .depthLeft { left: 2px; }
+  .header .depthRight { right: 2px; }
 
   /* The copy remains on paper; the paired kurinji branches frame only the hero photograph. */
   .home-hero { top: auto; bottom: 0; height: 62.5vw; }
@@ -169,6 +232,15 @@
     transform: none;
     --foliage-origin: 100% 8%;
   }
+  .home-hero .depthLeft { top: -16px; left: -72px; width: clamp(132px,39vw,158px); opacity: .24; }
+  .home-hero .depthRight { right: -76px; bottom: -18px; width: clamp(140px,42vw,168px); opacity: .23; }
+  .home-hero .depthLeft,.home-hero .depthRight { animation-duration: 14s; }
+
+  .categories .left { left: 0; bottom: 0; width: clamp(92px, 29vw, 112px); opacity: .3; }
+  .categories .right { top: auto; right: 8px; bottom: 0; width: clamp(52px, 15vw, 62px); opacity: .52; }
+  .categories .depthLeft { top: 0; left: 0; width: clamp(110px, 32vw, 128px); opacity: .15; }
+  .categories .depthRight { display: none; }
+  .categories .left,.categories .right,.categories .depthLeft,.categories .depthRight { animation-duration: 14s; }
 
   /* Let a restrained edge of foliage appear around the shelf, behind its product cards. */
   .featured .left,.featured .right {
@@ -177,6 +249,15 @@
   }
   .featured .left { top: clamp(104px, 30vw, 126px); left: -54px; transform: none; --foliage-origin: 0 82%; }
   .featured .right { right: -26px; bottom: 8px; --foliage-origin: 100% 18%; }
+  .featured .depthLeft { top: -26px; left: -66px; width: clamp(138px,40vw,160px); opacity: .22; }
+  .featured .depthRight { right: -74px; bottom: -34px; width: clamp(148px,43vw,172px); opacity: .22; }
+  .featured .depthLeft,.featured .depthRight { animation-duration: 15s; }
+
+  .delivery .left { top: 0; left: -8px; width: clamp(118px, 34vw, 142px); opacity: .26; }
+  .delivery .right { right: -8px; bottom: 0; width: clamp(128px, 36vw, 150px); opacity: .27; }
+  .delivery .depthLeft { left: 6px; bottom: 0; width: clamp(104px, 30vw, 124px); opacity: .13; }
+  .delivery .depthRight { top: 0; right: 6px; width: clamp(112px, 32vw, 132px); opacity: .13; }
+  .delivery .left,.delivery .right,.delivery .depthLeft,.delivery .depthRight { animation-duration: 15s; }
 
   /* Shop and editorial banners keep foliage at the edges, with copy layered above it. */
   .banner .left,.banner .right { width: clamp(88px, 27vw, 108px); opacity: .48; }
@@ -193,8 +274,9 @@
   .menu .left { bottom: -14px; width: clamp(88px, 29vw, 112px); opacity: .28; }
   .menu .right { bottom: -10px; width: clamp(98px, 31vw, 120px); opacity: .32; }
   .menu-top { height: clamp(104px, 19vh, 140px); }
-  .menu-top .left { top: -12px; width: clamp(78px, 23vw, 120px); opacity: .2; }
-  .menu-top .right { top: -14px; width: clamp(82px, 24vw, 126px); opacity: .22; }
+  .menu-top .left,.menu-top .right { top: 8%; height: 84%; max-height: 84%; max-width: 42vw; }
+  .menu-top .left { opacity: .2; }
+  .menu-top .right { opacity: .22; }
 }
 
 @media (max-width: 359px) {
@@ -204,9 +286,13 @@
   .home-hero .left,.home-hero .right { width: 112px; }
   .home-hero .left { left: -16px; }
   .home-hero .right { right: -16px; width: 100px; }
+  .home-hero .depthLeft { left: -68px; width: 132px; }
+  .home-hero .depthRight { right: -70px; width: 140px; }
   .featured .left,.featured .right { width: 112px; }
   .featured .left { top: 104px; left: -54px; }
   .featured .right { right: -36px; }
+  .featured .depthLeft { left: -62px; width: 138px; }
+  .featured .depthRight { right: -70px; width: 148px; }
   .banner .left,.banner .right { width: 88px; }
   .banner .left { left: -18px; }
   .banner .right { right: 12px; }
@@ -217,8 +303,7 @@
   .menu .left { bottom: -12px; width: 88px; }
   .menu .right { bottom: -8px; width: 98px; }
   .menu-top { height: 102px; }
-  .menu-top .left { top: -10px; width: 74px; }
-  .menu-top .right { top: -12px; width: 78px; }
+  .menu-top .left,.menu-top .right { top: 8%; height: 84%; max-height: 84%; max-width: 42vw; }
 }
 
 @media (max-height: 560px) and (max-width: 767px) {
@@ -226,8 +311,7 @@
   .menu .left { width: 76px; opacity: .2; }
   .menu .right { width: 84px; opacity: .22; }
   .menu-top { height: 84px; }
-  .menu-top .left { top: -8px; width: 70px; opacity: .16; }
-  .menu-top .right { top: -9px; width: 74px; opacity: .18; }
+  .menu-top .left,.menu-top .right { top: 8%; height: 84%; max-height: 84%; max-width: 42vw; opacity: .18; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -237,8 +321,9 @@
 
 @media (max-width: 767px) and (min-height: 561px) {
   .menu-top { height: clamp(100px, 16vh, 155px); }
-  .menu-top .left { left: -12px; top: -24px; width: clamp(110px, 32vw, 150px); opacity: .7; }
-  .menu-top .right { right: -15px; top: -30px; width: clamp(110px, 32vw, 150px); opacity: .65; }
+  .menu-top .left,.menu-top .right { top: 8%; height: 84%; max-height: 84%; max-width: clamp(110px, 32vw, 150px); }
+  .menu-top .left { left: 0; opacity: .7; }
+  .menu-top .right { right: 0; opacity: .65; }
   .menu { height: clamp(150px, 25vh, 220px); }
   .menu .left { left: -12px; bottom: -18px; width: clamp(190px, 62vw, 270px); opacity: .72; }
   .menu .right { right: -14px; bottom: -18px; width: clamp(190px, 62vw, 270px); opacity: .74; }

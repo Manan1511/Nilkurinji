@@ -4,3 +4,4 @@
 .form input::placeholder { color: var(--ink-secondary); opacity: 1; }
 .form button { border: 0; background: transparent; color: var(--brand); font: 600 14px/1.4 var(--font-body); min-height: 44px; padding: 8px; cursor: pointer; }
 .form button.clear { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 36px; width: 36px; min-width: 36px; padding: 8px; color: var(--ash); }
+.form button.iconSubmit { display: inline-grid; place-items: center; flex: 0 0 36px; width: 36px; min-width: 36px; min-height: 36px; padding: 0; border-radius: 50%; }

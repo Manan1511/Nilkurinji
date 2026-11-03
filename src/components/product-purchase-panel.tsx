@@ -5,7 +5,7 @@ import { Minus, Plus, ShoppingBag } from "lucide-react";
 import { formatMoney } from "@/lib/format";
 import type { StorefrontProduct, StorefrontVariant } from "@/lib/shopify/types";
 import styles from "./product-purchase-panel.module.css";
-import { postCartAction } from "@/lib/cart-client";
+import { postCartAction, postCheckoutSession } from "@/lib/cart-client";
 import { useStorefrontCart } from "@/components/cart-provider";
 import { DeliveryChecker } from "@/components/delivery-checker";
 
@@ -34,22 +34,29 @@ export function getPurchaseNotice(
   product: StorefrontProduct,
   purchasingEnabled: boolean,
   selectedVariant: StorefrontVariant | undefined,
+  cartEnabled = purchasingEnabled,
 ): string | null {
   if (product.variants.length > 0 && !selectedVariant) {
     return "This option combination is not available. Choose another combination.";
   }
   if (selectedVariant && !selectedVariant.availableForSale) return "This option is currently unavailable.";
   if (product.isPreview) return "This is a visual preview. No product is available to purchase.";
-  if (!purchasingEnabled) return "Purchasing will open after Shopify inventory and checkout are approved.";
+  if (!purchasingEnabled) return cartEnabled
+    ? "Checkout is currently closed. You can still add this item to your cart."
+    : "Purchasing will open after Shopify inventory and checkout are approved.";
   return null;
 }
 
 export function ProductPurchasePanel({
   product,
   purchasingEnabled,
+  cartEnabled,
+  checkoutEnabled,
 }: {
   product: StorefrontProduct;
   purchasingEnabled: boolean;
+  cartEnabled?: boolean;
+  checkoutEnabled?: boolean;
 }) {
   const options = useMemo(() => variantOptions(product.variants), [product.variants]);
   const firstVariant = product.variants.find((variant) => variant.availableForSale) ?? product.variants[0];
@@ -58,6 +65,7 @@ export function ProductPurchasePanel({
   );
   const [quantity, setQuantity] = useState(1);
   const [busy, setBusy] = useState(false);
+  const [pendingAdds, setPendingAdds] = useState(0);
   const [message, setMessage] = useState("");
   const mutationLock = useRef(false);
   const buttonsRef = useRef<HTMLDivElement>(null);
@@ -68,37 +76,53 @@ export function ProductPurchasePanel({
     const target = buttonsRef.current;
     if (!target || typeof IntersectionObserver === "undefined") return;
     const observer = new IntersectionObserver(([entry]) => {
-      setShowStickyPurchase(!entry.isIntersecting);
-    }, { threshold: 0 });
+      setShowStickyPurchase(!entry.isIntersecting && entry.boundingClientRect.top < 0);
+    }, { rootMargin: `0px 0px ${window.innerHeight}px 0px`, threshold: 0 });
     observer.observe(target);
     return () => observer.disconnect();
   }, []);
 
   const selectedVariant = findSelectedVariant(product.variants, selectedOptions)
     ?? (options.length === 0 ? firstVariant : undefined);
-  const purchasable = purchasingEnabled && !product.isPreview && Boolean(selectedVariant?.availableForSale);
-  const purchaseNotice = getPurchaseNotice(product, purchasingEnabled, selectedVariant);
+  const canAddToCart = cartEnabled ?? purchasingEnabled;
+  const canCheckout = checkoutEnabled ?? purchasingEnabled;
+  const variantPurchasable = !product.isPreview && Boolean(selectedVariant?.availableForSale);
+  const addable = canAddToCart && variantPurchasable;
+  const buyable = canCheckout && variantPurchasable;
+  const purchaseNotice = getPurchaseNotice(product, canCheckout, selectedVariant, canAddToCart);
 
   async function sendCartAction(action: "add" | "buy-now"): Promise<void> {
-    if (!selectedVariant || !purchasable || mutationLock.current) return;
+    if (!selectedVariant || (action === "add" ? !addable : !buyable)) return;
+    if (action === "add") {
+      setPendingAdds((count) => count + 1);
+      setMessage("Adding to your cart…");
+      try {
+        const result = cart
+          ? await cart.mutate({ action: "add", variantId: selectedVariant.id, quantity })
+          : await postCartAction({ action: "add", variantId: selectedVariant.id, quantity });
+        if (cart && !result) throw new Error("Your cart is being updated. Please try again.");
+        setMessage("Added to your cart.");
+        if (!cart) window.dispatchEvent(new Event("nilkurinji:cart-updated"));
+      } catch (error) {
+        setMessage(error instanceof Error ? error.message : "The cart could not be updated.");
+      } finally {
+        setPendingAdds((count) => Math.max(0, count - 1));
+      }
+      return;
+    }
+    if (mutationLock.current) return;
     mutationLock.current = true;
     setBusy(true);
     setMessage("");
     try {
-      if (action === "buy-now" && !cart) throw new Error("Checkout is temporarily unavailable. Please refresh and try again.");
-      const cartAction = { action, variantId: selectedVariant.id, quantity } as const;
-      const result = cart ? await cart.mutate(cartAction) : await postCartAction(cartAction);
+      const result = cart
+        ? await cart.mutate({ action: "buy-now", variantId: selectedVariant.id, quantity })
+        : await postCheckoutSession({ action: "buy-now", variantId: selectedVariant.id, quantity });
       if (cart && !result) throw new Error("Your cart is being updated. Please try again.");
-      if (action === "buy-now") {
-        const checkoutUrl = result?.checkoutUrl;
-        if (checkoutUrl) window.location.assign(checkoutUrl);
-        else if (result && "providerSession" in result && result.providerSession) setMessage("Complete your order in the secure checkout window.");
-        else throw new Error("Checkout could not be prepared. Please try again.");
-        return;
-      }
-      setMessage("Added to your cart.");
-      if (cart) window.dispatchEvent(new Event("nilkurinji:cart-open"));
-      else window.dispatchEvent(new Event("nilkurinji:cart-updated"));
+      const checkoutUrl = result?.checkoutUrl;
+      if (checkoutUrl) window.location.assign(checkoutUrl);
+      else if (result && "providerSession" in result && result.providerSession) setMessage("Complete your order in the secure checkout window.");
+      else throw new Error("Checkout could not be prepared. Please try again.");
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "The cart could not be updated.");
     } finally {
@@ -146,10 +170,10 @@ export function ProductPurchasePanel({
       {purchaseNotice && <p className="purchase-panel__notice" role="status">{purchaseNotice}</p>}
 
       <div className="purchase-panel__buttons" ref={buttonsRef}>
-        <button type="button" className="button button--dark" disabled={!purchasable || busy || !selectedVariant} onClick={() => void sendCartAction("add")}>
-          <ShoppingBag aria-hidden="true" size={17} /> {busy ? "Updating…" : "Add to cart"}
+        <button type="button" className="button button--dark" disabled={!addable || busy || !selectedVariant} aria-busy={pendingAdds > 0} onClick={() => void sendCartAction("add")}>
+          <ShoppingBag aria-hidden="true" size={17} /> Add to cart
         </button>
-        <button type="button" className="button button--outline" disabled={!purchasable || busy || !selectedVariant} onClick={() => void sendCartAction("buy-now")}>
+        <button type="button" className="button button--outline" disabled={!buyable || busy || !selectedVariant} title={!canCheckout ? "Checkout is currently closed." : undefined} onClick={() => void sendCartAction("buy-now")}>
           Buy now
         </button>
       </div>
@@ -163,10 +187,10 @@ export function ProductPurchasePanel({
         <strong>{price ? <>{product.isPreview ? "Sample price: " : ""}{formatMoney(price)}</> : "Price unavailable"}</strong>
       </div>
       <div className={styles.stickyButtons}>
-        <button type="button" className="button button--dark" disabled={!purchasable || busy || !selectedVariant} onClick={() => void sendCartAction("add")}>
-          {busy ? "Updating…" : "Add to cart"}
+        <button type="button" className="button button--dark" disabled={!addable || busy || !selectedVariant} aria-busy={pendingAdds > 0} onClick={() => void sendCartAction("add")}>
+          Add to cart
         </button>
-        <button type="button" className="button button--outline" disabled={!purchasable || busy || !selectedVariant} onClick={() => void sendCartAction("buy-now")}>
+        <button type="button" className="button button--outline" disabled={!buyable || busy || !selectedVariant} title={!canCheckout ? "Checkout is currently closed." : undefined} onClick={() => void sendCartAction("buy-now")}>
           Buy now
         </button>
       </div>

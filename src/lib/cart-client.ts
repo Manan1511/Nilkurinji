@@ -1,7 +1,7 @@
 "use client";
 import type { CartAction } from "@/lib/shopify/cart-validation";
 import type { ShopifyCart } from "@/lib/shopify/cart";
-type CartResult = { cart?: ShopifyCart | null; checkoutUrl?: string; error?: string; buyNow?: boolean };
+type CartResult = { cart?: ShopifyCart | null; cartEnabled?: boolean; purchasingEnabled?: boolean; checkoutUrl?: string; error?: string; buyNow?: boolean };
 export type EmbeddedCheckoutSession = { provider: "razorpay"; orderId: string; keyId: string; name: string; accentColor: string };
 type CheckoutResult = { provider?: "razorpay"; session?: EmbeddedCheckoutSession; checkoutUrl?: string; error?: string; statusPath?: string };
 

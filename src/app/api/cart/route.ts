@@ -13,7 +13,7 @@ import {
   ShopifyCartError,
   updateShopifyCartLine,
 } from "@/lib/shopify/cart";
-import { checkoutAllowedHosts, getCheckoutProvider, isShopifyCheckoutEnabled } from "@/lib/shopify/checkout-config";
+import { checkoutAllowedHosts, getCheckoutProvider, isShopifyCartEnabled, isShopifyCheckoutEnabled } from "@/lib/shopify/checkout-config";
 import { isSafeCheckoutUrl } from "@/lib/shopify/checkout-url";
 import { canAddCartQuantity, parseCartAction } from "@/lib/shopify/cart-validation";
 import { getStorefrontMode } from "@/lib/shopify/mode";
@@ -68,13 +68,13 @@ function safeCheckoutUrl(url: string, storeDomain: string): string | null {
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   const mode = getStorefrontMode();
-  if (mode.mode === "preview") return jsonNoStore({ cart: null, preview: true, purchasingEnabled: false });
-  if (mode.mode === "unavailable") return jsonNoStore({ cart: null, error: "The cart is temporarily unavailable. Try again shortly.", purchasingEnabled: false }, 503);
-  if (COOKIE_SECRET().length < 32) return jsonNoStore({ cart: null, purchasingEnabled: false });
+  if (mode.mode === "preview") return jsonNoStore({ cart: null, preview: true, cartEnabled: false, purchasingEnabled: false });
+  if (mode.mode === "unavailable") return jsonNoStore({ cart: null, error: "The cart is temporarily unavailable. Try again shortly.", cartEnabled: false, purchasingEnabled: false }, 503);
+  if (!isShopifyCartEnabled()) return jsonNoStore({ cart: null, cartEnabled: false, purchasingEnabled: false });
 
   const signedCart = readCartCookie(request.cookies.get(CART_COOKIE_NAME)?.value, COOKIE_SECRET());
   if (!signedCart) {
-    const response = jsonNoStore({ cart: null, purchasingEnabled: isShopifyCheckoutEnabled() });
+    const response = jsonNoStore({ cart: null, cartEnabled: true, purchasingEnabled: isShopifyCheckoutEnabled() });
     if (request.cookies.has(CART_COOKIE_NAME)) clearCartCookie(response);
     return response;
   }
@@ -82,11 +82,11 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     const cart = await getShopifyCart(signedCart.cartId, getBuyerIp(request.headers));
     if (!cart) {
-      const response = jsonNoStore({ cart: null, purchasingEnabled: isShopifyCheckoutEnabled(), expired: true });
+      const response = jsonNoStore({ cart: null, cartEnabled: true, purchasingEnabled: isShopifyCheckoutEnabled(), expired: true });
       clearCartCookie(response);
       return response;
     }
-    return jsonNoStore({ cart, purchasingEnabled: isShopifyCheckoutEnabled() });
+    return jsonNoStore({ cart, cartEnabled: true, purchasingEnabled: isShopifyCheckoutEnabled() });
   } catch {
     return jsonNoStore({ cart: null, error: "The cart is temporarily unavailable. Try again shortly." }, 502);
   }
@@ -97,9 +97,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   if (Number(request.headers.get("content-length") ?? 0) > 4096) return jsonNoStore({ error: "Cart request is too large." }, 413);
 
   const mode = getStorefrontMode();
-  if (mode.mode === "preview") return jsonNoStore({ error: "Checkout is disabled for this preview storefront." }, 409);
+  if (mode.mode === "preview") return jsonNoStore({ error: "Cart actions are disabled for this design preview." }, 409);
   if (mode.mode === "unavailable") return jsonNoStore({ error: "The cart is temporarily unavailable. Try again shortly." }, 503);
-  if (!isShopifyCheckoutEnabled()) return jsonNoStore({ error: "Shopify checkout is not enabled yet." }, 503);
 
   let body: unknown;
   try {
@@ -111,7 +110,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   if (!parsed.ok) return jsonNoStore({ error: parsed.reason }, 400);
 
   const action = parsed.value;
-  if ((action.action === "checkout" || action.action === "buy-now") && getCheckoutProvider() !== "shopify") {
+  const checkoutAction = action.action === "checkout" || action.action === "buy-now";
+  if (checkoutAction && !isShopifyCheckoutEnabled()) return jsonNoStore({ error: "Checkout is currently closed." }, 503);
+  if (!checkoutAction && !isShopifyCartEnabled()) return jsonNoStore({ error: "The cart is temporarily unavailable. Try again shortly." }, 503);
+  if (checkoutAction && getCheckoutProvider() !== "shopify") {
     return jsonNoStore({ error: "Use the configured storefront checkout flow." }, 409);
   }
   const secret = COOKIE_SECRET();
@@ -157,7 +159,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       }
       if (!cart) cart = await createShopifyCart(action.variantId, action.quantity, buyerIp);
       else cart = await addShopifyCartLine(cart.id, action.variantId, action.quantity, buyerIp);
-      const response = jsonNoStore({ cart, purchasingEnabled: true });
+      const response = jsonNoStore({ cart, cartEnabled: true, purchasingEnabled: isShopifyCheckoutEnabled() });
       saveCartCookie(response, cart.id);
       return response;
     }
@@ -181,7 +183,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const cart = action.action === "update"
       ? await updateShopifyCartLine(currentCart.id, action.lineId, action.quantity, buyerIp)
       : await removeShopifyCartLine(currentCart.id, action.lineId, buyerIp);
-    const response = jsonNoStore({ cart, purchasingEnabled: true });
+    const response = jsonNoStore({ cart, cartEnabled: true, purchasingEnabled: isShopifyCheckoutEnabled() });
     if (cart.totalQuantity === 0) clearCartCookie(response);
     else saveCartCookie(response, cart.id);
     return response;

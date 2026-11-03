@@ -3,7 +3,7 @@
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, Search, ShoppingBag, UserRound } from "lucide-react";
+import { Menu, ShoppingBag, UserRound } from "lucide-react";
 import { BrandMark } from "@/components/brand-mark";
 import { BotanicalEdges, MenuBackgroundFoliage } from "@/components/botanical-edges";
 import { CartPanel } from "@/components/cart-panel";
@@ -20,12 +20,11 @@ export function SiteHeader({ enabledCategories = DEFAULT_CATEGORY_HANDLES }: { e
   const [panel, setPanel] = useState<HeaderPanel>(null);
   const [compact, setCompact] = useState(false);
   const [query, setQuery] = useState("");
-  const desktopSearchRef = useRef<HTMLButtonElement>(null);
-  const mobileSearchRef = useRef<HTMLButtonElement>(null);
+  const searchTriggerRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLButtonElement>(null);
   const cartRef = useRef<HTMLButtonElement>(null);
   const cart = useStorefrontCart();
-  const cartCount = cart?.cart?.totalQuantity ?? 0;
+  const cartCount = Math.max(0, (cart?.cart?.totalQuantity ?? 0) + (cart?.pendingQuantityDelta ?? 0));
   const close = useCallback(() => setPanel(null), []);
   const [previousPathname, setPreviousPathname] = useState(pathname);
 
@@ -38,7 +37,6 @@ export function SiteHeader({ enabledCategories = DEFAULT_CATEGORY_HANDLES }: { e
     const media = window.matchMedia?.("(max-width: 1023px)");
     if (!media) return;
     const sync = () => {
-      if (document.activeElement?.closest("#header-search-panel")) (media.matches ? mobileSearchRef : desktopSearchRef).current?.focus({ preventScroll: true });
       setCompact(media.matches);
       setPanel(null);
     };
@@ -58,7 +56,7 @@ export function SiteHeader({ enabledCategories = DEFAULT_CATEGORY_HANDLES }: { e
   return (
     <header className={styles.header}>
       <BotanicalEdges placement="header" />
-      <div className={styles.topRow}>
+      <div className={`${styles.topRow} ${panel === "search" ? styles.searchOpen : ""}`}>
         <button
           ref={menuRef}
           className={`${styles.tool} ${styles.menu} site-header__menu`}
@@ -71,19 +69,6 @@ export function SiteHeader({ enabledCategories = DEFAULT_CATEGORY_HANDLES }: { e
           <Menu aria-hidden="true" />
         </button>
 
-        <button
-          ref={desktopSearchRef}
-          className={`${styles.searchTrigger} ${styles.desktopSearch} site-header__search-trigger site-tools__search`}
-          type="button"
-          aria-label="Search products"
-          aria-expanded={panel === "search"}
-          aria-controls="header-search-panel"
-          onClick={() => setPanel((value) => (value === "search" ? null : "search"))}
-        >
-          <Search aria-hidden="true" />
-          <span>Search</span>
-        </button>
-
         <Link className={styles.logo} href="/" aria-label="Nilkurinji home" onClick={close}>
           <BrandMark className={styles.mark} />
           <span className={styles.name}>NILKURINJI</span>
@@ -91,17 +76,16 @@ export function SiteHeader({ enabledCategories = DEFAULT_CATEGORY_HANDLES }: { e
         </Link>
 
         <div className={styles.tools}>
-          <button
-          ref={mobileSearchRef}
-            className={`${styles.tool} ${styles.mobileSearch} site-header__search-trigger site-tools__search`}
-            type="button"
-            aria-label="Search products"
-            aria-expanded={panel === "search"}
-            aria-controls="header-search-panel"
-            onClick={() => setPanel((value) => (value === "search" ? null : "search"))}
-          >
-            <Search aria-hidden="true" />
-          </button>
+          <SearchOverlay
+            open={panel === "search"}
+            compact={compact}
+            query={query}
+            onQueryChange={setQuery}
+            onOpen={() => setPanel("search")}
+            onClose={close}
+            triggerRef={searchTriggerRef}
+            enabledCategories={enabledCategories}
+          />
           <Link href="/account" className={`${styles.tool} ${styles.account}`} aria-label="Customer account" onClick={close}>
             <UserRound aria-hidden="true" />
           </Link>
@@ -128,7 +112,6 @@ export function SiteHeader({ enabledCategories = DEFAULT_CATEGORY_HANDLES }: { e
         />
       </Suspense>
 
-      <SearchOverlay open={panel === "search"} compact={compact} query={query} onQueryChange={setQuery} onClose={close} triggerRef={compact ? mobileSearchRef : desktopSearchRef} enabledCategories={enabledCategories} />
       <ModalSheet open={panel === "menu" && compact} id="header-menu-panel" label="Menu" placement="left" size="menu" triggerRef={menuRef} onClose={close}>
         <MenuBackgroundFoliage />
         <BotanicalEdges placement="menu-top" />

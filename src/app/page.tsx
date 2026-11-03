@@ -11,7 +11,7 @@ import { getProducts } from "@/lib/shopify/catalog";
 import { DRAFT_HOMEPAGE_CONTENT, getHomepageContent } from "@/lib/shopify/content";
 import { isTeaProduct } from "@/lib/catalog-state";
 import { CATEGORIES } from "@/lib/site-config";
-import { isShopifyCheckoutEnabled } from "@/lib/shopify/checkout-config";
+import { isShopifyCartEnabled, isShopifyCheckoutEnabled } from "@/lib/shopify/checkout-config";
 import styles from "@/components/home/home.module.css";
 import type { Metadata } from "next";
 import type { CSSProperties } from "react";
@@ -22,9 +22,9 @@ export const revalidate = 60;
 export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 const FALLBACK_HERO = {
-  url: "/images/nilkurinji-home-hero-desktop.webp",
-  mobileUrl: "/images/nilkurinji-home-hero-mobile.webp",
-  altText: "Amber tea and loose tea leaves beside blue-purple Nilkurinji blossoms, with green hills beyond",
+  url: "/images/nilkurinji-hero-elaichi-desktop.webp",
+  mobileUrl: "/images/nilkurinji-hero-elaichi-mobile.webp",
+  altText: "Nilkurinji Elaichi Tea package beside amber tea and loose tea leaves, with blue-violet blossoms and green hills beyond",
   width: 2048,
   height: 768,
 };
@@ -54,6 +54,7 @@ function HomeCategories({ enabled }: { enabled: string[] }) {
   const categories = CATEGORIES.filter((category) => enabled.includes(category.handle));
   if (!categories.length) return null;
   return <section className={styles.categories} aria-labelledby="home-categories-heading">
+    <BotanicalEdges placement="categories" />
     <div className={styles.categoryHeading}>
       <BrandMark className={styles.categoryMark} />
       <div><span className={styles.headingRule} /><h2 id="home-categories-heading">Our Categories</h2><span className={styles.headingRule} /></div>
@@ -83,7 +84,11 @@ function DeliveryBand() {
     { icon: Truck, title: "Pan India Delivery", body: "Available delivery options are confirmed at checkout." },
   ];
   return <section className={styles.deliveryBand} aria-label="Store information">
-    {items.map(({ icon: Icon, title, body }) => <div className={styles.deliveryItem} key={title}>
+    <BotanicalEdges placement="delivery" />
+    {items.map(({ icon: Icon, title, body }, index) => <div
+      className={`${styles.deliveryItem}${index === 0 ? ` ${styles.deliveryItemFirst}` : ""}${index === 0 || index === 2 ? ` ${styles.deliveryItemMobileRowStart}` : ""}`}
+      key={title}
+    >
       <Icon size={26} strokeWidth={1.4} aria-hidden="true" />
       <h3>{title}</h3><p>{body}</p>
     </div>)}
@@ -92,7 +97,8 @@ function DeliveryBand() {
 
 export default async function HomePage() {
   const [catalog, homepage, enabledCategories] = await Promise.all([getProducts(), getHomepageContent(), getEnabledCategoryHandles()]);
-  const purchasingEnabled = isShopifyCheckoutEnabled();
+  const cartEnabled = isShopifyCartEnabled();
+  const checkoutEnabled = isShopifyCheckoutEnabled();
   const content = homepage.source === "unavailable" ? null : homepage.data;
   const products = catalog.source === "unavailable" ? [] : catalog.data;
   const heroImage = content?.heroImage ?? FALLBACK_HERO;
@@ -121,7 +127,7 @@ export default async function HomePage() {
             <Link href="/shop">Shop all <ArrowRight size={16} aria-hidden="true" /></Link>
           </div>
         </div>
-        {catalog.source === "unavailable" ? <div className={styles.empty} role="status"><p>The range is temporarily unavailable.</p><Link href="/shop">Browse the shop</Link></div> : shownProducts.length ? <div className={styles.productRail} role="region" aria-label="Featured products" tabIndex={0}>{shownProducts.map((product) => <ProductCard key={product.id} product={product} purchasingEnabled={purchasingEnabled} variant="featured" />)}</div> : <div className={styles.empty}><p>The product range is being prepared.</p><Link href="/shop">Explore the shop</Link></div>}
+        {catalog.source === "unavailable" ? <div className={styles.empty} role="status"><p>The range is temporarily unavailable.</p><Link href="/shop">Browse the shop</Link></div> : shownProducts.length ? <div className={styles.productRail} role="region" aria-label="Featured products" tabIndex={0}>{shownProducts.map((product) => <ProductCard key={product.id} product={product} cartEnabled={cartEnabled} checkoutEnabled={checkoutEnabled} variant="featured" />)}</div> : <div className={styles.empty}><p>The product range is being prepared.</p><Link href="/shop">Explore the shop</Link></div>}
       </div>
     </section>
 

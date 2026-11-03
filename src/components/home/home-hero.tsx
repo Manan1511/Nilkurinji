@@ -35,7 +35,7 @@ export function HomeHero({
     {image && <div className={styles.heroMedia}>
       <picture className={styles.heroScene}>
         {mobileScene && <source media="(max-width: 599px)" srcSet={mobileScene.srcSet} sizes="100vw" />}
-        <Image className={styles.heroPhoto} src={image.url} alt={image.altText ?? ""} fill quality={85} preload sizes="100vw" />
+        <Image className={styles.heroPhoto} src={image.url} alt={image.altText ?? ""} fill quality={95} preload sizes="100vw" />
       </picture>
       <span className={styles.heroFade} aria-hidden="true" />
     </div>}

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { BotanicalEdges } from "@/components/botanical-edges";
 import type { StorefrontBlog, StorefrontBlogLanding, StorefrontData } from "@/lib/shopify/types";
 import styles from "./editorial.module.css";
@@ -9,16 +10,18 @@ type Props = {
   blog: StorefrontData<StorefrontBlog | null>;
   landing: StorefrontData<StorefrontBlogLanding | null>;
   previewImage?: string;
+  compactHero?: boolean;
+  children?: ReactNode;
 };
 
-export function BlogLanding({ title, blog, landing, previewImage }: Props) {
+export function BlogLanding({ title, blog, landing, previewImage, compactHero = false, children }: Props) {
   const articles = blog.source === "unavailable" ? [] : blog.data?.articles ?? [];
   const content = landing.source === "unavailable" ? null : landing.data;
   const image = content?.heroImage?.url ?? (blog.source === "preview" ? previewImage : undefined);
   const description = content?.intro;
 
   return <div className={styles.page}>
-    <header className={styles.hero}>
+    <header className={`${styles.hero} ${compactHero ? styles.heroCompact : ""}`}>
       {image && <Image src={image} alt={content?.altText || (blog.source === "preview" ? "Illustrative Nilkurinji concept imagery" : "")} fill quality={85} sizes="100vw" preload className={styles.heroImage} />}
       <BotanicalEdges placement="banner" />
       <div className={styles.heroCopy}>
@@ -28,6 +31,8 @@ export function BlogLanding({ title, blog, landing, previewImage }: Props) {
       </div>
       {blog.source === "preview" && image && <span className={styles.imageNote}>Illustrative concept imagery</span>}
     </header>
+
+    {children}
 
     <section className={styles.articles} aria-labelledby="editorial-heading">
       <div className={styles.sectionHeading}>

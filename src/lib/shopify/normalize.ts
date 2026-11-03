@@ -39,16 +39,28 @@ function parseApprovedHowItsMade(content: string | null | undefined, approved: s
   return text;
 }
 
-const CLIENT_PRODUCT_IMAGES: Record<string, ShopifyImage> = {
-  "premium-tea": { url: "/images/client-supplied/premium-tea-1kg-back-label.jpg", altText: "Back label of Nilkurinji Premium Tea, 1 kg", width: 1448, height: 1086 },
-  "rose-tea": { url: "/images/client-supplied/rose-tea-campaign.jpg", altText: "Nilkurinji Rose Tea, 500 g, in a campaign image", width: 1448, height: 1086 },
-  "elaichi-tea": { url: "/images/client-supplied/elaichi-tea-500g-pack.jpg", altText: "Nilkurinji Elaichi Tea, 500 g, in a campaign image", width: 1448, height: 1086 },
+const CLIENT_PRODUCT_IMAGES: Record<string, ShopifyImage[]> = {
+  "premium-tea": [{ url: "/images/client-supplied/premium-tea-1kg-back-label.jpg", altText: "Back label of Nilkurinji Premium Tea, 1 kg", width: 1448, height: 1086 }],
+  "rose-tea": [{ url: "/images/client-supplied/rose-tea-campaign.jpg", altText: "Nilkurinji Rose Tea, 500 g, in a campaign image", width: 1448, height: 1086 }],
+  "elaichi-tea": [
+    { url: "/images/client-supplied/elaichi-tea-500g-pack.jpg", altText: "Nilkurinji Elaichi Tea, 500 g pack", width: 1448, height: 1086 },
+    { url: "/images/client-supplied/elaichi-tea-500g-pack-alt.jpg", altText: "Alternate view of Nilkurinji Elaichi Tea, 500 g pack", width: 1448, height: 1086 },
+  ],
 };
+
+function uniqueImages(images: Array<ShopifyImage | null | undefined>): ShopifyImage[] {
+  const seen = new Set<string>();
+  return images.filter((image): image is ShopifyImage => {
+    if (!image || seen.has(image.url)) return false;
+    seen.add(image.url);
+    return true;
+  });
+}
 
 export function normalizeProduct(raw: RawProduct): StorefrontProduct {
   const variants = raw.variants?.nodes ?? [];
-  const fallbackImage = CLIENT_PRODUCT_IMAGES[raw.handle] ?? null;
-  const images = raw.images?.nodes?.length ? raw.images.nodes : raw.featuredImage ? [raw.featuredImage] : fallbackImage ? [fallbackImage] : [];
+  const shopifyImages = uniqueImages([raw.featuredImage, ...(raw.images?.nodes ?? []), ...variants.map((variant) => variant.image)]);
+  const images = shopifyImages.length ? shopifyImages : CLIENT_PRODUCT_IMAGES[raw.handle] ?? [];
   const minVariantPrice = raw.priceRange?.minVariantPrice ?? variants[0]?.price ?? null;
   const maxVariantPrice = raw.priceRange?.maxVariantPrice ?? minVariantPrice;
   const collectionHandles = raw.collections?.nodes?.map(({ handle }) => handle) ?? [];

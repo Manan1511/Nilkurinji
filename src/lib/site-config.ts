@@ -13,7 +13,7 @@ export const PRIMARY_NAV = [
   { label: "Shop", href: "/shop" },
   { label: "Tea Guide", href: "/tea-guide" },
   { label: "Recipes", href: "/recipes" },
-  { label: "Journal", href: "/journal" },
+  { label: "Nilkurinji Journal", href: "/journal" },
   { label: "Contact", href: "/contact" },
 ] as const;
 

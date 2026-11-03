@@ -1,4 +1,4 @@
-.panel { display: grid; gap: 16px; padding-block: 20px 24px; }
+.panel { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; padding-block: 20px 24px; }
 .panel :global(.purchase-panel__price) { font: 500 24px/1.4 var(--font-body); font-variant-numeric: tabular-nums; }
 .panel :global(.purchase-panel__tax) { margin-top: -16px; color: var(--ink-secondary); font-size: 14px; }
 .panel label { display: flex; flex-direction: column; gap: 10px; font-size: 14px; }

@@ -11,24 +11,24 @@
 .botanicalLeft { left: 12px; animation-delay: -4.2s; }
 .botanicalRight { right: 12px; animation-name: footer-leaf-sway-reverse; animation-duration: 15s; animation-delay: -8.1s; }
 @keyframes footer-leaf-sway {
-  0%,100% { rotate: 0deg; }
-  35% { rotate: .32deg; }
-  70% { rotate: -.22deg; }
+  0%,100% { rotate: 0deg; translate: 0 0; }
+  35% { rotate: 1.25deg; translate: 2.4px -.35px; }
+  70% { rotate: -.92deg; translate: -1.8px .25px; }
 }
 @keyframes footer-leaf-sway-reverse {
-  0%,100% { rotate: 0deg; }
-  32% { rotate: -.28deg; }
-  68% { rotate: .2deg; }
+  0%,100% { rotate: 0deg; translate: 0 0; }
+  32% { rotate: -1.15deg; translate: -2.3px -.3px; }
+  68% { rotate: .86deg; translate: 1.7px .25px; }
 }
 @keyframes footer-leaf-sway-desktop {
   0%,100% { rotate: 0deg; translate: 0 0; }
-  35% { rotate: 2.2deg; translate: 1px -.4px; }
-  70% { rotate: -1.55deg; translate: -1px .3px; }
+  35% { rotate: 2.25deg; translate: 2px -.4px; }
+  70% { rotate: -1.62deg; translate: -1.8px .3px; }
 }
 @keyframes footer-leaf-sway-desktop-reverse {
   0%,100% { rotate: 0deg; translate: 0 0; }
-  32% { rotate: -2deg; translate: -1px -.35px; }
-  68% { rotate: 1.4deg; translate: 1px .25px; }
+  32% { rotate: -2.1deg; translate: -2px -.35px; }
+  68% { rotate: 1.5deg; translate: 1.8px .25px; }
 }
 @media (min-width: 768px) {
   .botanical { animation-name: footer-leaf-sway-desktop; }
@@ -136,7 +136,7 @@
   .signature,.signatureWithoutSocial { order: 2; display: flex; flex-direction: column; justify-content: center; min-height: auto; padding: 12px var(--page-gutter); }
   .signature .brand,.signatureWithoutSocial .brand { min-height: auto; padding: 0 16px; }
   .logo,.descriptor { color: var(--forest); }
-  .signature .contact,.signature .signoff,.signature .botanical { display: none; }
+  .signature .contact,.signature .signoff { display: none; }
   .signature .socialBlock { display: flex; min-height: auto; padding: 12px 0 0; border: 0; }
   .socialBlock h2 { color: var(--forest); }
   .socials a { color: var(--forest); }

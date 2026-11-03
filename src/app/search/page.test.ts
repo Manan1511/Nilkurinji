@@ -1,31 +1,22 @@
-import { renderToStaticMarkup } from "react-dom/server";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import SearchPage from "@/app/search/page";
 
-describe("unavailable search page", () => {
-  afterEach(() => vi.unstubAllEnvs());
+async function expectSearchRedirect(query: string | undefined, destination: string) {
+  try {
+    await SearchPage({ searchParams: Promise.resolve({ q: query }) });
+  } catch (error) {
+    expect((error as Error & { digest?: string }).digest).toContain(destination);
+    return;
+  }
+  throw new Error("Expected the legacy search route to redirect to the shop.");
+}
 
-  it("hides storefront setup errors and offers a shopper route", async () => {
-    vi.stubEnv("SHOPIFY_MODE", "live");
-    vi.stubEnv("SHOPIFY_STORE_DOMAIN", "");
-    vi.stubEnv("SHOPIFY_API_VERSION", "");
-    vi.stubEnv("SHOPIFY_STOREFRONT_PRIVATE_TOKEN", "");
-    const markup = renderToStaticMarkup(await SearchPage({ searchParams: Promise.resolve({ q: "tea" }) }));
-
-    expect(markup).not.toContain("Live Shopify storefront configuration is incomplete.");
-    expect(markup).not.toContain("incomplete");
-    expect(markup).toContain("Search is temporarily unavailable.");
-    expect(markup).toContain('href="/shop"');
+describe("legacy search route", () => {
+  it("sends product searches to the shop results", async () => {
+    await expectSearchRedirect(" tea   bags ", "/shop?q=tea%20bags");
   });
 
-  it("offers shop format filters when a query has no results", async () => {
-    vi.stubEnv("SHOPIFY_MODE", "preview");
-    const markup = renderToStaticMarkup(await SearchPage({ searchParams: Promise.resolve({ q: "no-matching-tea-92849" }) }));
-
-    expect(markup).toContain("No products found for");
-    expect(markup).toContain('href="/shop?category=tea"');
-    expect(markup).toContain('href="/shop?category=tea-bags"');
-    expect(markup).not.toContain("/collections/");
-    expect(markup).not.toContain("clearing a filter");
+  it("sends an empty search to the shop", async () => {
+    await expectSearchRedirect(undefined, "/shop");
   });
 });

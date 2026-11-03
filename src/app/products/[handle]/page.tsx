@@ -6,7 +6,7 @@ import { ProductCard } from "@/components/product-card";
 import { ProductGallery } from "@/components/product-gallery";
 import { ProductPurchasePanel } from "@/components/product-purchase-panel";
 import { TeaDetails } from "@/components/tea-details";
-import { isShopifyCheckoutEnabled } from "@/lib/shopify/checkout-config";
+import { isShopifyCartEnabled, isShopifyCheckoutEnabled } from "@/lib/shopify/checkout-config";
 import { getProduct, getRecommendations } from "@/lib/shopify/catalog";
 import { CATEGORIES } from "@/lib/site-config";
 import type { StorefrontProduct } from "@/lib/shopify/types";
@@ -83,7 +83,7 @@ export default async function ProductPage({ params }: PageProps) {
   const related = recommendations.source === "unavailable" ? [] : recommendations.data.filter((item) => item.id !== product.id);
   return <div className={styles.page}>
     <nav className={styles.breadcrumb} aria-label="Breadcrumb"><Link href="/shop">Shop</Link><ChevronRight size={14} aria-hidden="true" />{category && <><Link href={category.href}>{category.label}</Link><ChevronRight size={14} aria-hidden="true" /></>}<span>{product.title}</span></nav>
-    <div className={styles.layout} key={product.id}><ProductGallery images={product.images} title={product.title} /><ProductDetails className={styles.detail}><h1 id="product-title">{product.title}</h1><ProductPurchasePanel product={product} purchasingEnabled={isShopifyCheckoutEnabled()} />{product.description && <p className={styles.description}>{product.description}</p>}<TeaDetails product={product} /></ProductDetails></div>
+    <div className={styles.layout} key={product.id}><ProductGallery images={product.images} title={product.title} /><ProductDetails className={styles.detail}><h1 id="product-title">{product.title}</h1><ProductPurchasePanel product={product} cartEnabled={isShopifyCartEnabled()} checkoutEnabled={isShopifyCheckoutEnabled()} purchasingEnabled={isShopifyCheckoutEnabled()} />{product.description && <p className={styles.description}>{product.description}</p>}<TeaDetails product={product} /></ProductDetails></div>
     {(product.howItsMade || product.isPreview) && <section className={styles.howItsMade} aria-labelledby="how-its-made-heading">
       <h2 id="how-its-made-heading">How it’s made</h2>
       <p>{product.howItsMade ?? "Production details for this product will appear here once Nilkurinji confirms them."}</p>
@@ -93,7 +93,7 @@ export default async function ProductPage({ params }: PageProps) {
       {product.faqs.length > 0 && <section><h2>Frequently asked questions</h2>{product.faqs.map((faq) => <details key={faq.question}><summary>{faq.question}</summary><p>{faq.answer}</p></details>)}</section>}
       {product.approvedReviews.length > 0 && <section><h2>Customer reviews</h2>{product.approvedReviews.map((review,index) => <article key={`${review.name}-${index}`}><div className={styles.stars} aria-label={`${review.rating} out of 5 stars`}>{Array.from({ length: review.rating }, (_, i) => <Star key={i} size={16} fill="currentColor" aria-hidden="true" />)}</div>{review.title && <h3>{review.title}</h3>}<p>{review.body}</p><p className={styles.byline}>{review.name}{review.date && <> · <time dateTime={review.date}>{new Intl.DateTimeFormat("en-IN", { dateStyle: "medium" }).format(new Date(`${review.date}T00:00:00`))}</time></>}</p></article>)}</section>}
     </div>}
-    {related.length > 0 && <section className={styles.related}><h2>You may also like</h2><div className={styles.grid}>{related.slice(0,4).map((item) => <ProductCard key={item.id} product={item} purchasingEnabled={isShopifyCheckoutEnabled()} />)}</div></section>}
+    {related.length > 0 && <section className={styles.related}><h2>You may also like</h2><div className={styles.grid}>{related.slice(0,4).map((item) => <ProductCard key={item.id} product={item} cartEnabled={isShopifyCartEnabled()} checkoutEnabled={isShopifyCheckoutEnabled()} />)}</div></section>}
     {!product.isPreview && product.priceRange && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd(product)).replace(/</g,"\\u003c") }} />}
   </div>;
 }

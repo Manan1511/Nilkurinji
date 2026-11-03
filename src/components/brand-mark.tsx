@@ -1,3 +1,5 @@
+import styles from "./brand-mark.module.css";
+
 type BrandMarkProps = {
   className?: string;
 };
@@ -5,7 +7,7 @@ type BrandMarkProps = {
 export function BrandMark({ className }: BrandMarkProps) {
   return (
     <svg
-      className={className}
+      className={[styles.mark, className].filter(Boolean).join(" ")}
       viewBox="0 0 40 32"
       fill="none"
       aria-hidden="true"

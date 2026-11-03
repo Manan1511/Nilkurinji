@@ -57,7 +57,7 @@ describe("shared storefront header", () => {
   it("submits a product query from the header instead of linking to a blank search page", () => {
     const markup = renderToStaticMarkup(createElement(SiteHeader));
 
-    expect(markup).toContain('action="/search"');
+    expect(markup).toContain('action="/shop"');
     expect(markup).toContain('name="q"');
     expect(markup).toContain('placeholder="Search tea and pantry"');
     expect(markup).not.toContain('href="/search"');

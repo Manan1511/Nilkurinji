@@ -2,6 +2,10 @@ import "server-only";
 
 import { getStorefrontMode } from "@/lib/shopify/mode";
 
+export function isShopifyCartEnabled(): boolean {
+  return getStorefrontMode().mode === "live" && (process.env.CART_COOKIE_SECRET?.trim().length ?? 0) >= 32;
+}
+
 export function isShopifyCheckoutEnabled(): boolean {
   if (getStorefrontMode().mode !== "live" || process.env.SHOPIFY_CHECKOUT_ENABLED?.trim().toLowerCase() !== "true" || (process.env.CART_COOKIE_SECRET?.length ?? 0) < 32) return false;
   const provider = process.env.CHECKOUT_PROVIDER?.trim().toLowerCase();

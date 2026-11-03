@@ -85,7 +85,7 @@ describe("header search interaction", () => {
       input.dispatchEvent(new Event("input", { bubbles: true }));
     });
     const form = input.form!;
-    expect(form.getAttribute("action")).toBe("/search");
+    expect(form.getAttribute("action")).toBe("/shop");
     expect(new FormData(form).get("q")).toBe("green tea");
     await act(async () => form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })));
     expect(element<HTMLDialogElement>("#header-search-panel").open).toBe(false);

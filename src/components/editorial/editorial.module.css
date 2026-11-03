@@ -1,5 +1,6 @@
 .page { padding-bottom: clamp(48px, 6vw, 88px); }
 .hero { position: relative; display: grid; align-items: center; min-height: 260px; overflow: hidden; isolation: isolate; background: var(--paper); }
+.heroCompact { min-height: 210px; }
 .hero::after { position: absolute; z-index: -1; inset: 0; background: linear-gradient(90deg, var(--paper) 0%, color-mix(in srgb, var(--paper) 90%, transparent) 42%, transparent 100%); content: ""; }
 .heroImage { z-index: -2; object-fit: cover; object-position: right center; }
 .heroCopy { position: relative; z-index: 1; width: min(1440px, 100%); padding: 40px var(--page-gutter); margin-inline: auto; }
@@ -28,6 +29,18 @@
 .readMore:hover span { transform: translateX(3px); }
 .empty,.notice { padding: 28px; border: 1px solid var(--rule); color: var(--ash); text-align: center; }
 .empty a { display: inline-flex; margin-top: 14px; }
+.customerReviews { width: min(1360px, 100%); padding: 20px var(--page-gutter) 0; margin-inline: auto; }
+.customerReviewsHeading { display: flex; align-items: center; justify-content: center; gap: 18px; margin-bottom: 22px; }
+.customerReviewsHeading > span { width: min(72px, 12vw); height: 1px; background: var(--rule); }
+.customerReviewsHeading h2 { color: var(--ink); font: 400 clamp(1.6rem, 2.2vw, 2rem)/1.2 var(--font-editorial); text-align: center; }
+.customerReviewGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.customerReviewCard { display: flex; min-width: 0; min-height: 190px; align-items: stretch; gap: 14px; padding: 14px; border: 1px solid var(--rule); border-radius: 10px; background: var(--paper-light); }
+.customerReviewCopy { display: flex; min-width: 0; flex: 1; flex-direction: column; justify-content: center; }
+.customerReviewCopy blockquote { color: var(--ash); font-size: 14px; line-height: 1.5; }
+.customerReviewCopy footer { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin-top: 12px; color: var(--ash); font-size: 12px; line-height: 1.4; }
+.customerReviewCopy cite { color: var(--ink); font-style: normal; font-weight: 700; }
+.customerReviewPhoto { position: relative; flex: 0 0 34%; min-width: 100px; min-height: 160px; overflow: hidden; border-radius: 7px; background: var(--parchment); }
+.customerReviewPhoto img { object-fit: cover; }
 .article { width: min(100%, 960px); padding: 28px var(--page-gutter) clamp(48px, 7vw, 96px); margin-inline: auto; }
 .unavailable { min-height: 340px; text-align: center; }
 .unavailable h1 { color: var(--ink); font: 400 clamp(2rem, 4vw, 3rem)/1.15 var(--font-editorial); }
@@ -49,13 +62,23 @@
 .articleBody li + li { margin-top: .45em; }
 .articleBody a { color: var(--forest); text-underline-offset: 3px; }
 .articleFooter { max-width: 68ch; margin: 40px auto 0; padding-top: 20px; border-top: 1px solid var(--rule); }
-@media (max-width: 900px) { .grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 20px; } }
+@media (max-width: 900px) { .grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 20px; } .customerReviewGrid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; } }
 @media (max-width: 639px) {
   .hero { min-height: 220px; }
+  .hero.heroCompact { min-height: 190px; }
   .hero::after { background: linear-gradient(90deg, var(--paper) 0%, color-mix(in srgb, var(--paper) 84%, transparent) 72%, color-mix(in srgb, var(--paper) 20%, transparent) 100%); }
   .heroCopy { padding-block: 32px; }
   .heroCopy h1 { max-width: 12ch; font-size: 2.25rem; }
   .grid { grid-template-columns: 1fr; gap: 18px; }
+  .customerReviews { padding-top: 16px; }
+  .customerReviewsHeading { gap: 10px; margin-bottom: 16px; }
+  .customerReviewsHeading > span { width: min(34px, 8vw); }
+  .customerReviewsHeading h2 { font-size: 1.55rem; }
+  .customerReviewGrid { grid-template-columns: 1fr; gap: 12px; }
+  .customerReviewCard { min-height: 166px; gap: 12px; padding: 12px; }
+  .customerReviewCopy blockquote { font-size: 13px; line-height: 1.45; }
+  .customerReviewCopy footer { margin-top: 8px; font-size: 11px; }
+  .customerReviewPhoto { flex-basis: 31%; min-height: 140px; }
   .cardCopy { padding: 14px 16px 16px; }
   .article { padding-top: 20px; }
   .articleHeader { margin-top: 36px; }

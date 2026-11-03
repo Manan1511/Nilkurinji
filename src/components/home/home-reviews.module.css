@@ -6,8 +6,8 @@
 .foliage .leafTopRight { top: -16px; right: -60px; opacity: .13; transform-origin: right top; animation-delay: -4s; }
 .foliage .leafBottomLeft { bottom: -70px; left: -55px; opacity: .36; transform-origin: left bottom; animation-delay: -6s; }
 .foliage .leafBottomRight { bottom: -35px; right: -55px; opacity: .4; transform-origin: right bottom; animation-delay: -2s; }
-@keyframes reviewLeafSway { 0%, 100% { rotate: 0deg; } 35% { rotate: .9deg; } 70% { rotate: -.65deg; } }
-@keyframes reviewLeafSwayDesktop { 0%, 100% { rotate: 0deg; } 35% { rotate: 1.65deg; } 70% { rotate: -1.15deg; } }
+@keyframes reviewLeafSway { 0%, 100% { rotate: 0deg; translate: 0 0; } 35% { rotate: 1.65deg; translate: 3px -.5px; } 70% { rotate: -1.1deg; translate: -2px .3px; } }
+@keyframes reviewLeafSwayDesktop { 0%, 100% { rotate: 0deg; translate: 0 0; } 35% { rotate: 2.15deg; translate: 3px -.5px; } 70% { rotate: -1.55deg; translate: -2px .35px; } }
 .heading { display: block; max-width: 760px; margin: 0 auto 14px; text-align: center; }
 .heading h2 { color: var(--ink); font: 400 clamp(1.85rem, 2.5vw, 2.25rem)/1.12 var(--font-editorial); letter-spacing: -.025em; }
 .heading > p { max-width: 50ch; margin: 6px auto 0; color: var(--muted); font: 400 clamp(16px, 1.35vw, 18px)/1.4 var(--font-editorial); }

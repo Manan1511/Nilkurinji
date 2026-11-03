@@ -1,5 +1,5 @@
 import { getStorefrontMode } from "@/lib/shopify/mode";
-import { isShopifyCheckoutEnabled } from "@/lib/shopify/checkout-config";
+import { isShopifyCartEnabled, isShopifyCheckoutEnabled } from "@/lib/shopify/checkout-config";
 import styles from "./store-notice.module.css";
 
 export function StoreNotice() {
@@ -15,7 +15,7 @@ export function StoreNotice() {
     return <div className={styles.notice} role="status">The store is being prepared. Purchases disabled.</div>;
   }
   if (!isShopifyCheckoutEnabled()) {
-    return <div className={styles.notice} role="status">Browse the collection · Checkout currently closed</div>;
+    return <div className={styles.notice} role="status">{isShopifyCartEnabled() ? "Add items to your cart · Checkout currently closed" : "Browse the collection · Checkout currently closed"}</div>;
   }
   return null;
 }
