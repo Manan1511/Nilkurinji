@@ -2,28 +2,30 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { createElement } from "react";
 import { describe, expect, it } from "vitest";
 import { HomeReviews } from "./home-reviews";
-import { makeProduct } from "../../../test/fixtures/storefront";
 
 describe("homepage reviews", () => {
-  const product = makeProduct({ handle: "premium-tea", title: "Nilkurinji Premium Tea", isPreview: false });
+  it("renders all twelve supplied customer reviews with their attribution", () => {
+    const html = renderToStaticMarkup(createElement(HomeReviews));
 
-  it("shows sample reviews with Shopify products during preview", () => {
-    const html = renderToStaticMarkup(createElement(HomeReviews, { products: [product], preview: true }));
-    expect(html).toContain("Notes from Tea Lovers");
+    expect(html).toContain("The Nilkurinji Journal");
+    expect(html).toContain("Real stories, honest experiences and love shared by our customers.");
+    expect(html.match(/aria-roledescription="slide"/g)).toHaveLength(12);
+    expect(html).toContain("Rituparna bhattacharjee");
+    expect(html).toContain("Guwahati, Assam");
+    expect(html).toContain("I actually really loved it ,the aroma ,strong colour &amp; taste - overall a very fine quality tea 😊.");
+    expect(html).toContain("Neha Kumar");
+    expect(html).toContain("⭐⭐⭐⭐⭐");
     expect(html).not.toContain("Illustrative mock reviews");
-    expect(html).toContain("mock rating");
     expect(html).not.toContain("Preview sample");
-    expect(html).toContain("/products/premium-tea");
+    expect(html).not.toContain("Mira S.");
   });
 
-  it("does not show sample reviews in a purchasing-enabled storefront", () => {
-    expect(renderToStaticMarkup(createElement(HomeReviews, { products: [product], preview: false }))).toBe("");
-  });
+  it("uses a different decorative image for each review card", () => {
+    const html = renderToStaticMarkup(createElement(HomeReviews));
+    const imageSources = Array.from(html.matchAll(/src="([^"]+)"/g), (match) => decodeURIComponent(match[1] ?? ""));
+    const reviewPhotoSources = imageSources.filter((source) => source?.includes("/images/") && !source.includes("/botanical/"));
 
-  it("prefers approved customer reviews over preview samples", () => {
-    const reviewed = makeProduct({ approvedReviews: [{ name: "Customer", rating: 5, title: "Lovely", body: "A lovely tea.", date: null }] });
-    const html = renderToStaticMarkup(createElement(HomeReviews, { products: [reviewed], preview: true }));
-    expect(html).toContain("A lovely tea.");
-    expect(html).not.toContain("Preview sample");
+    expect(reviewPhotoSources).toHaveLength(12);
+    expect(new Set(reviewPhotoSources).size).toBe(12);
   });
 });

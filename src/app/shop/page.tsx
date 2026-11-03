@@ -26,6 +26,14 @@ const categoryCopy: Record<string, { heading: string; body: string }> = {
   "other-foods": { heading: "Other foods", body: "Browse other foods from the Nilkurinji collection." },
 };
 
+function ShopBannerFoliage() {
+  return <span className={styles.extraFoliage} aria-hidden="true">
+    <Image className={styles.upperRightLeaf} src="/images/botanical/botanical-home-hero-right-refined.webp" alt="" width={1327} height={1186} quality={82} sizes="(max-width: 767px) 160px, (max-width: 1279px) 190px, 270px" />
+    <Image className={styles.middleRightLeaf} src="/images/botanical/botanical-header-left-refined.webp" alt="" width={1433} height={1098} quality={82} sizes="(max-width: 767px) 130px, (max-width: 1279px) 170px, 220px" />
+    <Image className={styles.lowerMiddleLeaf} src="/images/botanical/botanical-editorial-left.webp" alt="" width={1024} height={683} quality={82} sizes="(max-width: 1279px) 180px, 260px" />
+  </span>;
+}
+
 function ShopBanner({ category, image, mobileImage, copy, preview }: { category: string; image: ShopifyImage | null; mobileImage: ShopifyImage | null; copy: { eyebrow?: string; heading?: string; body?: string; altText?: string } | null; preview: boolean }) {
   const alt = copy?.altText || image?.altText || "";
   const mobileImageProps = mobileImage ? getImageProps({
@@ -44,6 +52,7 @@ function ShopBanner({ category, image, mobileImage, copy, preview }: { category:
       {preview && image.url.includes("preview-") && <span className={styles.disclosure}>Illustrative concept imagery</span>}
     </div>}
     <BotanicalEdges placement="banner" />
+    {!image && <ShopBannerFoliage />}
     <div className={styles.copy}>
       <p className={styles.eyebrow}>{copy?.eyebrow || (category === "all" ? "NILKURINJI · SHOP" : `NILKURINJI · ${CATEGORIES.find((item) => item.handle === category)?.label.toUpperCase()}`)}</p>
       <h1>{copy?.heading || categoryCopy[category]?.heading || categoryCopy.all.heading}</h1>

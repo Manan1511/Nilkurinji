@@ -22,10 +22,10 @@ it("follows the approved banner, arrow-free categories and editorial four-produc
   const featuredStart = html.indexOf('aria-labelledby="home-featured-heading"');
   const featuredMarkup = html.slice(featuredStart, html.indexOf('aria-labelledby="home-reviews-heading"', featuredStart));
 
-  expect(html).toContain("nilkurinji-hero-elaichi-desktop.webp");
-  expect(html).toContain("nilkurinji-hero-elaichi-mobile.webp");
+  expect(html).toContain("nilkurinji-home-hero-desktop.webp");
+  expect(html).toContain("nilkurinji-home-hero-mobile.webp");
   expect(html).not.toContain("Illustrative concept imagery");
-  expect(html).toContain("elaichi-tea-500g-pack.jpg");
+  expect(html).not.toContain("hero-elaichi-pack-overlay.webp");
   expect(html).toContain("Explore our range");
   expect(html).toContain('aria-label="Shop by category"');
   for (const category of ["Tea", "Tea Bags"]) expect(categoriesMarkup).toContain(category);
@@ -51,14 +51,14 @@ it("follows the approved banner, arrow-free categories and editorial four-produc
   expect(html).not.toContain("botanical-tea-spray-alt.webp");
 });
 
-it("shows the illustrative hero fallback without substituting preview products when live content is unavailable", async () => {
+it("shows a product-free hero fallback without substituting preview products when live content is unavailable", async () => {
   vi.stubEnv("SHOPIFY_MODE", "live");
   vi.mocked(getProducts).mockResolvedValue({ source: "unavailable", data: null, reason: "unavailable" });
   const html = renderToStaticMarkup(await HomePage());
 
   expect(html).not.toContain("preview-hero-home-kurinji.webp");
-  expect(html).toContain("nilkurinji-hero-elaichi-desktop.webp");
-  expect(html).toContain("elaichi-tea-500g-pack.jpg");
+  expect(html).toContain("nilkurinji-home-hero-desktop.webp");
+  expect(html).not.toContain("hero-elaichi-pack-overlay.webp");
   expect(html).not.toContain("Preview Tea");
   expect(html).toContain("The range is temporarily unavailable.");
 });

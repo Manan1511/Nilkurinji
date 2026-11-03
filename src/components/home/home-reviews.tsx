@@ -1,75 +1,104 @@
-import Link from "next/link";
 import Image from "next/image";
-import { Star } from "lucide-react";
 import { BrandMark } from "@/components/brand-mark";
 import { ReviewRail } from "@/components/home/review-rail";
 import styles from "./home-reviews.module.css";
-import type { ApprovedProductReview, StorefrontProduct } from "@/lib/shopify/types";
 
 type HomepageReview = {
   id: string;
-  productHandle: string;
-  productTitle: string;
-  review: ApprovedProductReview;
-  sample?: boolean;
+  name: string;
+  location: string;
+  body: string;
+  photo: string;
 };
 
-const PREVIEW_REVIEW_COPY: Omit<ApprovedProductReview, "date">[] = [
+const CUSTOMER_REVIEWS: HomepageReview[] = [
   {
-    name: "Mira S.",
-    rating: 5,
-    title: "A gentle start to the day",
-    body: "An easy cup for slow mornings. I like making a little time for it before the day gets busy.",
+    id: "rituparna-bhattacharjee",
+    name: "Rituparna bhattacharjee",
+    location: "Guwahati, Assam",
+    body: "I actually really loved it ,the aroma ,strong colour & taste - overall a very fine quality tea 😊. Being a milk tea lover ,it was really good experience.",
+    photo: "/images/leaf-to-cup/hero-cup.webp",
   },
   {
-    name: "Arjun R.",
-    rating: 5,
-    title: "A pause in the afternoon",
-    body: "Comforting and easy to come back to when I want a quiet moment in the middle of the day.",
+    id: "preeti-sharma",
+    name: "Preeti Sharma",
+    location: "Jhunjhunu, Rajasthan",
+    body: "I really enjoyed Nilkurinji Premium Tea. It has a pleasant aroma, a refreshing taste, and a nice colour. The overall quality is good, and I had a lovely tea experience. Thank you! 😊",
+    photo: "/images/leaf-to-cup/hero-leaf.webp",
   },
   {
-    name: "Neha P.",
-    rating: 4,
-    title: "A simple everyday cup",
-    body: "A small, familiar ritual that fits just as well at my desk as it does at home.",
+    id: "deepika-cherukuri",
+    name: "Deepika Cherukuri",
+    location: "Andhra Pradesh",
+    body: "Not just saying... But I really loved your tea... Was so nice... I gave some tea powder to my mom also and she too said the same😊",
+    photo: "/images/leaf-to-cup/hero-water.webp",
+  },
+  {
+    id: "diksha-verma",
+    name: "Diksha Verma",
+    location: "M.P",
+    body: "I really enjoyed the tea! It has a nice aroma, a rich colour, and a refreshing taste. The overall quality is good, and it makes for a lovely cup of tea. 😊☕",
+    photo: "/images/leaf-to-cup/format-tea.webp",
+  },
+  {
+    id: "vanshika-sharma",
+    name: "Vanshika Sharma",
+    location: "Delhi",
+    body: "I like the taste, and it doesn’t leave me feeling as heavy as some other teas do. Overall, I’ve had a pleasant experience with it.",
+    photo: "/images/leaf-to-cup/format-tea-bags.webp",
+  },
+  {
+    id: "sneha-kanodia",
+    name: "Sneha Kanodia",
+    location: "Kanpur, UP",
+    body: "I usually pay attention to how I feel after drinking tea. I’ve personally found this one comfortable to drink, without the acidity I sometimes experience with other teas.",
+    photo: "/images/tea-hero-editorial.webp",
+  },
+  {
+    id: "jagrity-varshney",
+    name: "Jagrity Varshney",
+    location: "Bangalore",
+    body: "The tea tastes really good, and personally, I feel quite light after having it. It has become a nice part of my daily routine.",
+    photo: "/images/reviews/review-window.webp",
+  },
+  {
+    id: "himanshi",
+    name: "Himanshi",
+    location: "Lucknow, UP",
+    body: "I liked the overall tea experience, from the aroma to the flavour. It feels like a thoughtful choice for tea lovers.",
+    photo: "/images/reviews/review-veranda.webp",
+  },
+  {
+    id: "pramita-chakraborty",
+    name: "Pramita Chakraborty",
+    location: "West Bengal",
+    body: "The tea has a lovely flavour and a comforting aroma. I especially liked how enjoyable it was with my daily tea time.",
+    photo: "/images/reviews/review-journal.webp",
+  },
+  {
+    id: "neha-kumar",
+    name: "Neha Kumar",
+    location: "Pulwama ,J&K",
+    body: "Absolutely loved this tea! It has a rich color, strong refreshing taste, and an amazing aroma that instantly brightens up your day. Highly recommended for all tea lovers! ⭐⭐⭐⭐⭐",
+    photo: "/images/reviews/review-amber-cup.webp",
+  },
+  {
+    id: "nisha-prasad",
+    name: "Nisha prasad",
+    location: "Chhattisgarh",
+    body: "Thank you so much! ❤️ Nilkurinji Premium Tea has a lovely aroma, a refreshing taste, and a beautiful colour. The overall quality feels really good, making it a perfect choice for tea lovers. ☕🌿✨",
+    photo: "/images/reviews/review-after-rain.webp",
+  },
+  {
+    id: "lucky-neeti-manhas",
+    name: "Lucky Neeti Manhas",
+    location: "Agra",
+    body: "A great option for those who enjoy strong chai, just a small amount of tea leaves delivers a rich, bold flavour!",
+    photo: "/images/reviews/review-shared-tea.webp",
   },
 ];
 
-const REVIEW_PHOTOS = [
-  "/images/tea-hero-editorial.webp",
-  "/images/leaf-to-cup/hero-cup.webp",
-  "/images/category-tea-bags-kurinji.webp",
-] as const;
-
-function recentApprovedReviews(products: StorefrontProduct[]): HomepageReview[] {
-  return products
-    .filter((product) => !product.isPreview)
-    .flatMap((product) => product.approvedReviews.map((review, index) => ({
-      id: `${product.handle}-${review.date ?? "undated"}-${review.name}-${index}`,
-      productHandle: product.handle,
-      productTitle: product.title,
-      review,
-    })))
-    .sort((a, b) => (b.review.date ?? "").localeCompare(a.review.date ?? ""))
-    .slice(0, 3);
-}
-
-function previewSampleReviews(products: StorefrontProduct[]): HomepageReview[] {
-  const previewProducts = products.slice(0, PREVIEW_REVIEW_COPY.length);
-  return previewProducts.map((product, index) => ({
-    id: `preview-sample-${product.handle}`,
-    productHandle: product.handle,
-    productTitle: product.title,
-    review: { ...PREVIEW_REVIEW_COPY[index], date: null },
-    sample: true,
-  }));
-}
-
-export function HomeReviews({ products, preview }: { products: StorefrontProduct[]; preview: boolean }) {
-  const approvedReviews = recentApprovedReviews(products);
-  const reviews = approvedReviews.length ? approvedReviews : preview ? previewSampleReviews(products) : [];
-  if (!preview && reviews.length === 0) return null;
-
+export function HomeReviews() {
   return <section className={styles.section} aria-labelledby="home-reviews-heading">
     <span className={styles.foliage} aria-hidden="true">
       <Image className={styles.leafTopLeft} src="/images/botanical/botanical-editorial-left.webp" alt="" width={1024} height={683} quality={85} sizes="(max-width: 599px) clamp(115px, 36vw, 155px), 190px" />
@@ -81,29 +110,30 @@ export function HomeReviews({ products, preview }: { products: StorefrontProduct
       <header className={styles.heading}>
         <span className={styles.ornament} aria-hidden="true"><BrandMark /></span>
         <h2 id="home-reviews-heading">The Nilkurinji Journal</h2>
-        {reviews.length > 0 && <p>Real stories, honest experiences and love shared by our customers.</p>}
+        <p>Real stories, honest experiences and love shared by our customers.</p>
       </header>
 
-      {reviews.length > 0 ? <ReviewRail count={reviews.length}>
-        {reviews.map(({ id, productHandle, productTitle, review, sample }, index) => {
-          const photo = REVIEW_PHOTOS[index % REVIEW_PHOTOS.length] ?? REVIEW_PHOTOS[0];
-          return <article className={styles.review} key={id} id={`home-review-${index + 1}`}>
-            <div className={styles.copy}>
-            <div className={styles.rating} role="img" aria-label={`${review.rating} out of 5 stars${sample ? ", mock rating" : ""}`}>
-              {Array.from({ length: 5 }, (_, index) => <Star key={index} size={16} fill={index < review.rating ? "currentColor" : "none"} aria-hidden="true" />)}
-            </div>
-            {review.title && <h3>{review.title}</h3>}
-            <p className={styles.body}>{review.body}</p>
-            <div className={styles.byline}>
-              <span>{review.name}</span>
-              <Link href={`/products/${productHandle}`}>{productTitle}</Link>
-              {review.date && <time dateTime={review.date}>{new Intl.DateTimeFormat("en-IN", { dateStyle: "medium" }).format(new Date(`${review.date}T00:00:00`))}</time>}
-            </div>
-            </div>
-            <div className={styles.photo}><Image src={photo} alt="" fill sizes="(max-width: 359px) 100px, (max-width: 599px) calc((100vw - 40px) * 0.35), 250px" /></div>
-          </article>;
-        })}
-      </ReviewRail> : <p className={styles.empty}>Approved customer reviews will appear here when available.</p>}
+      <ReviewRail count={CUSTOMER_REVIEWS.length}>
+        {CUSTOMER_REVIEWS.map((review, index) => <article
+          className={styles.review}
+          key={review.id}
+          id={`home-review-${index + 1}`}
+          role="group"
+          aria-roledescription="slide"
+          aria-label={`Review ${index + 1} of ${CUSTOMER_REVIEWS.length}`}
+        >
+          <div className={styles.copy}>
+            <blockquote className={styles.body}>{review.body}</blockquote>
+            <footer className={styles.byline}>
+              <cite>{review.name}</cite>
+              <span>{review.location}</span>
+            </footer>
+          </div>
+          <div className={styles.photo}>
+            <Image src={review.photo} alt="" fill sizes="(max-width: 359px) 90px, (max-width: 599px) 31vw, 184px" />
+          </div>
+        </article>)}
+      </ReviewRail>
     </div>
   </section>;
 }

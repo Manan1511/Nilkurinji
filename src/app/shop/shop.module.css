@@ -1,4 +1,21 @@
 .banner { position: relative; display: flex; align-items: center; min-height: clamp(220px,20vw,270px); overflow: hidden; isolation: isolate; background: var(--paper); }
+.extraFoliage { position: absolute; z-index: 0; inset: 0; overflow: hidden; pointer-events: none; }
+.extraFoliage img { position: absolute; display: block; height: auto; max-width: none; object-fit: contain; user-select: none; will-change: rotate, translate; }
+.upperRightLeaf { top: 10px; right: 12px; width: clamp(190px,18vw,276px); opacity: .78; transform-origin: 98% 10%; animation: shop-leaf-sway 12.8s ease-in-out -3.7s infinite; }
+.middleRightLeaf { top: 6%; right: clamp(188px,21vw,330px); width: clamp(158px,14vw,218px); opacity: .72; transform-origin: 5% 87%; animation: shop-leaf-sway-reverse 14.6s ease-in-out -8.2s infinite; }
+.lowerMiddleLeaf { right: clamp(300px,38vw,590px); bottom: 10px; width: clamp(220px,17vw,260px); opacity: .6; transform-origin: 3% 86%; animation: shop-leaf-sway 16.4s ease-in-out -11s infinite; }
+@keyframes shop-leaf-sway {
+  0%, 100% { rotate: 0deg; translate: 0 0; }
+  28% { rotate: 2deg; translate: 3px -1px; }
+  63% { rotate: -1.5deg; translate: -2px 1px; }
+  84% { rotate: .8deg; translate: 1px 0; }
+}
+@keyframes shop-leaf-sway-reverse {
+  0%, 100% { rotate: 0deg; translate: 0 0; }
+  31% { rotate: -1.8deg; translate: -2.8px -1px; }
+  66% { rotate: 1.25deg; translate: 1.8px 1px; }
+  86% { rotate: -.55deg; translate: -1px 0; }
+}
 .media { position: absolute; z-index: -1; inset: 0; background: var(--paper); }
 .picture { position: absolute; inset: 0; }
 .media img { object-fit: cover; object-position: 72% 56%; }
@@ -12,6 +29,9 @@
 .notice p { margin-bottom: 18px; color: var(--muted); }
 @media (max-width: 599px) {
   .banner { align-items: center; min-height: 220px; }
+  .upperRightLeaf { top: 8px; right: 8px; width: clamp(118px,34vw,160px); opacity: .3; animation-duration: 13.8s; }
+  .middleRightLeaf { top: auto; right: clamp(78px,23vw,118px); bottom: 8px; width: clamp(112px,31vw,142px); opacity: .26; animation-duration: 15.2s; }
+  .lowerMiddleLeaf { display: none; }
   .media { position: absolute; z-index: -1; inset: 0; display: block; width: 100%; height: auto; flex: initial; }
   .media img { object-position: 72% center; }
   .fade { background: linear-gradient(90deg,var(--paper) 0%,rgb(243 239 227 / 96%) 40%,rgb(243 239 227 / 78%) 58%,rgb(243 239 227 / 12%) 100%); }
@@ -19,4 +39,14 @@
   .copy h1 { max-width: 15ch; margin-top: 6px; font-size: clamp(1.7rem,7vw,2rem); line-height: 1.08; }
   .copy > p:not(.eyebrow) { max-width: 32ch; margin-top: 8px; font-size: 14px; line-height: 1.45; }
   .disclosure { top: auto; right: 10px; bottom: 8px; max-width: calc(100% - 20px); font-size: 12px; }
+}
+
+@media (min-width: 600px) and (max-width: 900px) {
+  .upperRightLeaf { width: clamp(138px,22vw,198px); opacity: .62; }
+  .middleRightLeaf { right: clamp(120px,22vw,198px); width: clamp(126px,17vw,158px); opacity: .52; }
+  .lowerMiddleLeaf { right: clamp(250px,37vw,340px); width: clamp(170px,24vw,220px); opacity: .44; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .extraFoliage img { animation: none; rotate: none; translate: none; will-change: auto; }
 }

@@ -9,7 +9,6 @@ import { BrandMark } from "@/components/brand-mark";
 import { ProductCard } from "@/components/product-card";
 import { getProducts } from "@/lib/shopify/catalog";
 import { DRAFT_HOMEPAGE_CONTENT, getHomepageContent } from "@/lib/shopify/content";
-import { getStorefrontMode } from "@/lib/shopify/mode";
 import { isTeaProduct } from "@/lib/catalog-state";
 import { CATEGORIES } from "@/lib/site-config";
 import { isShopifyCheckoutEnabled } from "@/lib/shopify/checkout-config";
@@ -23,8 +22,9 @@ export const revalidate = 60;
 export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 const FALLBACK_HERO = {
-  url: "/images/nilkurinji-hero-elaichi-desktop.webp",
-  altText: "Nilkurinji Elaichi Tea and a glass of tea in a green landscape",
+  url: "/images/nilkurinji-home-hero-desktop.webp",
+  mobileUrl: "/images/nilkurinji-home-hero-mobile.webp",
+  altText: "Amber tea and loose tea leaves beside blue-purple Nilkurinji blossoms, with green hills beyond",
   width: 2048,
   height: 768,
 };
@@ -92,12 +92,10 @@ function DeliveryBand() {
 
 export default async function HomePage() {
   const [catalog, homepage, enabledCategories] = await Promise.all([getProducts(), getHomepageContent(), getEnabledCategoryHandles()]);
-  const preview = getStorefrontMode().mode === "preview";
   const purchasingEnabled = isShopifyCheckoutEnabled();
   const content = homepage.source === "unavailable" ? null : homepage.data;
   const products = catalog.source === "unavailable" ? [] : catalog.data;
   const heroImage = content?.heroImage ?? FALLBACK_HERO;
-  const usesFallbackHero = !content?.heroImage;
   const shownProducts = featuredProducts(products);
 
   return <div className={styles.home} data-homepage="true">
@@ -106,7 +104,6 @@ export default async function HomePage() {
       heading={content?.heading || DRAFT_HOMEPAGE_CONTENT.heading}
       description={content?.description || DRAFT_HOMEPAGE_CONTENT.description}
       image={heroImage}
-      showProductPack={usesFallbackHero}
     />
 
     <HomeCategories enabled={enabledCategories} />
@@ -128,9 +125,9 @@ export default async function HomePage() {
       </div>
     </section>
 
-    <HomeReviews products={products} preview={preview || !purchasingEnabled} />
+    <HomeReviews />
 
-    <MobileContactCard />
+    <MobileContactCard homepage />
 
     <DeliveryBand />
   </div>;

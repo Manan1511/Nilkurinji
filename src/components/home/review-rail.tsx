@@ -1,5 +1,6 @@
 "use client";
 
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import styles from "./home-reviews.module.css";
 
@@ -55,18 +56,26 @@ export function ReviewRail({ children, count }: { children: ReactNode; count: nu
   };
 
   return <>
-    <div ref={railRef} className={styles.grid} role="region" aria-label="Customer reviews" tabIndex={0}>
+    <div ref={railRef} className={styles.grid} role="region" aria-label="Customer reviews" aria-roledescription="carousel" tabIndex={0}>
       {children}
     </div>
-    {count > 1 && <nav className={styles.dots} aria-label="Choose a review">
-      {Array.from({ length: count }, (_, index) => <button
-        key={index}
+    {count > 1 && <nav className={styles.carouselControls} aria-label="Review carousel controls">
+      <button
+        className={styles.carouselButton}
         type="button"
-        aria-label={`Review ${index + 1}`}
-        aria-controls={`home-review-${index + 1}`}
-        aria-current={activeIndex === index ? "true" : undefined}
-        onClick={() => scrollToReview(index)}
-      />)}
+        aria-label="Previous review"
+        disabled={activeIndex === 0}
+        onClick={() => scrollToReview(activeIndex - 1)}
+      ><ChevronLeft size={18} aria-hidden="true" /></button>
+      <span className={styles.counter} aria-live="polite">{activeIndex + 1} <span aria-hidden="true">/</span> {count}</span>
+      <span className={styles.progress} aria-hidden="true"><span className={styles.progressFill} style={{ width: `${((activeIndex + 1) / count) * 100}%` }} /></span>
+      <button
+        className={styles.carouselButton}
+        type="button"
+        aria-label="Next review"
+        disabled={activeIndex === count - 1}
+        onClick={() => scrollToReview(activeIndex + 1)}
+      ><ChevronRight size={18} aria-hidden="true" /></button>
     </nav>}
   </>;
 }
