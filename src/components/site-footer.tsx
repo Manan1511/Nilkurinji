@@ -1,4 +1,4 @@
-import Image, { getImageProps } from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { BrandMark } from "@/components/brand-mark";
@@ -8,27 +8,14 @@ import type { SocialLink } from "@/lib/shopify/social-links";
 import styles from "./site-footer.module.css";
 
 export function MobileContactCard({ homepage = false }: { homepage?: boolean } = {}) {
-  const preview = getStorefrontMode().mode === "preview";
-  const image = preview ? "/images/preview-hero-home-kurinji.webp" : "/images/nilkurinji-hero-elaichi-desktop.webp";
-  const mobileImage = preview ? image : "/images/nilkurinji-hero-elaichi-mobile.webp";
-  const mobileImageProps = homepage ? getImageProps({
-    src: mobileImage,
-    alt: "",
-    width: preview ? 2172 : 2048,
-    height: preview ? 724 : 768,
-    quality: 82,
-    sizes: "(max-width: 767px) calc(100vw - 40px), 100vw",
-  }).props : null;
   const headingId = homepage ? "home-contact-card-heading" : "footer-contact-card-heading";
 
   return <section className={`${styles.mobileFeature} ${homepage ? styles.homeFeature : ""}`} aria-labelledby={headingId}>
-    {mobileImageProps ? <picture className={styles.mobileFeaturePicture}>
-      <source media="(max-width: 767px)" srcSet={mobileImageProps.srcSet} sizes="(max-width: 767px) calc(100vw - 40px)" />
-      <Image className={styles.mobileFeatureImage} src={image} alt="" fill quality={85} sizes="(max-width: 767px) calc(100vw - 40px), min(1320px, calc(100vw - 128px))" />
-    </picture> : <Image className={styles.mobileFeatureImage} src={image} alt="" fill quality={85} sizes="(max-width: 359px) calc(100vw - 32px), (max-width: 767px) calc(100vw - 40px), 0px" />}
-    <span className={styles.mobileFeatureScrim} aria-hidden="true" />
-    <h2 id={headingId}>Get in touch</h2>
-    <p>Questions about a product or order?</p>
+    <span className={styles.homeContactMark} aria-hidden="true"><BrandMark /></span>
+    <div className={styles.homeContactCopy}>
+      <h2 id={headingId}>Get in touch</h2>
+      <p>Questions about a product or order?</p>
+    </div>
     <Link href="/contact">Contact Nilkurinji <ArrowUpRight size={16} aria-hidden="true" /></Link>
   </section>;
 }

@@ -8,6 +8,7 @@ import {
   CART_QUERY,
 } from "@/lib/shopify/queries";
 import { shopifyQuery } from "@/lib/shopify/server";
+import { isComingSoonTea } from "@/lib/product-presentation";
 
 export type ShopifyCart = {
   id: string;
@@ -38,6 +39,10 @@ export type ShopifyCart = {
     }[];
   };
 };
+
+export function cartContainsComingSoonTea(cart: ShopifyCart): boolean {
+  return cart.lines.nodes.some(({ merchandise }) => isComingSoonTea(merchandise.product));
+}
 
 type MutationPayload = { cart: ShopifyCart | null; userErrors: { field: string[] | null; message: string }[] };
 

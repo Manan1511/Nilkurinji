@@ -7,7 +7,7 @@ import type { ShopifyImage } from "@/lib/shopify/types";
 
 export type BannerSlide = { id?: string; label?: string; eyebrow: string; heading: string; description: string; image: string | null; mobileImage?: string | null; imageAlt: string; imageCaption: string; href: string };
 
-type HomepageHeroImage = ShopifyImage & { mobileUrl?: string };
+type HomepageHeroImage = ShopifyImage & { mobileUrl?: string; mobileWidth?: number; mobileHeight?: number };
 
 export function HomeHero({
   eyebrow,
@@ -25,8 +25,8 @@ export function HomeHero({
   const mobileScene = image?.mobileUrl ? getImageProps({
     src: image.mobileUrl,
     alt: image.altText ?? "",
-    width: 1200,
-    height: 675,
+    width: image.mobileWidth ?? 1200,
+    height: image.mobileHeight ?? 675,
     quality: 85,
     sizes: "100vw",
   }).props : null;
@@ -46,7 +46,7 @@ export function HomeHero({
       <p className={styles.heroDescription}>{description}</p>
       {status && <p className={styles.heroStatus} role="status">{status}</p>}
       <div className={styles.heroActions}>
-        <Link className="button button--dark" href="/shop">Explore our range <ArrowRight aria-hidden="true" size={17} /></Link>
+        <Link className="button button--dark" href="/shop?category=tea">Explore Our Products <ArrowRight aria-hidden="true" size={17} /></Link>
       </div>
     </div>
   </section>;

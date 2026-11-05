@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { createShopifyCart, getShopifyCart, type ShopifyCart } from "@/lib/shopify/cart";
+import { cartContainsComingSoonTea, createShopifyCart, getShopifyCart, type ShopifyCart } from "@/lib/shopify/cart";
 import { CART_COOKIE_NAME, readCartCookie } from "@/lib/shopify/cart-cookie";
 import { checkoutAllowedHosts, getCheckoutProvider, isShopifyCheckoutEnabled } from "@/lib/shopify/checkout-config";
 import { isSafeCheckoutUrl } from "@/lib/shopify/checkout-url";
@@ -45,6 +45,7 @@ export async function POST(request: NextRequest) {
       cart = existingCart;
     }
     if (!cart.lines.nodes.length) return checkoutJson({ error: "Your cart is empty. Add an item before checkout." }, 409);
+    if (cartContainsComingSoonTea(cart)) return checkoutJson({ error: "Nilkurinji Premium Masala Tea is coming soon and cannot be checked out yet. Remove it from your cart to continue." }, 409);
     if (cart.lines.nodes.some((line) => !line.merchandise.availableForSale)) return checkoutJson({ error: "One or more items are no longer available. Update your cart and try again." }, 409);
     const checkoutUrl = safeCheckoutUrl(cart.checkoutUrl, mode.storeDomain);
     if (!checkoutUrl) return checkoutJson({ error: "Shopify returned an unexpected checkout address." }, 502);

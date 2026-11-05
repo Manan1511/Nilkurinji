@@ -86,7 +86,7 @@ export function ProductPurchasePanel({
     ?? (options.length === 0 ? firstVariant : undefined);
   const canAddToCart = cartEnabled ?? purchasingEnabled;
   const canCheckout = checkoutEnabled ?? purchasingEnabled;
-  const variantPurchasable = !product.isPreview && Boolean(selectedVariant?.availableForSale);
+  const variantPurchasable = !product.isPreview && !product.comingSoon && Boolean(selectedVariant?.availableForSale);
   const addable = canAddToCart && variantPurchasable;
   const buyable = canCheckout && variantPurchasable;
   const purchaseNotice = getPurchaseNotice(product, canCheckout, selectedVariant, canAddToCart);

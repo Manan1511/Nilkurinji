@@ -6,7 +6,7 @@ export const CATEGORIES = [
   { handle: "other-foods", label: "Other Foods", href: "/shop?category=other-foods" },
 ] as const;
 
-export const DEFAULT_CATEGORY_HANDLES: string[] = ["tea", "tea-bags", "rice", "snacks", "other-foods"];
+export const DEFAULT_CATEGORY_HANDLES: string[] = ["tea"];
 
 export const PRIMARY_NAV = [
   { label: "Home", href: "/" },

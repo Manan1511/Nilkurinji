@@ -1,14 +1,13 @@
 .gallery { min-width: 0; }
-.main { position: relative; aspect-ratio: 1; background: var(--surface-subtle); }
+.main { position: relative; aspect-ratio: 1; background: var(--surface-subtle); touch-action: pan-y; }
 .mainImage { object-fit: contain; object-position: center top; animation: gallery-image-in var(--motion-control) ease both; }
 @keyframes gallery-image-in { from { opacity: .7; } to { opacity: 1; } }
-.thumbs { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
-.thumbs button { width: 64px; height: 64px; position: relative; border: 1px solid var(--rule); background: var(--surface-subtle); padding: 0; transition: border-color var(--motion-fast) ease, background-color var(--motion-fast) ease; }
-.thumbs button:hover { border-color: var(--brand); }
-.thumbs button[aria-pressed="true"] { border-color: var(--brand); outline: 1px solid var(--brand); }
-.thumbs img { object-fit: contain; transition: transform var(--motion-control) var(--ease-out); }
-.thumbs button:hover img { transform: scale(1.035); }
+.dots { display: flex; justify-content: center; align-items: center; gap: 2px; margin-top: 8px; }
+.dots button { display: grid; width: 36px; height: 44px; padding: 0; place-items: center; border: 0; border-radius: 999px; background: transparent; cursor: pointer; }
+.dots button::before { width: 8px; height: 8px; border-radius: 50%; background: var(--control); content: ""; transition: background-color var(--motion-fast) ease, transform var(--motion-fast) ease; }
+.dots button[aria-pressed="true"]::before { transform: scale(1.25); background: var(--brand); }
+.dots button:focus-visible { outline: 2px solid var(--brand); outline-offset: -5px; }
 .empty { aspect-ratio: 1; display: flex; flex-direction: column; gap: 12px; align-items: center; justify-content: center; padding: 24px; text-align: center; background: var(--surface-subtle); color: var(--ink-secondary); }
 .empty small { font-size: 14px; }
 @media (max-width: 767px) { .main { aspect-ratio: 4/3; } }
-@media (prefers-reduced-motion: reduce) { .mainImage { animation: none; } .thumbs img { transition: none; } .thumbs button:hover img { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .mainImage { animation: none; } .dots button::before { transition: none; } }

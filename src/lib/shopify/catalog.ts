@@ -13,6 +13,36 @@ import { getPreviewCollection, getPreviewProduct, PREVIEW_PRODUCTS } from "@/lib
 import { normalizeProduct } from "@/lib/shopify/normalize";
 import { getBuyerIp, shopifyQuery } from "@/lib/shopify/server";
 import type { StorefrontCollection, StorefrontData, StorefrontProduct } from "@/lib/shopify/types";
+import { isComingSoonTea } from "@/lib/product-presentation";
+
+const MASALA_COMING_SOON_HANDLE = "nilkurinji-premium-masala-tea";
+const MASALA_COMING_SOON_PRODUCT: StorefrontProduct = {
+  id: "storefront-coming-soon-masala-tea",
+  handle: MASALA_COMING_SOON_HANDLE,
+  title: "Nilkurinji Premium Masala Tea",
+  description: "Coming soon.",
+  productType: "Tea",
+  vendor: "Nilkurinji",
+  tags: [],
+  featuredImage: null,
+  images: [],
+  variants: [],
+  priceRange: null,
+  collectionHandles: ["tea"],
+  faqs: [],
+  approvedReviews: [],
+  teaProfile: null,
+  howItsMade: null,
+  details: "Coming soon.",
+  isPreview: false,
+  comingSoon: true,
+};
+
+function includeMasalaComingSoon(products: StorefrontProduct[]): StorefrontProduct[] {
+  return products.some((product) => isComingSoonTea(product))
+    ? products
+    : [...products, MASALA_COMING_SOON_PRODUCT];
+}
 
 type ProductConnection = { nodes: Parameters<typeof normalizeProduct>[0][] };
 type RawCollection = {
@@ -47,7 +77,7 @@ export async function getProducts(): Promise<StorefrontData<StorefrontProduct[]>
       sortKey: "BEST_SELLING",
       reverse: false,
     }, { buyerIp: await currentBuyerIp(), tags: ["shopify-products"] });
-    return { source: "shopify", data: data.products.nodes.map(normalizeProduct) };
+    return { source: "shopify", data: includeMasalaComingSoon(data.products.nodes.map(normalizeProduct)) };
   } catch {
     return unavailable("The live Shopify catalog is unavailable right now.");
   }
@@ -73,7 +103,9 @@ export async function getCollection(handle: string): Promise<StorefrontData<Stor
         title: collection.title,
         description: collection.description,
         image: collection.image ?? null,
-        products: collection.products.nodes.map(normalizeProduct),
+        products: handle === "tea"
+          ? includeMasalaComingSoon(collection.products.nodes.map(normalizeProduct))
+          : collection.products.nodes.map(normalizeProduct),
       } : null,
     };
   } catch {
@@ -95,7 +127,7 @@ export async function getProduct(handle: string): Promise<StorefrontData<Storefr
       { handle },
       { buyerIp: await currentBuyerIp(), tags: ["shopify-products", `shopify-product-${handle}`] },
     );
-    const product = data.product ? normalizeProduct(data.product) : null;
+    const product = data.product ? normalizeProduct(data.product) : handle === MASALA_COMING_SOON_HANDLE ? MASALA_COMING_SOON_PRODUCT : null;
     return { source: "shopify", data: product };
   } catch {
     return unavailable("This Shopify product is temporarily unavailable.");
@@ -121,7 +153,9 @@ export async function searchProducts(term: string): Promise<StorefrontData<Store
       { query, first: 20 },
       { buyerIp: await currentBuyerIp(), tags: ["shopify-search"] },
     );
-    return { source: "shopify", data: data.search.nodes.map(normalizeProduct) };
+    const products = data.search.nodes.map(normalizeProduct);
+    const includeTeaser = /\bmasala\b/.test(query.toLowerCase()) && !products.some((product) => isComingSoonTea(product));
+    return { source: "shopify", data: includeTeaser ? [...products, MASALA_COMING_SOON_PRODUCT] : products };
   } catch {
     return unavailable("Shopify search is temporarily unavailable.");
   }

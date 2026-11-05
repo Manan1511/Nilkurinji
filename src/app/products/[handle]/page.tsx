@@ -79,11 +79,11 @@ export default async function ProductPage({ params }: PageProps) {
   if (!result.data) notFound();
   const product = result.data;
   const category = CATEGORIES.find((item) => product.collectionHandles.includes(item.handle));
-  const recommendations = await getRecommendations(product);
+  const recommendations = product.comingSoon ? { source: "shopify" as const, data: [] } : await getRecommendations(product);
   const related = recommendations.source === "unavailable" ? [] : recommendations.data.filter((item) => item.id !== product.id);
   return <div className={styles.page}>
     <nav className={styles.breadcrumb} aria-label="Breadcrumb"><Link href="/shop">Shop</Link><ChevronRight size={14} aria-hidden="true" />{category && <><Link href={category.href}>{category.label}</Link><ChevronRight size={14} aria-hidden="true" /></>}<span>{product.title}</span></nav>
-    <div className={styles.layout} key={product.id}><ProductGallery images={product.images} title={product.title} /><ProductDetails className={styles.detail}><h1 id="product-title">{product.title}</h1><ProductPurchasePanel product={product} cartEnabled={isShopifyCartEnabled()} checkoutEnabled={isShopifyCheckoutEnabled()} purchasingEnabled={isShopifyCheckoutEnabled()} />{product.description && <p className={styles.description}>{product.description}</p>}<TeaDetails product={product} /></ProductDetails></div>
+    <div className={styles.layout} key={product.id}><ProductGallery images={product.images} title={product.title} /><ProductDetails className={styles.detail}><h1 id="product-title">{product.title}</h1>{product.comingSoon ? <p className={styles.comingSoon} role="status">Coming Soon!</p> : <ProductPurchasePanel product={product} cartEnabled={isShopifyCartEnabled()} checkoutEnabled={isShopifyCheckoutEnabled()} purchasingEnabled={isShopifyCheckoutEnabled()} />}{product.description && <p className={styles.description}>{product.description}</p>}{!product.comingSoon && <TeaDetails product={product} />}</ProductDetails></div>
     {(product.howItsMade || product.isPreview) && <section className={styles.howItsMade} aria-labelledby="how-its-made-heading">
       <h2 id="how-its-made-heading">How it’s made</h2>
       <p>{product.howItsMade ?? "Production details for this product will appear here once Nilkurinji confirms them."}</p>
@@ -94,6 +94,6 @@ export default async function ProductPage({ params }: PageProps) {
       {product.approvedReviews.length > 0 && <section><h2>Customer reviews</h2>{product.approvedReviews.map((review,index) => <article key={`${review.name}-${index}`}><div className={styles.stars} aria-label={`${review.rating} out of 5 stars`}>{Array.from({ length: review.rating }, (_, i) => <Star key={i} size={16} fill="currentColor" aria-hidden="true" />)}</div>{review.title && <h3>{review.title}</h3>}<p>{review.body}</p><p className={styles.byline}>{review.name}{review.date && <> · <time dateTime={review.date}>{new Intl.DateTimeFormat("en-IN", { dateStyle: "medium" }).format(new Date(`${review.date}T00:00:00`))}</time></>}</p></article>)}</section>}
     </div>}
     {related.length > 0 && <section className={styles.related}><h2>You may also like</h2><div className={styles.grid}>{related.slice(0,4).map((item) => <ProductCard key={item.id} product={item} cartEnabled={isShopifyCartEnabled()} checkoutEnabled={isShopifyCheckoutEnabled()} />)}</div></section>}
-    {!product.isPreview && product.priceRange && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd(product)).replace(/</g,"\\u003c") }} />}
+    {!product.isPreview && !product.comingSoon && product.priceRange && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd(product)).replace(/</g,"\\u003c") }} />}
   </div>;
 }

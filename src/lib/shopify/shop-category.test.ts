@@ -33,9 +33,9 @@ describe("Shop category banner content", () => {
 });
 
 describe("category visibility", () => {
-  it("defaults to all categories when category entries are missing", async () => {
+  it("defaults to Tea when category entries are missing", async () => {
     vi.mocked(shopifyQuery).mockResolvedValue({ metaobject: null });
-    expect(await getEnabledCategoryHandles()).toEqual(["tea", "tea-bags", "rice", "snacks", "other-foods"]);
+    expect(await getEnabledCategoryHandles()).toEqual(["tea"]);
   });
 
   it("honours explicit Shopify enabled and disabled values", async () => {
@@ -48,8 +48,8 @@ describe("category visibility", () => {
     expect(await getEnabledCategoryHandles()).toEqual(["tea-bags", "rice"]);
   });
 
-  it("uses defaults when Shopify is unavailable", async () => {
+  it("uses the Tea-only default when Shopify is unavailable", async () => {
     vi.mocked(shopifyQuery).mockRejectedValue(new Error("unavailable"));
-    expect(await getEnabledCategoryHandles()).toEqual(["tea", "tea-bags", "rice", "snacks", "other-foods"]);
+    expect(await getEnabledCategoryHandles()).toEqual(["tea"]);
   });
 });

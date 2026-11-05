@@ -52,10 +52,11 @@
 .all { margin-top: 8px; }
 @media (max-width: 1023px) {
   .control[data-open="true"] { flex-basis: min(320px,calc(100vw - 300px)); width: min(320px,calc(100vw - 300px)); }
-  .panel { top: calc(100% + 22px); width: min(420px,calc(100vw - 32px)); max-height: calc(100dvh - var(--header-height) - 24px); padding: 12px 16px 10px; }
+  .panel { top: calc(100% + 8px); right: auto; left: 50%; width: min(420px,calc(100vw - 24px)); max-height: calc(100dvh - var(--header-height) - 24px); padding: 12px 16px 10px; transform: translate(-50%,-5px) scale(.99); transform-origin: top center; }
+  .panel[data-open="true"] { transform: translate(-50%,0) scale(1); }
 }
 @media (max-width: 480px) {
-  .control[data-open="true"] { flex-basis: 154px; width: 154px; }
+  .control[data-open="true"] { flex-basis: min(154px,calc(100vw - 216px)); width: min(154px,calc(100vw - 216px)); }
   .inlineForm { gap: 0; }
   .inlineForm > input { font-size: 13px; }
   .inlineForm button.iconSubmit { flex-basis: 32px; width: 32px; min-width: 32px; }
@@ -65,6 +66,9 @@
   .browse { gap: 0 14px; }
   .results a { grid-template-columns: 48px minmax(0,1fr); gap: 12px; }
   .image { width: 48px; height: 52px; }
+}
+@media (max-width: 359px) {
+  .control[data-open="true"] { flex-basis: min(126px,calc(100vw - 194px)); width: min(126px,calc(100vw - 194px)); }
 }
 @media (prefers-reduced-motion: reduce) {
   .control,.trigger,.pill,.panel,.image img,.results li { transition: none; animation: none; }

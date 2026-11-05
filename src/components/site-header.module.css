@@ -2,8 +2,8 @@
 .topRow { position: relative; z-index: 3; display: grid; grid-template-columns: minmax(0,1fr) minmax(190px,244px) minmax(0,1fr); align-items: center; gap: 24px; width: min(1536px,100%); height: 80px; padding-left: max(var(--page-gutter),8.3vw); padding-right: max(var(--page-gutter),5.7vw); margin-inline: auto; }
 .logo { position: absolute; top: 50%; left: 50%; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 244px; min-height: 68px; color: var(--forest); text-decoration: none; transform: translate(-50%,-50%); transition: left 220ms var(--ease-out), transform 220ms var(--ease-out), width 220ms var(--ease-out); }
 .mark { width: 24px; height: 20px; margin-bottom: 2px; }
-.name { font: 400 29px/1 var(--font-logo); letter-spacing: .17em; white-space: nowrap; }
-.descriptor { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 6px; color: var(--forest); font: 700 9px/1.2 var(--font-body); letter-spacing: .2em; white-space: nowrap; }
+.name { font: 400 29px/1 var(--font-logo); letter-spacing: .17em; white-space: nowrap; transition: font-size 220ms var(--ease-out), letter-spacing 220ms var(--ease-out), opacity 160ms ease; }
+.descriptor { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 6px; color: var(--forest); font: 700 9px/1.2 var(--font-body); letter-spacing: .2em; white-space: nowrap; transition: opacity 160ms ease; }
 .descriptor i { display: block; width: 24px; height: 1px; background: var(--rule); }
 .tools { position: relative; z-index: 5; grid-column: 3; grid-row: 1; display: flex; align-items: center; justify-self: end; gap: 4px; }
 .tool { position: relative; display: inline-grid; place-items: center; width: 44px; height: 44px; flex-shrink: 0; border: 0; border-radius: 50%; color: var(--forest); background: transparent; text-decoration: none; }
@@ -30,6 +30,7 @@
 }
 @media (max-width: 1023px) {
   .topRow { grid-template-columns: 44px minmax(0,1fr) auto; gap: 8px; height: var(--header-height); padding-inline: var(--page-gutter); }
+  .tools { position: static; }
   .menu { display: inline-grid; grid-column: 1; grid-row: 1; }
   .menu svg { width: 22px; height: 22px; }
   .logo { width: min(190px,calc(100% - 128px)); min-height: 56px; margin: 0; }
@@ -39,14 +40,14 @@
   .tools { grid-column: 3; grid-row: 1; gap: 0; }
   .account { display: none; }
   .navigation { display: none; }
-  .searchOpen .logo { left: 28vw; width: 130px; transform: translate(-50%,-50%); }
-  .searchOpen .mark { width: 16px; height: 14px; margin-bottom: 1px; }
-  .searchOpen .name { font-size: clamp(15px,2.6vw,18px); letter-spacing: .08em; }
+  .searchOpen { --search-expanded-width: min(320px,calc(100vw - 300px)); --search-expanded-half: min(160px,calc(50vw - 150px)); }
+  .searchOpen .logo { left: calc(50% - var(--search-expanded-half)); width: min(190px,calc(100vw - var(--page-gutter) - var(--page-gutter) - 104px - var(--search-expanded-width))); min-height: 56px; }
+  .searchOpen .mark { width: 15px; height: 13px; margin-bottom: 1px; transition: width 220ms var(--ease-out), height 220ms var(--ease-out); }
+  .searchOpen .name { font-size: clamp(10px,2.8vw,13px); letter-spacing: .04em; }
 }
-@media (max-width: 480px) and (min-width: 360px) {
-  .searchOpen .logo { left: clamp(106px,28vw,134px); width: 84px; }
-  .searchOpen .mark { width: 15px; height: 13px; }
-  .searchOpen .name { font-size: 11px; letter-spacing: .04em; }
+@media (max-width: 480px) {
+  .searchOpen { --search-expanded-width: min(154px,calc(100vw - 216px)); --search-expanded-half: min(77px,calc(50vw - 108px)); }
+  .searchOpen .name { font-size: clamp(9px,2.5vw,11px); letter-spacing: .025em; }
 }
 @media (max-width: 359px) {
   .topRow { grid-template-columns: 44px minmax(0,1fr) auto; gap: 2px; }
@@ -54,9 +55,11 @@
   .name { font-size: 16px; letter-spacing: .08em; }
   .tool { width: 44px; height: 44px; }
   .tools { gap: 0; }
-  .searchOpen .logo { left: clamp(76px,24vw,86px); width: 24px; }
-  .searchOpen .name,.searchOpen .descriptor { display: none; }
-  .searchOpen .mark { width: 20px; height: 18px; margin: 0; }
+  .searchOpen { --search-expanded-width: min(126px,calc(100vw - 194px)); --search-expanded-half: min(63px,calc(50vw - 97px)); }
+  .searchOpen .logo { left: calc(50% - var(--search-expanded-half)); width: 24px; }
+  .searchOpen .name { font-size: 0; letter-spacing: 0; opacity: 0; }
+  .searchOpen .descriptor { opacity: 0; }
+  .searchOpen .mark { width: 17px; height: 15px; margin: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .logo,.navigation > a::after,.tool svg { transition: none; }

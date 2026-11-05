@@ -66,6 +66,7 @@ export type StorefrontProduct = {
   approvedReviews: ApprovedProductReview[];
   teaProfile: TeaProfile | null;
   howItsMade?: string | null;
+  comingSoon?: boolean;
   details: string;
   isPreview: boolean;
 }

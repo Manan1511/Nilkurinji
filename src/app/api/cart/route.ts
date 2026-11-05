@@ -7,6 +7,7 @@ import {
 } from "@/lib/shopify/cart-cookie";
 import {
   addShopifyCartLine,
+  cartContainsComingSoonTea,
   createShopifyCart,
   getShopifyCart,
   removeShopifyCartLine,
@@ -123,6 +124,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     if (action.action === "buy-now") {
       const cart = await createShopifyCart(action.variantId, action.quantity, buyerIp);
+      if (cartContainsComingSoonTea(cart)) return jsonNoStore({ error: "Nilkurinji Premium Masala Tea is coming soon and is not available to purchase yet." }, 409);
       if (!cart.lines.nodes.length || cart.lines.nodes.some((line) => !line.merchandise.availableForSale)) {
         return jsonNoStore({ error: "That option is no longer available. Return to the product page and try again." }, 409);
       }
@@ -144,6 +146,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         return response;
       }
       if (!cart.lines.nodes.length) return jsonNoStore({ error: "Your cart is empty. Add an item before checkout." }, 409);
+      if (cartContainsComingSoonTea(cart)) return jsonNoStore({ error: "Nilkurinji Premium Masala Tea is coming soon and cannot be checked out yet. Remove it from your cart to continue." }, 409);
       if (cart.lines.nodes.some((line) => !line.merchandise.availableForSale)) {
         return jsonNoStore({ error: "One or more items are no longer available. Update your cart and try again." }, 409);
       }

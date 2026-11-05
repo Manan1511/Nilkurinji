@@ -33,9 +33,6 @@ export function HomeReviews() {
               <span>{review.location}</span>
             </footer>
           </div>
-          <div className={styles.photo}>
-            <Image src={review.photo} alt="" fill sizes="(max-width: 359px) 90px, (max-width: 599px) 31vw, 184px" />
-          </div>
         </article>)}
       </ReviewRail>
     </div>

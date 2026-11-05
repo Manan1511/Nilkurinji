@@ -19,6 +19,7 @@
 .type { min-height: 1.5em; margin-top: 5px; color: var(--muted); font: 700 11px/1.35 var(--font-body); letter-spacing: .12em; text-transform: uppercase; }
 .pack { min-height: 1.5em; margin-top: 2px; color: var(--muted); font: 400 12px/1.4 var(--font-body); }
 .price { min-height: 1.5em; margin-top: 7px; color: var(--ink); font: 700 14px/1.4 var(--font-body); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.comingSoon { min-height: 1.5em; margin-top: 7px; color: var(--forest); font: 700 13px/1.4 var(--font-body); letter-spacing: .04em; }
 .unavailable { margin: 4px 0 8px; color: var(--ash); font-size: 12px; line-height: 1.35; }
 .card.featured { overflow: hidden; border: 1px solid rgb(22 49 34 / 10%); border-radius: 4px; background: var(--card); }
 .featured .frame { aspect-ratio: 1.2; }

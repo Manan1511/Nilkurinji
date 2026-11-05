@@ -1,32 +1,29 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Flower2, Landmark, Leaf, ShieldCheck, Truck } from "lucide-react";
+import { Flower2, Landmark, Leaf, ShieldCheck, Truck } from "lucide-react";
 import { HomeHero } from "@/components/home/home-hero";
 import { HomeReviews } from "@/components/home/home-reviews";
 import { MobileContactCard } from "@/components/site-footer";
 import { BotanicalEdges } from "@/components/botanical-edges";
 import { BrandMark } from "@/components/brand-mark";
-import { ProductCard } from "@/components/product-card";
-import { getProducts } from "@/lib/shopify/catalog";
 import { DRAFT_HOMEPAGE_CONTENT, getHomepageContent } from "@/lib/shopify/content";
-import { isTeaProduct } from "@/lib/catalog-state";
 import { CATEGORIES } from "@/lib/site-config";
-import { isShopifyCartEnabled, isShopifyCheckoutEnabled } from "@/lib/shopify/checkout-config";
 import styles from "@/components/home/home.module.css";
 import type { Metadata } from "next";
 import type { CSSProperties } from "react";
 import { getEnabledCategoryHandles } from "@/lib/shopify/shop-category";
-import type { StorefrontProduct } from "@/lib/shopify/types";
 
 export const revalidate = 60;
 export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 const FALLBACK_HERO = {
-  url: "/images/nilkurinji-hero-elaichi-desktop.webp",
-  mobileUrl: "/images/nilkurinji-hero-elaichi-mobile.webp",
-  altText: "Nilkurinji Elaichi Tea package beside amber tea and loose tea leaves, with blue-violet blossoms and green hills beyond",
-  width: 2048,
-  height: 768,
+  url: "/images/nilkurinji-mountain-home-desktop.webp",
+  mobileUrl: "/images/nilkurinji-mountain-home-mobile.webp",
+  mobileWidth: 1122,
+  mobileHeight: 1402,
+  altText: "Blue-violet Nilkurinji flowers covering misty mountain slopes at sunrise",
+  width: 1672,
+  height: 941,
 };
 
 const CATEGORY_CUTOUTS: Record<string, string> = {
@@ -36,19 +33,6 @@ const CATEGORY_CUTOUTS: Record<string, string> = {
   snacks: "/images/category-icon-snacks.png",
   "other-foods": "/images/category-icon-other-foods.png",
 };
-
-function featuredProducts(products: StorefrontProduct[]): StorefrontProduct[] {
-  const tea = products.filter((product) => isTeaProduct(product) && product.collectionHandles.includes("tea")).slice(0, 2);
-  const otherCategories = ["rice", "snacks"]
-    .map((category) => products.find((product) => product.collectionHandles.includes(category)))
-    .filter((product): product is StorefrontProduct => product !== undefined);
-  const selected = [...tea, ...otherCategories];
-  for (const product of products) {
-    if (selected.length >= 4) break;
-    if (!selected.some((item) => item.id === product.id)) selected.push(product);
-  }
-  return selected.slice(0, 4);
-}
 
 function HomeCategories({ enabled }: { enabled: string[] }) {
   const categories = CATEGORIES.filter((category) => enabled.includes(category.handle));
@@ -96,40 +80,18 @@ function DeliveryBand() {
 }
 
 export default async function HomePage() {
-  const [catalog, homepage, enabledCategories] = await Promise.all([getProducts(), getHomepageContent(), getEnabledCategoryHandles()]);
-  const cartEnabled = isShopifyCartEnabled();
-  const checkoutEnabled = isShopifyCheckoutEnabled();
+  const [homepage, enabledCategories] = await Promise.all([getHomepageContent(), getEnabledCategoryHandles()]);
   const content = homepage.source === "unavailable" ? null : homepage.data;
-  const products = catalog.source === "unavailable" ? [] : catalog.data;
-  const heroImage = content?.heroImage ?? FALLBACK_HERO;
-  const shownProducts = featuredProducts(products);
 
   return <div className={styles.home} data-homepage="true">
     <HomeHero
       eyebrow={content?.eyebrow || DRAFT_HOMEPAGE_CONTENT.eyebrow}
       heading={content?.heading || DRAFT_HOMEPAGE_CONTENT.heading}
       description={content?.description || DRAFT_HOMEPAGE_CONTENT.description}
-      image={heroImage}
+      image={FALLBACK_HERO}
     />
 
     <HomeCategories enabled={enabledCategories} />
-
-    <section className={styles.featured} data-reveal="section" aria-labelledby="home-featured-heading">
-      <BotanicalEdges placement="featured" />
-      <div className={styles.featuredContent}>
-        <div className={styles.featuredEditorial}>
-          <div className={styles.featuredCopy}>
-            <p className={styles.eyebrow}>Featured products</p>
-            <h2 id="home-featured-heading">{content?.featuredProductsHeading || "Tea and pantry for every table."}</h2>
-          </div>
-          <div className={styles.featuredAction}>
-            <p>Explore tea, tea bags and pantry foods from Nilkurinji.</p>
-            <Link href="/shop">Shop all <ArrowRight size={16} aria-hidden="true" /></Link>
-          </div>
-        </div>
-        {catalog.source === "unavailable" ? <div className={styles.empty} role="status"><p>The range is temporarily unavailable.</p><Link href="/shop">Browse the shop</Link></div> : shownProducts.length ? <div className={styles.productRail} role="region" aria-label="Featured products" tabIndex={0}>{shownProducts.map((product) => <ProductCard key={product.id} product={product} cartEnabled={cartEnabled} checkoutEnabled={checkoutEnabled} variant="featured" />)}</div> : <div className={styles.empty}><p>The product range is being prepared.</p><Link href="/shop">Explore the shop</Link></div>}
-      </div>
-    </section>
 
     <HomeReviews />
 

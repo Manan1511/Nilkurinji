@@ -6,6 +6,7 @@
 .detail[data-sticky="true"] { position: sticky; top: calc(var(--shell-height) + 24px); }
 .detail h1 { font-size: clamp(36px,3vw,44px); letter-spacing: -.02em; }
 .description { margin-top: 20px; color: var(--ink-secondary); max-width: 60ch; }
+.comingSoon { display: inline-flex; min-height: 42px; align-items: center; margin-top: 18px; padding: 0 16px; border: 1px solid var(--brass); border-radius: 999px; color: var(--forest); font-size: 14px; font-weight: 700; letter-spacing: .05em; }
 .howItsMade { max-width: 1000px; display: grid; grid-template-columns: minmax(0,.8fr) minmax(0,1.2fr); gap: 32px 56px; align-items: start; margin: 56px auto 0; padding-block: 32px; border-block: 1px solid var(--rule); }
 .howItsMade h2 { margin: 0; font: 400 clamp(28px,3vw,34px)/1.2 var(--font-editorial); }
 .howItsMade p { max-width: 65ch; margin: 0; color: var(--ink-secondary); font-size: 16px; line-height: 1.7; white-space: pre-line; }

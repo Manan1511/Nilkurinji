@@ -1,5 +1,6 @@
 import { CATEGORIES } from "@/lib/site-config";
 import type { ShopifyImage, StorefrontCollection, StorefrontProduct } from "@/lib/shopify/types";
+import { getProductPresentation } from "@/lib/product-presentation";
 
 type PreviewProductSeed = {
   handle: string;
@@ -78,7 +79,7 @@ const PREVIEW_SEEDS: PreviewProductSeed[] = [
   },
   {
     handle: "masala-chai",
-    title: "Masala Chai",
+    title: "Nilkurinji Premium Masala Tea",
     category: "Tea",
     price: "300.00",
     image: "/images/preview-product-masala-chai-kurinji.png",
@@ -195,10 +196,11 @@ export const PREVIEW_PRODUCTS: StorefrontProduct[] = PREVIEW_SEEDS.map((seed) =>
     ? { url: seed.cardImage, altText: seed.alt, width: 1586, height: 992 }
     : null;
   const price = { amount: seed.price, currencyCode: "INR" };
+  const presentation = getProductPresentation({ ...seed, productType: seed.category });
   return {
     id: `preview-${seed.handle}`,
     handle: seed.handle,
-    title: seed.title,
+    title: presentation.title,
     description: previewCopy,
     productType: seed.category,
     vendor: "",
@@ -215,6 +217,7 @@ export const PREVIEW_PRODUCTS: StorefrontProduct[] = PREVIEW_SEEDS.map((seed) =>
     howItsMade: null,
     details: previewCopy,
     isPreview: true,
+    comingSoon: presentation.comingSoon,
   };
 });
 

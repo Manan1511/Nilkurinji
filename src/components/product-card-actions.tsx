@@ -51,8 +51,8 @@ export function ProductCardActions({
     ? controller.pendingVariantQuantityDelta[selectedVariantId] ?? 0
     : fallbackPendingByVariant[selectedVariantId] ?? 0;
   const quantity = Math.max(0, confirmedQuantity + pendingVariantDelta);
-  const canAdd = cartEnabled && !product.isPreview && Boolean(selectedVariant?.availableForSale);
-  const canBuy = checkoutEnabled && !product.isPreview && Boolean(selectedVariant?.availableForSale);
+  const canAdd = cartEnabled && !product.isPreview && !product.comingSoon && Boolean(selectedVariant?.availableForSale);
+  const canBuy = checkoutEnabled && !product.isPreview && !product.comingSoon && Boolean(selectedVariant?.availableForSale);
   const optionName = variants.flatMap((variant) => variant.selectedOptions.map((option) => option.name))
     .find((name) => name.toLowerCase() === "pack size")
     ?? variants[0]?.selectedOptions[0]?.name

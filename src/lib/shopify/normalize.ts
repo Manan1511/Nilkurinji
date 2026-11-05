@@ -1,6 +1,7 @@
 import { parseApprovedReviews, parseFaqs } from "@/lib/shopify/product-content";
 import type { ShopifyImage, ShopifyMoney, StorefrontProduct } from "@/lib/shopify/types";
 import { parseTeaProfile } from "@/lib/shopify/tea-profile";
+import { getProductPresentation } from "@/lib/product-presentation";
 
 type RawProduct = {
   id: string;
@@ -68,11 +69,18 @@ export function normalizeProduct(raw: RawProduct): StorefrontProduct {
   if (raw.productType?.trim().toLowerCase() === "tea" && !collectionHandles.some((handle) => handle === "tea" || handle === "tea-bags")) {
     collectionHandles.push("tea");
   }
+  const presentation = getProductPresentation({
+    handle: raw.handle,
+    title: raw.title,
+    productType: raw.productType ?? "",
+    tags: raw.tags ?? [],
+    collectionHandles,
+  });
 
   return {
     id: raw.id,
     handle: raw.handle,
-    title: raw.title,
+    title: presentation.title,
     description: raw.description ?? "",
     productType: raw.productType ?? "",
     vendor: raw.vendor ?? "",
@@ -92,6 +100,7 @@ export function normalizeProduct(raw: RawProduct): StorefrontProduct {
     approvedReviews: parseApprovedReviews(raw.reviews?.value),
     teaProfile: parseTeaProfile(raw.teaProfile?.value),
     howItsMade: parseApprovedHowItsMade(raw.howItsMade?.value, raw.howItsMadeApproved?.value),
+    comingSoon: presentation.comingSoon,
     details: raw.details?.value?.trim() ?? "",
     isPreview: false,
   };

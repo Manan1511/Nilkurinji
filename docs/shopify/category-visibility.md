@@ -1,6 +1,6 @@
 # Category visibility in Shopify
 
-The storefront reads the `enabled` boolean of each `nilkurinji_category` metaobject. All five categories are visible by default. These settings control category links and homepage tiles. They do not change product publication or remove products from Shop All or search.
+The storefront reads the `enabled` boolean of each `nilkurinji_category` metaobject. Tea is visible by default; Tea Bags, Rice, Snacks, and Other Foods are hidden by default. These settings control category links and homepage tiles. They do not change product publication or remove products from Shop All or search.
 
 ## One-time Shopify setup
 
@@ -11,10 +11,10 @@ The storefront reads the `enabled` boolean of each `nilkurinji_category` metaobj
    | Handle | Initial value |
    | --- | --- |
    | `tea` | true |
-   | `tea-bags` | true |
-   | `rice` | true |
-   | `snacks` | true |
-   | `other-foods` | true |
+   | `tea-bags` | false |
+   | `rice` | false |
+   | `snacks` | false |
+   | `other-foods` | false |
 
 4. To show or hide a category later, edit its entry and change **Enabled**. The storefront refreshes cached content after approximately 60 seconds.
 

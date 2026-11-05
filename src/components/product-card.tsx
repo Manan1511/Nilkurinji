@@ -34,10 +34,10 @@ export function ProductCard({ product, cartEnabled, checkoutEnabled, purchasingE
         <h3>{product.title}</h3>
         <p className={styles.type}>{product.productType || "\u00a0"}</p>
         <p className={styles.pack}>{packText || "\u00a0"}</p>
-        <p className={styles.price}>{price ? <>{!product.isPreview && range ? "From " : ""}{formatMoney(price)}</> : "Price unavailable"}</p>
-        {!product.isPreview && !available && <p className={styles.unavailable}>Currently unavailable</p>}
+        <p className={product.comingSoon ? styles.comingSoon : styles.price}>{product.comingSoon ? "Coming Soon!" : price ? <>{!product.isPreview && range ? "From " : ""}{formatMoney(price)}</> : "Price unavailable"}</p>
+        {!product.comingSoon && !product.isPreview && !available && <p className={styles.unavailable}>Currently unavailable</p>}
       </div>
     </Link>
-    <ProductCardActions product={product} cartEnabled={canUseCart} checkoutEnabled={canUseCheckout} />
+    {!product.comingSoon && <ProductCardActions product={product} cartEnabled={canUseCart} checkoutEnabled={canUseCheckout} />}
   </article>;
 }
