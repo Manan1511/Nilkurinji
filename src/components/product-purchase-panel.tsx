@@ -8,6 +8,7 @@ import styles from "./product-purchase-panel.module.css";
 import { postCartAction, postCheckoutSession } from "@/lib/cart-client";
 import { useStorefrontCart } from "@/components/cart-provider";
 import { DeliveryChecker } from "@/components/delivery-checker";
+import { useProductVariantImage } from "@/components/product-variant-image";
 
 function variantOptions(variants: StorefrontVariant[]): { name: string; values: string[] }[] {
   const values = new Map<string, Set<string>>();
@@ -84,6 +85,8 @@ export function ProductPurchasePanel({
 
   const selectedVariant = findSelectedVariant(product.variants, selectedOptions)
     ?? (options.length === 0 ? firstVariant : undefined);
+  const { setImageUrl, setVariantId } = useProductVariantImage();
+  useEffect(() => { setImageUrl(selectedVariant?.image?.url ?? null); setVariantId(selectedVariant?.id ?? null); }, [selectedVariant?.id, selectedVariant?.image?.url, setImageUrl, setVariantId]);
   const canAddToCart = cartEnabled ?? purchasingEnabled;
   const canCheckout = checkoutEnabled ?? purchasingEnabled;
   const variantPurchasable = !product.isPreview && !product.comingSoon && Boolean(selectedVariant?.availableForSale);

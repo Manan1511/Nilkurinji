@@ -11,12 +11,16 @@ export function MobileContactCard({ homepage = false }: { homepage?: boolean } =
   const headingId = homepage ? "home-contact-card-heading" : "footer-contact-card-heading";
 
   return <section className={`${styles.mobileFeature} ${homepage ? styles.homeFeature : ""}`} aria-labelledby={headingId}>
+    <span className={styles.mobileFeaturePicture} aria-hidden="true">
+      <Image className={styles.mobileFeatureImage} src="/images/nilkurinji-hero-tea-landscape.webp" alt="" fill quality={82} sizes="(max-width: 767px) calc(100vw - 40px), min(1320px, calc(100vw - 128px))" />
+    </span>
+    <span className={styles.mobileFeatureScrim} aria-hidden="true" />
     <span className={styles.homeContactMark} aria-hidden="true"><BrandMark /></span>
     <div className={styles.homeContactCopy}>
       <h2 id={headingId}>Get in touch</h2>
       <p>Questions about a product or order?</p>
+      <Link href="/contact">Contact Nilkurinji <ArrowUpRight size={16} aria-hidden="true" /></Link>
     </div>
-    <Link href="/contact">Contact Nilkurinji <ArrowUpRight size={16} aria-hidden="true" /></Link>
   </section>;
 }
 

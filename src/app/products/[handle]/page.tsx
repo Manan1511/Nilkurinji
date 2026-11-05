@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ChevronRight, Star } from "lucide-react";
 import { ProductCard } from "@/components/product-card";
 import { ProductGallery } from "@/components/product-gallery";
+import { ProductVariantImageProvider } from "@/components/product-variant-image";
 import { ProductPurchasePanel } from "@/components/product-purchase-panel";
 import { TeaDetails } from "@/components/tea-details";
 import { isShopifyCartEnabled, isShopifyCheckoutEnabled } from "@/lib/shopify/checkout-config";
@@ -83,7 +84,7 @@ export default async function ProductPage({ params }: PageProps) {
   const related = recommendations.source === "unavailable" ? [] : recommendations.data.filter((item) => item.id !== product.id);
   return <div className={styles.page}>
     <nav className={styles.breadcrumb} aria-label="Breadcrumb"><Link href="/shop">Shop</Link><ChevronRight size={14} aria-hidden="true" />{category && <><Link href={category.href}>{category.label}</Link><ChevronRight size={14} aria-hidden="true" /></>}<span>{product.title}</span></nav>
-    <div className={styles.layout} key={product.id}><ProductGallery images={product.images} title={product.title} /><ProductDetails className={styles.detail}><h1 id="product-title">{product.title}</h1>{product.comingSoon ? <p className={styles.comingSoon} role="status">Coming Soon!</p> : <ProductPurchasePanel product={product} cartEnabled={isShopifyCartEnabled()} checkoutEnabled={isShopifyCheckoutEnabled()} purchasingEnabled={isShopifyCheckoutEnabled()} />}{product.description && <p className={styles.description}>{product.description}</p>}{!product.comingSoon && <TeaDetails product={product} />}</ProductDetails></div>
+    <ProductVariantImageProvider key={product.id}><div className={styles.layout}><ProductGallery images={product.images} variants={product.variants} title={product.title} /><ProductDetails className={styles.detail}><h1 id="product-title">{product.title}</h1>{product.comingSoon ? <p className={styles.comingSoon} role="status">Coming Soon!</p> : <ProductPurchasePanel product={product} cartEnabled={isShopifyCartEnabled()} checkoutEnabled={isShopifyCheckoutEnabled()} purchasingEnabled={isShopifyCheckoutEnabled()} />}{product.description && <p className={styles.description}>{product.description}</p>}{!product.comingSoon && <TeaDetails product={product} />}</ProductDetails></div></ProductVariantImageProvider>
     {(product.howItsMade || product.isPreview) && <section className={styles.howItsMade} aria-labelledby="how-its-made-heading">
       <h2 id="how-its-made-heading">How it’s made</h2>
       <p>{product.howItsMade ?? "Production details for this product will appear here once Nilkurinji confirms them."}</p>

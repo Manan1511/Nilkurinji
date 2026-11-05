@@ -131,10 +131,10 @@ export function BotanicalEdges({ placement }: { placement: BotanicalPlacement })
     <span className={`${styles.edges} ${styles[placement]}`} aria-hidden="true">
       {depthPair && <>
         <Image className={styles.depthLeft} src={depthPair.left.src} alt="" width={depthPair.left.width} height={depthPair.left.height} quality={75} sizes={depthSizes} />
-        <Image className={styles.depthRight} src={depthPair.right.src} alt="" width={depthPair.right.width} height={depthPair.right.height} quality={75} sizes={depthSizes} />
+        {placement !== "home-hero" && <Image className={styles.depthRight} src={depthPair.right.src} alt="" width={depthPair.right.width} height={depthPair.right.height} quality={75} sizes={depthSizes} />}
       </>}
       <Image className={styles.left} src={pair.left.src} alt="" width={pair.left.width} height={pair.left.height} quality={85} sizes={sizes.left} />
-      <Image className={styles.right} src={pair.right.src} alt="" width={pair.right.width} height={pair.right.height} quality={85} sizes={sizes.right} />
+      {placement !== "home-hero" && <Image className={styles.right} src={pair.right.src} alt="" width={pair.right.width} height={pair.right.height} quality={85} sizes={sizes.right} />}
     </span>
   );
 }

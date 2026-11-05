@@ -22,10 +22,12 @@ export function ProductCardActions({
   product,
   cartEnabled,
   checkoutEnabled,
+  onVariantChange,
 }: {
   product: StorefrontProduct;
   cartEnabled: boolean;
   checkoutEnabled: boolean;
+  onVariantChange?: (variantId: string) => void;
 }) {
   const variants = product.variants;
   const initialVariant = variants.find((variant) => variant.availableForSale) ?? variants[0];
@@ -170,7 +172,7 @@ export function ProductCardActions({
             aria-pressed={selected}
             aria-label={`${variantLabel(variant)}, ${formatMoney(variant.price)}${variant.availableForSale ? "" : ", sold out"}`}
             disabled={checkoutPending}
-            onClick={() => { setSelectedVariantId(variant.id); setMessage(""); setAnnouncement(""); }}
+            onClick={() => { setSelectedVariantId(variant.id); onVariantChange?.(variant.id); setMessage(""); setAnnouncement(""); }}
           >
             <span>{variantLabel(variant)}</span>
             <span className={styles.variantPrice}>{formatMoney(variant.price)}</span>

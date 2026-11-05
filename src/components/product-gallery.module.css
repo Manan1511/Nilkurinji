@@ -1,13 +1,23 @@
 .gallery { min-width: 0; }
-.main { position: relative; aspect-ratio: 1; background: var(--surface-subtle); touch-action: pan-y; }
-.mainImage { object-fit: contain; object-position: center top; animation: gallery-image-in var(--motion-control) ease both; }
-@keyframes gallery-image-in { from { opacity: .7; } to { opacity: 1; } }
+.main { position: relative; overflow: hidden; border-radius: 10px; aspect-ratio: 4/3; background: var(--surface-subtle); touch-action: pan-y; }
+.mainImage,.previousImage { object-fit: contain; object-position: center; }
+.previousImage { z-index: 0; }
+.mainImage { z-index: 1; }
+.imageWaiting { opacity: 0; }
+.imageEntering { animation: gallery-image-in 360ms cubic-bezier(.22, 1, .36, 1) both; }
+@keyframes gallery-image-in { from { opacity: 0; } to { opacity: 1; } }
+.arrow { position: absolute; z-index: 2; top: calc(50% - 22px); display: grid; width: 44px; height: 44px; padding: 0; place-items: center; border: 1px solid rgb(22 49 34 / 20%); border-radius: 50%; color: var(--forest); background: rgb(246 242 230 / 94%); box-shadow: 0 2px 10px rgb(20 43 28 / 12%); cursor: pointer; transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease; }
+.arrow:not(:disabled):active { transform: none; }
+.previous { left: 12px; }
+.next { right: 12px; }
+.arrow:hover { color: var(--paper); background: var(--forest); border-color: var(--forest); }
+.arrow:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
 .dots { display: flex; justify-content: center; align-items: center; gap: 2px; margin-top: 8px; }
 .dots button { display: grid; width: 36px; height: 44px; padding: 0; place-items: center; border: 0; border-radius: 999px; background: transparent; cursor: pointer; }
-.dots button::before { width: 8px; height: 8px; border-radius: 50%; background: var(--control); content: ""; transition: background-color var(--motion-fast) ease, transform var(--motion-fast) ease; }
+.dots button::before { width: 8px; height: 8px; border-radius: 50%; background: var(--control); content: ""; }
 .dots button[aria-pressed="true"]::before { transform: scale(1.25); background: var(--brand); }
 .dots button:focus-visible { outline: 2px solid var(--brand); outline-offset: -5px; }
 .empty { aspect-ratio: 1; display: flex; flex-direction: column; gap: 12px; align-items: center; justify-content: center; padding: 24px; text-align: center; background: var(--surface-subtle); color: var(--ink-secondary); }
 .empty small { font-size: 14px; }
-@media (max-width: 767px) { .main { aspect-ratio: 4/3; } }
-@media (prefers-reduced-motion: reduce) { .mainImage { animation: none; } .dots button::before { transition: none; } }
+@media (max-width: 767px) { .previous { left: 8px; } .next { right: 8px; } }
+@media (prefers-reduced-motion: reduce) { .imageEntering { animation: none; } .arrow { transition: none; } }

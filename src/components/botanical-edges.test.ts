@@ -1,33 +1,41 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { BotanicalEdges } from "@/components/botanical-edges";
+import { BotanicalEdges } from "./botanical-edges";
 
-describe("section-specific botanical edges", () => {
-  it("uses a distinct branch pair for the header, hero and featured shelf", () => {
+describe("botanical framing", () => {
+  it("keeps the right-hand branches out of the mountain hero", () => {
+    const html = renderToStaticMarkup(createElement(BotanicalEdges, { placement: "home-hero" }));
+    expect(html).not.toContain("botanical-home-hero-right-refined");
+    expect(html).not.toContain("botanical-editorial-right-kurinji");
+    expect(html).toContain("botanical-home-hero-left-refined");
+  });
+
+  it("retains the header's right-hand branches", () => {
+    const html = renderToStaticMarkup(createElement(BotanicalEdges, { placement: "header" }));
+    expect(html).toContain("botanical-header-right-refined");
+  });
+
+  it("keeps distinct header and featured branch pairs", () => {
     const regions = [
       ["header", "botanical-header-left-refined.webp", "botanical-header-right-refined.webp"],
-      ["home-hero", "botanical-home-hero-left-refined.webp", "botanical-home-hero-right-refined.webp"],
       ["featured", "botanical-categories-left.webp", "botanical-categories-right-kurinji.webp"],
     ] as const;
-
-    for (const [placement, leftAsset, rightAsset] of regions) {
-      const markup = renderToStaticMarkup(createElement(BotanicalEdges, { placement }));
-      expect(markup).toContain(leftAsset);
-      expect(markup).toContain(rightAsset);
+    for (const [placement, left, right] of regions) {
+      const html = renderToStaticMarkup(createElement(BotanicalEdges, { placement }));
+      expect(html).toContain(left);
+      expect(html).toContain(right);
     }
   });
 
-  it("uses the editorial pair for editorial banners and the story page only", () => {
-    const banner = renderToStaticMarkup(createElement(BotanicalEdges, { placement: "banner" }));
-    const story = renderToStaticMarkup(createElement(BotanicalEdges, { placement: "story" }));
-
-    for (const asset of ["botanical-editorial-left.webp", "botanical-editorial-right-kurinji.webp"]) {
-      expect(banner).toContain(asset);
-      expect(story).toContain(asset);
+  it("uses the editorial pair for banners and story", () => {
+    for (const placement of ["banner", "story"] as const) {
+      const html = renderToStaticMarkup(createElement(BotanicalEdges, { placement }));
+      expect(html).toContain("botanical-editorial-left.webp");
+      expect(html).toContain("botanical-editorial-right-kurinji.webp");
+      expect(html).not.toContain("botanical-header-left-refined.webp");
+      expect(html).not.toContain("botanical-home-hero-left-refined.webp");
+      expect(html).not.toContain("botanical-categories-left.webp");
     }
-    expect(banner).not.toContain("botanical-header-left-refined.webp");
-    expect(banner).not.toContain("botanical-home-hero-left-refined.webp");
-    expect(banner).not.toContain("botanical-categories-left.webp");
   });
 });

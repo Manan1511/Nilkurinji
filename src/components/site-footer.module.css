@@ -1,10 +1,14 @@
 .footer { color: var(--paper); background: var(--forest); }
 .mobileFeature { display: none; }
-.homeFeature { position: relative; isolation: isolate; display: flex; align-items: center; gap: clamp(16px, 3vw, 40px); overflow: hidden; width: min(1320px, calc(100% - var(--page-gutter) - var(--page-gutter))); min-height: 168px; padding: 28px clamp(22px, 5vw, 64px); margin: 28px auto 24px; border: 1px solid rgb(243 239 227 / 12%); border-radius: 14px; color: var(--paper); background: linear-gradient(112deg, #163122, #1c3a29 68%, #254432); }
+.homeFeature { position: relative; isolation: isolate; display: flex; align-items: center; gap: clamp(18px, 3vw, 40px); overflow: hidden; width: min(1320px, calc(100% - var(--page-gutter) - var(--page-gutter))); min-height: 208px; padding: 28px clamp(22px, 5vw, 64px); margin: 28px auto 24px; border: 1px solid rgb(243 239 227 / 12%); border-radius: 14px; color: var(--paper); background: var(--forest); }
 .mobileFeature > * { position: relative; z-index: 1; }
-.homeContactMark { display: grid; flex: 0 0 42px; width: 42px; height: 42px; place-items: center; }
-.homeContactMark svg { width: 32px; height: 32px; }
-.homeContactCopy { min-width: 0; }
+.mobileFeaturePicture { position: absolute; z-index: 0; inset: 0; display: block; }
+.mobileFeatureImage { position: absolute; z-index: 0; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 80% 80%; }
+.mobileFeatureScrim { position: absolute; z-index: 1; inset: 0; background: linear-gradient(90deg, #163122 0%, rgb(22 49 34 / 96%) 34%, rgb(22 49 34 / 76%) 58%, rgb(22 49 34 / 20%) 100%); pointer-events: none; }
+.mobileFeature > :not(.mobileFeaturePicture):not(.mobileFeatureScrim) { position: relative; z-index: 2; }
+.homeContactMark { display: grid; flex: 0 0 56px; width: 56px; height: 56px; place-items: center; }
+.homeContactMark svg { width: 48px; height: 48px; }
+.homeContactCopy { display: flex; min-width: 0; flex-direction: column; align-items: flex-start; }
 .signature { position: relative; display: grid; grid-template-columns: 1.15fr 1.15fr 1fr 1fr; align-items: center; width: min(1536px,100%); min-height: 132px; padding: 20px var(--page-gutter); margin-inline: auto; isolation: isolate; }
 .signatureWithoutSocial { grid-template-columns: 1.15fr 1.15fr 1fr; }
 .botanical { position: absolute; z-index: 0; top: 50%; display: block; width: 84px; height: 72px; object-fit: contain; opacity: .72; transform: translateY(-50%); transform-origin: 50% 50%; animation: footer-leaf-sway 13s ease-in-out infinite; pointer-events: none; }
@@ -58,7 +62,7 @@
 :global(body:has([data-homepage="true"])) .footer .mobileFeature { display: none; }
 .homeFeature h2 { font: 400 clamp(28px, 3vw, 38px)/1.08 var(--font-editorial); }
 .homeFeature p { max-width: 34ch; margin-top: 8px; color: rgb(243 239 227 / 90%); font: 400 15px/1.5 var(--font-body); }
-.homeFeature a { display: inline-flex; flex: 0 0 auto; gap: 7px; align-items: center; min-height: 44px; margin-left: auto; padding: 0 18px; border: 1px solid currentColor; border-radius: 999px; color: var(--paper); font: 400 14px/1.3 var(--font-body); text-decoration: none; transition: background-color 160ms ease, color 160ms ease; }
+.homeFeature a { display: inline-flex; flex: 0 0 auto; gap: 7px; align-items: center; min-height: 44px; margin-top: 14px; padding: 0 18px; border: 1px solid currentColor; border-radius: 999px; color: var(--paper); font: 400 14px/1.3 var(--font-body); text-decoration: none; transition: background-color 160ms ease, color 160ms ease; }
 .homeFeature a:hover,.homeFeature a:focus-visible { background: var(--paper); color: var(--forest); }
 .homeFeature a:focus-visible { outline: 2px solid var(--paper); outline-offset: 3px; }
 
@@ -116,17 +120,19 @@
 
 @media (max-width: 767px) {
   .footer { display: flex; flex-direction: column; color: var(--forest); background: var(--paper); }
-  .mobileFeature { position: relative; isolation: isolate; display: grid; grid-template-columns: 28px minmax(0,1fr); align-items: start; gap: 0 10px; overflow: hidden; min-height: 0; margin: 28px var(--page-gutter) 20px; padding: 22px 18px; border-radius: 12px; color: var(--paper); background: var(--forest); }
+  .mobileFeature { position: relative; isolation: isolate; display: grid; grid-template-columns: 44px minmax(0,1fr); align-items: start; gap: 0 12px; overflow: hidden; min-height: 176px; margin: 28px var(--page-gutter) 20px; padding: 20px 18px; border-radius: 12px; color: var(--paper); background: var(--forest); }
+  .mobileFeatureImage { object-position: 82% 70%; }
+  .mobileFeatureScrim { background: linear-gradient(90deg, #163122 0%, rgb(22 49 34 / 96%) 38%, rgb(22 49 34 / 82%) 67%, rgb(22 49 34 / 38%) 100%); }
   .mobileFeature h2 { font: 400 clamp(25px, 7vw, 34px)/1.1 var(--font-editorial); }
   .mobileFeature p { margin-top: 10px; font-size: 13px; line-height: 1.5; }
   .mobileFeature a { grid-column: 2; display: inline-flex; justify-self: start; gap: 6px; align-items: center; min-height: 40px; margin-top: 12px; padding: 0 14px; border: 1px solid currentColor; border-radius: 999px; font-size: 13px; }
-  .homeFeature { display: grid; grid-template-columns: 28px minmax(0,1fr); align-items: start; gap: 0 10px; width: auto; min-height: 0; padding: 22px 18px; margin: 24px var(--page-gutter) 18px; border-radius: 12px; }
-  .homeContactMark { flex-basis: 28px; width: 28px; height: 32px; }
-  .homeContactMark svg { width: 24px; height: 24px; }
+  .homeFeature { display: grid; grid-template-columns: 44px minmax(0,1fr); align-items: start; gap: 0 12px; width: auto; min-height: 184px; padding: 20px 18px; margin: 24px var(--page-gutter) 18px; border-radius: 12px; }
+  .homeContactMark { flex-basis: 44px; width: 44px; height: 44px; }
+  .homeContactMark svg { width: 40px; height: 40px; }
   .homeContactCopy { min-width: 0; }
   .homeFeature h2 { font: 400 clamp(23px, 6vw, 30px)/1.1 var(--font-editorial); }
   .homeFeature p { max-width: 24ch; margin-top: 7px; font-size: 13px; line-height: 1.5; }
-  .homeFeature a { grid-column: 2; min-height: 40px; justify-self: start; margin: 12px 0 0; padding-inline: 12px; font-size: 12px; white-space: nowrap; }
+  .homeFeature a { min-height: 40px; justify-self: start; margin: 12px 0 0; padding-inline: 12px; font-size: 12px; white-space: nowrap; }
   .links { order: 1; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border: 0; padding-block: 18px 24px; }
   .links nav { padding-inline: 10px; border-left: 1px solid var(--rule); }
   .links nav:first-child { padding-left: 0; border: 0; }
@@ -146,12 +152,13 @@
 }
 
 @media (max-width: 399px) {
-  .mobileFeature { grid-template-columns: 24px minmax(0,1fr); gap: 0 8px; padding: 18px 14px; }
+  .mobileFeature { grid-template-columns: 40px minmax(0,1fr); gap: 0 10px; padding: 18px 14px; }
   .mobileFeature h2 { font-size: 22px; }
   .mobileFeature a { padding-inline: 10px; font-size: 12px; }
-  .homeFeature { grid-template-columns: 24px minmax(0,1fr); gap: 0 8px; padding: 18px 12px; }
-  .homeContactMark { flex-basis: 24px; width: 24px; }
+  .homeFeature { grid-template-columns: 40px minmax(0,1fr); gap: 0 10px; padding: 18px 14px; }
+  .homeContactMark { flex-basis: 40px; width: 40px; height: 40px; }
+  .homeContactMark svg { width: 36px; height: 36px; }
   .homeFeature h2 { font-size: 22px; }
   .homeFeature p { font-size: 12px; }
-  .homeFeature a { padding-inline: 10px; font-size: 11px; }
+  .homeFeature a { padding-inline: 10px; font-size: 12px; }
 }

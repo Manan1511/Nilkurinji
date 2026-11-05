@@ -1,7 +1,7 @@
-.card { display: flex; min-width: 0; height: 100%; flex-direction: column; overflow: hidden; border: 1px solid var(--rule); border-radius: 4px; background: var(--card); transition: border-color 180ms ease, box-shadow 180ms ease; }
+.card { display: flex; min-width: 0; height: 100%; flex-direction: column; overflow: hidden; border: 1px solid var(--rule); border-radius: 8px; background: var(--card); transition: border-color 180ms ease, box-shadow 180ms ease; }
 .card:hover { border-color: color-mix(in srgb, var(--forest) 40%, var(--rule)); box-shadow: 0 5px 16px rgb(20 43 28 / 7%); }
 .productLink { display: flex; min-width: 0; flex: 1; flex-direction: column; color: inherit; text-decoration: none; }
-.frame { position: relative; overflow: hidden; flex: 0 0 auto; aspect-ratio: 16/9; background: var(--parchment); }
+.frame { position: relative; overflow: hidden; flex: 0 0 auto; border-radius: 7px; aspect-ratio: 16/9; background: var(--parchment); }
 .image { object-fit: cover; transition: opacity 240ms ease, transform var(--motion-image) var(--ease-out); }
 .primaryImage { z-index: 1; opacity: 1; }
 .alternateImage { z-index: 2; opacity: 0; }
@@ -13,8 +13,14 @@
 .productLink.hasAlternate:focus-visible .alternateImage { opacity: 1; transform: scale(1.02); }
 .productLink:focus-visible { outline: 2px solid var(--violet); outline-offset: -3px; }
 .fallback { position: absolute; inset: 0; display: grid; place-items: center; padding: 16px; color: var(--ash); text-align: center; font-size: 14px; }
-.details { display: flex; min-width: 0; flex: 1 0 auto; flex-direction: column; padding: 12px 12px 8px; }
-.details h3 { display: -webkit-box; min-height: 2.5em; overflow: hidden; color: var(--ink); font: 400 clamp(1rem,1.2vw,1.1rem)/1.25 var(--font-editorial); overflow-wrap: anywhere; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.comingSoonCard { box-shadow: 0 8px 22px rgb(20 43 28 / 10%); }
+.comingSoonCard:hover { box-shadow: 0 12px 28px rgb(20 43 28 / 14%); }
+.ghostPreview { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 16px; color: var(--paper); background: var(--forest); text-align: center; }
+.previewRule { width: 42px; height: 1px; background: #aaa07b; }
+.previewTitle { font: 400 clamp(18px, 2vw, 27px)/1.1 var(--font-editorial); }
+.previewCaption { color: var(--paper); font: 700 10px/1.3 var(--font-body); letter-spacing: .14em; text-transform: uppercase; }
+.details { display: flex; min-width: 0; flex: 1 0 auto; flex-direction: column; padding: 16px 16px 10px; }
+.details h3 { min-height: 2.5em; color: var(--ink); font: 400 clamp(1rem,1.2vw,1.1rem)/1.25 var(--font-editorial); overflow-wrap: anywhere; }
 .productLink:hover h3 { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
 .type { min-height: 1.5em; margin-top: 5px; color: var(--muted); font: 700 11px/1.35 var(--font-body); letter-spacing: .12em; text-transform: uppercase; }
 .pack { min-height: 1.5em; margin-top: 2px; color: var(--muted); font: 400 12px/1.4 var(--font-body); }
@@ -27,11 +33,16 @@
 .featured .details h3 { font-size: clamp(.92rem,1vw,1rem); }
 @media (max-width: 767px) {
   .details { padding: 10px 10px 6px; }
-  .details h3 { font-size: 15px; }
-  .type { font-size: 10px; }
-  .pack { font-size: 11px; }
-  .price { font-size: 13px; }
+  .details h3 { min-height: 2.36em; font-size: 15px; line-height: 1.2; }
+  .ghostPreview { gap: 5px; padding: 8px; }
+  .previewTitle { font-size: 18px; }
+  .previewCaption { font-size: 9px; }
+  .type { min-height: 1.25em; margin-top: 4px; font-size: 10px; }
+  .pack { min-height: 1.25em; font-size: 11px; }
+  .price { min-height: 1.3em; margin-top: 4px; font-size: 12px; }
+  .comingSoon { min-height: 1.3em; margin-top: 4px; font-size: 12px; }
   .card:hover { box-shadow: none; }
+  .comingSoonCard:hover { box-shadow: 0 8px 22px rgb(20 43 28 / 10%); }
 }
 @media (prefers-reduced-motion: reduce) {
   .card,.image { transition: none; }
