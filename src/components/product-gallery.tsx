@@ -7,18 +7,22 @@ import type { ShopifyImage, StorefrontVariant } from "@/lib/shopify/types";
 import styles from "./product-gallery.module.css";
 import { useProductVariantImage } from "./product-variant-image";
 import { curatedProductGallery } from "@/lib/catalog/product-gallery";
+import { defaultVariant } from "@/lib/catalog/default-variant";
 
 function GalleryPhoto({ image, previous, title, first, onLoaded }: { image: ShopifyImage; previous: ShopifyImage | null; title: string; first: boolean; onLoaded: (image: ShopifyImage) => void }) {
   const [loaded, setLoaded] = useState(false);
+  const [transitionComplete, setTransitionComplete] = useState(false);
   return <>
-    {previous && <Image className={styles.previousImage} src={previous.url} alt="" aria-hidden="true" fill quality={85} sizes="(max-width: 1023px) 100vw, 55vw" loading="eager" />}
-    <Image className={`${styles.mainImage} ${previous ? (loaded ? styles.imageEntering : styles.imageWaiting) : ""}`} src={image.url} alt={image.altText || title} fill quality={85} sizes="(max-width: 1023px) 100vw, 55vw" preload={first} loading={first ? undefined : "eager"} onLoad={() => { setLoaded(true); onLoaded(image); }} onError={() => setLoaded(true)} />
+    {previous && !transitionComplete && <div className={styles.previousLayer}><Image className={styles.galleryImage} src={previous.url} alt="" aria-hidden="true" width={previous.width ?? 1448} height={previous.height ?? 1086} quality={85} sizes="(max-width: 1023px) 100vw, 55vw" loading="eager" /></div>}
+    <div className={`${styles.currentLayer} ${previous ? (loaded ? styles.imageEntering : styles.imageWaiting) : ""}`} onAnimationEnd={() => setTransitionComplete(true)}>
+      <Image className={styles.galleryImage} src={image.url} alt={image.altText || title} width={image.width ?? 1448} height={image.height ?? 1086} quality={85} sizes="(max-width: 1023px) 100vw, 55vw" preload={first} loading={first ? undefined : "eager"} onLoad={() => { setLoaded(true); onLoaded(image); if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) setTransitionComplete(true); }} onError={() => { setLoaded(true); setTransitionComplete(true); }} />
+    </div>
   </>;
 }
 
 export function ProductGallery({ images, title, handle, variants = [] }: { images: ShopifyImage[]; title: string; handle?: string; variants?: StorefrontVariant[] }) {
   const { imageUrl, variantId } = useProductVariantImage();
-  const selectedVariant = variants.find((variant) => variant.id === variantId) ?? variants.find((variant) => variant.availableForSale) ?? variants[0];
+  const selectedVariant = defaultVariant(variants, variantId ?? undefined);
   const pack = selectedVariant?.selectedOptions.find((option) => /pack|size|weight/i.test(option.name))?.value.toLowerCase().replace(/\s+/g, "");
   const size = pack === "500g" || pack === "0.5kg" ? "500g" : pack === "1kg" || pack === "1000g" ? "1kg" : null;
   const curated = curatedProductGallery(handle, pack, title);

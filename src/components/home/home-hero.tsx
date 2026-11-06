@@ -46,7 +46,7 @@ export function HomeHero({
       <p className={styles.heroDescription}>{description}</p>
       {status && <p className={styles.heroStatus} role="status">{status}</p>}
       <div className={styles.heroActions}>
-        <Link className="button button--dark" href="/shop?category=tea">Explore Our Products <ArrowRight aria-hidden="true" size={17} /></Link>
+        <Link className="button button--dark" href="/shop?category=tea">Explore Our Range <ArrowRight aria-hidden="true" size={17} /></Link>
       </div>
     </div>
   </section>;

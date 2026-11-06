@@ -9,6 +9,7 @@ import { postCartAction, postCheckoutSession } from "@/lib/cart-client";
 import { useStorefrontCart } from "@/components/cart-provider";
 import { DeliveryChecker } from "@/components/delivery-checker";
 import { useProductVariantImage } from "@/components/product-variant-image";
+import { defaultVariant } from "@/lib/catalog/default-variant";
 
 function variantOptions(variants: StorefrontVariant[]): { name: string; values: string[] }[] {
   const values = new Map<string, Set<string>>();
@@ -53,14 +54,16 @@ export function ProductPurchasePanel({
   purchasingEnabled,
   cartEnabled,
   checkoutEnabled,
+  initialVariantId,
 }: {
   product: StorefrontProduct;
   purchasingEnabled: boolean;
   cartEnabled?: boolean;
   checkoutEnabled?: boolean;
+  initialVariantId?: string;
 }) {
   const options = useMemo(() => variantOptions(product.variants), [product.variants]);
-  const firstVariant = product.variants.find((variant) => variant.availableForSale) ?? product.variants[0];
+  const firstVariant = defaultVariant(product.variants, initialVariantId);
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>(() =>
     Object.fromEntries(firstVariant?.selectedOptions.map((option) => [option.name, option.value]) ?? []),
   );
@@ -143,16 +146,25 @@ export function ProductPurchasePanel({
       {price && <p className="purchase-panel__price">{product.isPreview ? "Sample price: " : ""}{formatMoney(price)}</p>}
       {!product.isPreview && price && <p className="purchase-panel__tax">Inclusive of all applicable taxes.</p>}
       {product.variants.length > 0 && options.map((option) => (
-        <label className="form-field" key={option.name}>
-          <span>{option.name}</span>
-          <select
-            value={selectedOptions[option.name] ?? option.values[0]}
-            disabled={busy}
-            onChange={(event) => { setSelectedOptions((current) => ({ ...current, [option.name]: event.target.value })); setMessage(""); }}
-          >
-            {option.values.map((value) => <option key={value} value={value}>{value}</option>)}
-          </select>
-        </label>
+        <fieldset className={styles.optionGroup} key={option.name}>
+          <legend>{option.name}</legend>
+          <div className={styles.optionList}>
+            {option.values.map((value) => <label className={styles.option} key={value}>
+              <input type="radio" name={`option-${option.name}`} value={value} checked={(selectedOptions[option.name] ?? option.values[0]) === value} disabled={busy} onChange={() => {
+                const next = { ...selectedOptions, [option.name]: value };
+                setSelectedOptions(next);
+                setMessage("");
+                const nextVariant = findSelectedVariant(product.variants, next);
+                if (nextVariant) {
+                  const url = new URL(window.location.href);
+                  url.searchParams.set("variant", nextVariant.id.split("/").at(-1) ?? nextVariant.id);
+                  window.history.replaceState(window.history.state, "", url);
+                }
+              }} />
+              <span>{value}</span>
+            </label>)}
+          </div>
+        </fieldset>
       ))}
 
       {product.variants.length > 0 && (

@@ -41,8 +41,8 @@ export type HomepageContent = {
 
 export const DRAFT_HOMEPAGE_CONTENT: HomepageContent = {
   eyebrow: "TEA · TEA BAGS · PANTRY",
-  heading: "The Finest Flavours of India",
-  description: "Tea, tea bags and pantry favourites for everyday tables.",
+  heading: "A Taste of Nature, Crafted for You",
+  description: "Fine tea, thoughtful blends and pantry essentials for everyday moments.",
   heroImage: null,
   secondaryEyebrow: "",
   secondaryHeading: "",

@@ -1,8 +1,9 @@
 .gallery { min-width: 0; }
 .main { position: relative; overflow: hidden; border-radius: 10px; aspect-ratio: 4/3; background: var(--surface-subtle); touch-action: pan-y; }
-.mainImage,.previousImage { object-fit: contain; object-position: center; }
-.previousImage { z-index: 0; }
-.mainImage { z-index: 1; }
+.previousLayer,.currentLayer { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+.previousLayer { z-index: 0; }
+.currentLayer { z-index: 1; background: var(--surface-subtle); }
+.galleryImage { display: block; width: auto; height: auto; max-width: 100%; max-height: 100%; border-radius: 10px; object-fit: contain; }
 .imageWaiting { opacity: 0; }
 .imageEntering { animation: gallery-image-in 360ms cubic-bezier(.22, 1, .36, 1) both; }
 @keyframes gallery-image-in { from { opacity: 0; } to { opacity: 1; } }

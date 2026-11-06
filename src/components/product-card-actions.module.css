@@ -10,6 +10,7 @@ button.variantChip[aria-pressed="true"] .variantPrice { color: var(--forest); }
 .soldOut { color: var(--muted); font-size: 10px; font-weight: 400; }
 .singleOption { cursor: default; }
 .buttons { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 8px; }
+.buttons.singleButton { grid-template-columns: minmax(0,1fr); }
 .buttons button { display: flex; align-items: center; justify-content: center; gap: 6px; min-width: 0; min-height: 44px; padding: 0 8px; border: 1px solid var(--forest); border-radius: 999px; font: 700 12px/1.15 var(--font-body); white-space: nowrap; cursor: pointer; transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease; }
 .addButton { color: var(--paper); background: var(--forest); }
 .addButton:hover:not(:disabled) { border-color: var(--forest-hover); background: var(--forest-hover); }

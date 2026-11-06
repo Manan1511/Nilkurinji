@@ -74,9 +74,11 @@ it("keeps the previous image in place until the next image loads", async () => {
   const active = host.querySelector<HTMLImageElement>('img:not([aria-hidden="true"])');
   expect(previous).not.toBeNull();
   expect(active?.getAttribute("alt")).toBe("Two");
-  expect(active?.className).toContain("imageWaiting");
+  expect(active?.parentElement?.className).toContain("imageWaiting");
   await act(async () => { active?.dispatchEvent(new Event("load")); await Promise.resolve(); });
-  expect(active?.className).toContain("imageEntering");
+  expect(active?.parentElement?.className).toContain("imageEntering");
+  await act(async () => active?.parentElement?.dispatchEvent(new Event("animationend", { bubbles: true })));
+  expect(host.querySelector('img[aria-hidden="true"]')).toBeNull();
   await act(async () => root.unmount()); host.remove(); vi.unstubAllGlobals();
 });
 
@@ -93,7 +95,7 @@ it("displays the requested Classic Tea sequence after changing packs", async () 
   expect(decodeURIComponent(host.querySelector('img:not([aria-hidden="true"])')?.getAttribute("src") ?? "")).toContain("img-0309.webp");
   await act(async () => host.querySelector("button")?.click());
   const dots = host.querySelectorAll<HTMLButtonElement>('[aria-label^="Show product photo"]');
-  const expected = "0286 0287 0299 0289 0290 0291 0292 0293 0294".split(" ");
+  const expected = "0286 0287 0288 0299 0289 0291 0292 0293 0294".split(" ");
   expect(dots).toHaveLength(expected.length);
   for (let i = 0; i < dots.length; i++) {
     await act(async () => dots[i].click());

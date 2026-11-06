@@ -9,6 +9,7 @@ import { useCompactViewport } from "@/hooks/use-compact-viewport";
 import { emptyCatalogState, matchesCategory, parseCatalogQuery, writeCatalogQuery, type CatalogSort, type CatalogState } from "@/lib/catalog-state";
 import { buildCatalogFacetGroups, matchesPriceBand, matchesSelectedFacets, type ProductFilterGroup } from "@/lib/catalog-facets";
 import type { StorefrontProduct } from "@/lib/shopify/types";
+import { featuredProductsFirst, moveComingSoonTeaLast } from "@/lib/product-presentation";
 import styles from "./product-grid.module.css";
 export type ProductTopFilter = { label: string; value: string; icon: "leaf" | "coffee" | "flower" | "sprout" | "wheat" | "sparkles" };
 export function filterProductsByTopFilters<T extends { tags: string[] }>(products: T[], selectedTags: string[]): T[] { return selectedTags.length ? products.filter((product) => selectedTags.some((tag) => product.tags.includes(tag))) : products; }
@@ -17,7 +18,7 @@ function selectProducts(products: StorefrontProduct[], state: CatalogState): Sto
   const selected = products.filter((product) => matchesCategory(product.collectionHandles, state.category) && (state.productType === "all" || product.productType === state.productType) && (state.priceBand === "all" || matchesPriceBand(priceOf(product), state.priceBand)) && matchesSelectedFacets(product, state.selectedFacets));
   if (state.sort === "title-asc") selected.sort((a,b) => a.title.localeCompare(b.title));
   if (state.sort === "price-asc" || state.sort === "price-desc") selected.sort((a,b) => { const left = priceOf(a), right = priceOf(b); if (!Number.isFinite(left)) return Number.isFinite(right) ? 1 : 0; if (!Number.isFinite(right)) return -1; return state.sort === "price-asc" ? left - right : right - left; });
-  return selected;
+  return state.sort === "featured" ? featuredProductsFirst(selected) : moveComingSoonTeaLast(selected);
 }
 export function ProductGrid({ products, emptyMessage, emptyDescription, initialCategory = "all", showCategoryNavigation = true, showFilters = true, showToolbar = true, purchasingEnabled = false, cartEnabled, checkoutEnabled, facetGroups, topFilters, enabledCategories = DEFAULT_CATEGORY_HANDLES }: { products: StorefrontProduct[]; emptyMessage: string; emptyDescription?: string; initialCategory?: string; allowCategoryFilter?: boolean; showCategoryNavigation?: boolean; showFilters?: boolean; showToolbar?: boolean; purchasingEnabled?: boolean; cartEnabled?: boolean; checkoutEnabled?: boolean; facetGroups?: ProductFilterGroup[]; topFilters?: ProductTopFilter[]; cardVariant?: "standard" | "collection"; shopLayout?: boolean; enabledCategories?: string[] }) {
   const [state, setState] = useState<CatalogState>(() => ({ ...emptyCatalogState(), category: initialCategory }));

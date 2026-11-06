@@ -23,6 +23,16 @@ export function isComingSoonTea(product: ProductIdentity): boolean {
   return isTea && /\bmasala\b/.test(text);
 }
 
+export function moveComingSoonTeaLast<T extends ProductIdentity>(products: T[]): T[] {
+  return [...products.filter((product) => !isComingSoonTea(product)), ...products.filter(isComingSoonTea)];
+}
+
+export function featuredProductsFirst<T extends ProductIdentity>(products: T[]): T[] {
+  const ordered = moveComingSoonTeaLast(products);
+  const classic = ordered.filter((product) => product.handle === "premium-tea" && !isComingSoonTea(product));
+  return [...classic, ...ordered.filter((product) => !classic.includes(product))];
+}
+
 export function getProductPresentation(product: ProductIdentity): ProductPresentation {
   const text = identityText(product);
   const isTea = /\btea\b|\bchai\b/.test(text)

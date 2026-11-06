@@ -25,7 +25,7 @@ export function RouteTransition({ children }: { children: ReactNode }) {
     timeout.current = setTimeout(() => {
       element.classList.remove(styles.entering);
       timeout.current = null;
-    }, 190);
+    }, 300);
 
     return () => {
       if (timeout.current) clearTimeout(timeout.current);

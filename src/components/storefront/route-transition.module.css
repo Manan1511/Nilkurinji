@@ -1,11 +1,12 @@
 .main { min-height: 50vh; }
-.entering { animation: storefront-page-arrive 170ms cubic-bezier(.22,1,.36,1) both; }
+.entering { animation: storefront-page-arrive 280ms cubic-bezier(.22,1,.36,1) both; }
 
 @keyframes storefront-page-arrive {
-  from { opacity: .72; }
-  to { opacity: 1; }
+  from { opacity: .76; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .entering { animation-duration: 80ms; }
+  .entering { animation: storefront-page-arrive-reduced 100ms ease-out both; }
 }
+@keyframes storefront-page-arrive-reduced { from { opacity: .85; } to { opacity: 1; } }

@@ -23,11 +23,15 @@ export function ProductCardActions({
   cartEnabled,
   checkoutEnabled,
   onVariantChange,
+  hideVariantSelector = false,
+  hideBuyNow = false,
 }: {
   product: StorefrontProduct;
   cartEnabled: boolean;
   checkoutEnabled: boolean;
   onVariantChange?: (variantId: string) => void;
+  hideVariantSelector?: boolean;
+  hideBuyNow?: boolean;
 }) {
   const variants = product.variants;
   const initialVariant = variants.find((variant) => variant.availableForSale) ?? variants[0];
@@ -161,7 +165,7 @@ export function ProductCardActions({
   const checkoutPending = pending === "buy-now";
 
   return <div className={styles.actions}>
-    <div className={styles.optionSlot}>
+    {!hideVariantSelector && <div className={styles.optionSlot}>
       <div className={styles.variantOptions} role="group" aria-label={`${optionName} for ${product.title}`}>
         {variants.length > 1 ? variants.map((variant) => {
           const selected = variant.id === selectedVariantId;
@@ -182,8 +186,8 @@ export function ProductCardActions({
           <span>{variantLabel(selectedVariant)}</span>
         </span> : <span className={`${styles.variantChip} ${styles.singleOption}`}>Option unavailable</span>}
       </div>
-    </div>
-    <div className={styles.buttons}>
+    </div>}
+    <div className={`${styles.buttons}${hideBuyNow ? ` ${styles.singleButton}` : ""}`}>
       {quantity > 0 ? <div className={styles.quantityControl} role="group" aria-label={`Quantity of ${product.title}`} aria-busy={pendingCount > 0}>
         <button type="button" className={styles.quantityButton} aria-label={`Decrease ${product.title} quantity`} disabled={checkoutPending || quantity <= 0} onClick={removeOne}>
           <Minus aria-hidden="true" size={15} />
@@ -196,10 +200,10 @@ export function ProductCardActions({
         <ShoppingBag aria-hidden="true" size={15} />
         <span>Add to cart</span>
       </button>}
-      <button type="button" className={styles.buyButton} disabled={!canBuy || checkoutPending} title={!checkoutEnabled ? "Checkout is currently closed." : undefined} aria-label={!checkoutEnabled ? "Buy now, checkout currently closed" : undefined} aria-busy={checkoutPending} onClick={() => void buyNow()}>
+      {!hideBuyNow && <button type="button" className={styles.buyButton} disabled={!canBuy || checkoutPending} title={!checkoutEnabled ? "Checkout is currently closed." : undefined} aria-label={!checkoutEnabled ? "Buy now, checkout currently closed" : undefined} aria-busy={checkoutPending} onClick={() => void buyNow()}>
         <span>{checkoutPending ? "Preparing…" : "Buy now"}</span>
         <ArrowRight aria-hidden="true" size={15} />
-      </button>
+      </button>}
     </div>
     {message && <p className={styles.status} role="status" aria-live="polite">{message}</p>}
     <span className="sr-only" role="status" aria-live="polite" aria-atomic="true">{announcement}</span>

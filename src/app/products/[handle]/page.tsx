@@ -12,7 +12,7 @@ import { getProduct, getRecommendations } from "@/lib/shopify/catalog";
 import { CATEGORIES } from "@/lib/site-config";
 import type { StorefrontProduct } from "@/lib/shopify/types";
 
-type PageProps = { params: Promise<{ handle: string }> };
+type PageProps = { params: Promise<{ handle: string }>; searchParams?: Promise<{ variant?: string | string[] }> };
 
 function productMetadata(product: StorefrontProduct | null, handle: string): Metadata {
   if (!product) return { title: "Product" };
@@ -74,17 +74,19 @@ export const revalidate = 60;
 import { ProductDetails } from "@/components/product-details";
 import styles from "./product.module.css";
 import reading from "@/app/reading.module.css";
-export default async function ProductPage({ params }: PageProps) {
+export default async function ProductPage({ params, searchParams }: PageProps) {
   const { handle } = await params; const result = await getProduct(handle);
   if (result.source === "unavailable") return <div className={reading.heading} role="status"><h1>Product information is temporarily unavailable.</h1><p>Please browse all products instead.</p><Link href="/shop" className="text-link">Browse all products</Link></div>;
   if (!result.data) notFound();
   const product = result.data;
+  const requestedVariant = (await searchParams)?.variant;
+  const initialVariantId = Array.isArray(requestedVariant) ? requestedVariant[0] : requestedVariant;
   const category = CATEGORIES.find((item) => product.collectionHandles.includes(item.handle));
   const recommendations = product.comingSoon ? { source: "shopify" as const, data: [] } : await getRecommendations(product);
   const related = recommendations.source === "unavailable" ? [] : recommendations.data.filter((item) => item.id !== product.id);
   return <div className={styles.page}>
     <nav className={styles.breadcrumb} aria-label="Breadcrumb"><Link href="/shop">Shop</Link><ChevronRight size={14} aria-hidden="true" />{category && <><Link href={category.href}>{category.label}</Link><ChevronRight size={14} aria-hidden="true" /></>}<span>{product.title}</span></nav>
-    <ProductVariantImageProvider key={product.id}><div className={styles.layout}><ProductGallery images={product.images} variants={product.variants} handle={product.handle} title={product.title} /><ProductDetails className={styles.detail}><h1 id="product-title">{product.title}</h1>{product.comingSoon ? <p className={styles.comingSoon} role="status">Coming Soon!</p> : <ProductPurchasePanel product={product} cartEnabled={isShopifyCartEnabled()} checkoutEnabled={isShopifyCheckoutEnabled()} purchasingEnabled={isShopifyCheckoutEnabled()} />}{product.description && <p className={styles.description}>{product.description}</p>}{!product.comingSoon && <TeaDetails product={product} />}</ProductDetails></div></ProductVariantImageProvider>
+    <ProductVariantImageProvider key={product.id} initialVariantId={initialVariantId}><div className={styles.layout}><ProductGallery images={product.images} variants={product.variants} handle={product.handle} title={product.title} /><ProductDetails className={styles.detail}><h1 id="product-title">{product.title}</h1>{product.comingSoon ? <p className={styles.comingSoon} role="status">Coming Soon!</p> : <ProductPurchasePanel product={product} initialVariantId={initialVariantId} cartEnabled={isShopifyCartEnabled()} checkoutEnabled={isShopifyCheckoutEnabled()} purchasingEnabled={isShopifyCheckoutEnabled()} />}{product.description && <p className={styles.description}>{product.description}</p>}{!product.comingSoon && <TeaDetails product={product} />}</ProductDetails></div></ProductVariantImageProvider>
     {(product.howItsMade || product.isPreview) && <section className={styles.howItsMade} aria-labelledby="how-its-made-heading">
       <h2 id="how-its-made-heading">How it’s made</h2>
       <p>{product.howItsMade ?? "Production details for this product will appear here once Nilkurinji confirms them."}</p>

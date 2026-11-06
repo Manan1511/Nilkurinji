@@ -6,7 +6,7 @@ import { HomeReviews } from "@/components/home/home-reviews";
 import { MobileContactCard } from "@/components/site-footer";
 import { BotanicalEdges } from "@/components/botanical-edges";
 import { BrandMark } from "@/components/brand-mark";
-import { DRAFT_HOMEPAGE_CONTENT, getHomepageContent } from "@/lib/shopify/content";
+import { DRAFT_HOMEPAGE_CONTENT } from "@/lib/shopify/content";
 import { CATEGORIES } from "@/lib/site-config";
 import styles from "@/components/home/home.module.css";
 import type { Metadata } from "next";
@@ -80,14 +80,13 @@ function DeliveryBand() {
 }
 
 export default async function HomePage() {
-  const [homepage, enabledCategories] = await Promise.all([getHomepageContent(), getEnabledCategoryHandles()]);
-  const content = homepage.source === "unavailable" ? null : homepage.data;
+  const enabledCategories = await getEnabledCategoryHandles();
 
   return <div className={styles.home} data-homepage="true">
     <HomeHero
-      eyebrow={content?.eyebrow || DRAFT_HOMEPAGE_CONTENT.eyebrow}
-      heading={content?.heading || DRAFT_HOMEPAGE_CONTENT.heading}
-      description={content?.description || DRAFT_HOMEPAGE_CONTENT.description}
+      eyebrow={DRAFT_HOMEPAGE_CONTENT.eyebrow}
+      heading={DRAFT_HOMEPAGE_CONTENT.heading}
+      description={DRAFT_HOMEPAGE_CONTENT.description}
       image={FALLBACK_HERO}
     />
 

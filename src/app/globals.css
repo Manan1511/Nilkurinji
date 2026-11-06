@@ -41,10 +41,10 @@ img { max-width: 100%; }
 .skip-link:focus { transform: none; }
 .site-shell { position: sticky; top: 0; z-index: 30; }
 ::view-transition { pointer-events: none; }
-::view-transition-old(.storefront-page-exit) { animation: 110ms ease-out both storefront-page-out; }
-::view-transition-new(.storefront-page-enter) { animation: 170ms var(--ease-out) both storefront-page-in; }
-@keyframes storefront-page-out { to { opacity: 0; } }
-@keyframes storefront-page-in { from { opacity: .72; } to { opacity: 1; } }
+::view-transition-old(.storefront-page-exit) { animation: 160ms ease-out both storefront-page-out; }
+::view-transition-new(.storefront-page-enter) { animation: 280ms var(--ease-out) both storefront-page-in; }
+@keyframes storefront-page-out { to { opacity: 0; transform: translateY(-3px); } }
+@keyframes storefront-page-in { from { opacity: .76; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 .button { display: inline-flex; justify-content: center; align-items: center; gap: 10px; min-height: 48px; padding: 12px 20px; border: 1px solid var(--forest); border-radius: var(--radius-control); text-decoration: none; font: 500 14px/1.4 var(--font-body); transition: background-color var(--motion-fast) ease, color var(--motion-fast) ease, border-color var(--motion-fast) ease, transform 120ms ease; }
 .button--dark { background: var(--forest); color: var(--paper); }
 .button--dark:hover { background: var(--brand-hover); border-color: var(--brand-hover); }
@@ -62,6 +62,8 @@ img { max-width: 100%; }
   html { scroll-behavior: auto; }
   button:not(:disabled):active,.button:hover svg.lucide-arrow-right,.button:hover svg.lucide-arrow-up-right { transform: none !important; }
   .button,.action { transition-duration: 100ms !important; transition-property: color,background-color,border-color,fill !important; }
-  ::view-transition-old(.storefront-page-exit) { animation-duration: 80ms !important; }
-  ::view-transition-new(.storefront-page-enter) { animation-duration: 80ms !important; }
+  ::view-transition-old(.storefront-page-exit) { animation: 80ms ease-out both storefront-page-reduced-out !important; }
+  ::view-transition-new(.storefront-page-enter) { animation: 100ms ease-out both storefront-page-reduced-in !important; }
 }
+@keyframes storefront-page-reduced-out { to { opacity: 0; } }
+@keyframes storefront-page-reduced-in { from { opacity: .85; } to { opacity: 1; } }
