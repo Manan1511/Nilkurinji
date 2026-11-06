@@ -10,7 +10,20 @@ Source files remain in `Nilkurinji-photos/`. Images were reviewed as supplied ar
 | Rose | IMG_0490 | IMG_0479 | IMG_0484, IMG_0489 |
 | Elaichi | IMG_0503 | IMG_0494 | IMG_0498, IMG_0502 |
 
-The selected gallery copies are Classic IMG_0309 and IMG_0286; Rose IMG_0490 and IMG_0479; Elaichi IMG_0503 and IMG_0494. The shared gallery photos use IMG_0290, IMG_0291 and IMG_0292, the 4:3 counterparts of IMG_0299, IMG_0300 and IMG_0301. Pack sizes are identified from the artwork; they do not set variant prices or stock.
+## Product gallery order
+
+Gallery order is configured in `src/lib/catalog/product-gallery.ts`, using optimized copies named after these source numbers. Product availability, variants, prices and stock remain in Shopify.
+
+| Product | Pack | Source numbers in gallery order |
+| --- | --- | --- |
+| Classic | 1 kg | 0286, 0287, 0299, 0289, 0290, 0291, 0292, 0293, 0294 |
+| Classic | 500 g | 0309, 0310, 0321, 0316, 0312, 0313, 0314, 0317, 0294 |
+| Rose | 1 kg | 0479, 0480, 0484, 0487, 0481, 0485, 0482, 0478 |
+| Rose | 500 g | 0490, 0487, 0489, 0480, 0488, 0486, 0491, 0493 |
+| Elaichi | 1 kg | 0494, 0495, 0498, 0499, 0496, 0292, 0497, 0493 |
+| Elaichi | 500 g | 0503, 0499, 0502, 0495, 0500, 0292, 0501, 0493 |
+
+Rose and Elaichi back-label artwork is not present in the supplied folder, so their galleries continue to the next available image. Some preparation images are identical copies; they retain the same positions as the Classic example. The folder contains no Masala pack artwork.
 
 ## Campaign and supporting artwork
 

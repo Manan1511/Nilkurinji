@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { ShopifyImage, StorefrontVariant } from "@/lib/shopify/types";
 import styles from "./product-gallery.module.css";
 import { useProductVariantImage } from "./product-variant-image";
+import { curatedProductGallery } from "@/lib/catalog/product-gallery";
 
 function GalleryPhoto({ image, previous, title, first, onLoaded }: { image: ShopifyImage; previous: ShopifyImage | null; title: string; first: boolean; onLoaded: (image: ShopifyImage) => void }) {
   const [loaded, setLoaded] = useState(false);
@@ -15,12 +16,13 @@ function GalleryPhoto({ image, previous, title, first, onLoaded }: { image: Shop
   </>;
 }
 
-export function ProductGallery({ images, title, variants = [] }: { images: ShopifyImage[]; title: string; variants?: StorefrontVariant[] }) {
+export function ProductGallery({ images, title, handle, variants = [] }: { images: ShopifyImage[]; title: string; handle?: string; variants?: StorefrontVariant[] }) {
   const { imageUrl, variantId } = useProductVariantImage();
   const selectedVariant = variants.find((variant) => variant.id === variantId) ?? variants.find((variant) => variant.availableForSale) ?? variants[0];
   const pack = selectedVariant?.selectedOptions.find((option) => /pack|size|weight/i.test(option.name))?.value.toLowerCase().replace(/\s+/g, "");
   const size = pack === "500g" || pack === "0.5kg" ? "500g" : pack === "1kg" || pack === "1000g" ? "1kg" : null;
-  const visibleImages = size ? images.filter((image) => {
+  const curated = curatedProductGallery(handle, pack, title);
+  const visibleImages = curated ?? (size ? images.filter((image) => {
     if (image.url.includes("/campaign-")) return true;
     const text = `${image.url} ${image.altText ?? ""}`.toLowerCase().replace(/\s+/g, "");
     const is500g = /500g|0\.5kg/.test(text);
@@ -28,7 +30,7 @@ export function ProductGallery({ images, title, variants = [] }: { images: Shopi
     if (size === "500g" && is1kg && !is500g) return false;
     if (size === "1kg" && is500g && !is1kg) return false;
     return (size === "500g" ? is500g : is1kg) || selectedVariant?.image?.url === image.url;
-  }) : images;
+  }) : images);
   const selectedImageUrl = imageUrl ?? selectedVariant?.image?.url ?? null;
   const selectionKey = `${variantId ?? selectedVariant?.id ?? ""}:${selectedImageUrl ?? ""}`;
   const [selection, setSelection] = useState<{ key: string; index: number; previous?: ShopifyImage | null }>({ key: "", index: 0 });
@@ -81,13 +83,11 @@ export function ProductGallery({ images, title, variants = [] }: { images: Shopi
         onTouchCancel={() => { touchStart.current = null; }}
       >
         <GalleryPhoto key={`${selectionKey}:${active.url}`} image={active} previous={selection.key === selectionKey && selection.previous?.url !== active.url ? selection.previous ?? null : null} title={title} first={activeIndex === 0} onLoaded={(image) => { lastLoaded.current = { key: selectionKey, image }; }} />
-        {visibleImages.length > 1 && <>
-          <button type="button" className={`${styles.arrow} ${styles.previous}`} aria-label="Previous product image" onClick={() => moveImage(-1)}><ChevronLeft size={19} strokeWidth={1.6} aria-hidden="true" /></button>
-          <button type="button" className={`${styles.arrow} ${styles.next}`} aria-label="Next product image" onClick={() => moveImage(1)}><ChevronRight size={19} strokeWidth={1.6} aria-hidden="true" /></button>
-        </>}
       </div>
       {visibleImages.length > 1 && (
-        <div className={styles.dots} role="group" aria-label="Product photo selection">
+        <div className={styles.controls}>
+          <button type="button" className={styles.arrow} aria-label="Previous product image" onClick={() => moveImage(-1)}><ChevronLeft size={19} strokeWidth={1.6} aria-hidden="true" /></button>
+          <div className={styles.dots} role="group" aria-label="Product photo selection">
           {visibleImages.map((image, index) => (
             <button
               key={`${image.url}-${index}`}
@@ -97,6 +97,8 @@ export function ProductGallery({ images, title, variants = [] }: { images: Shopi
               aria-pressed={index === activeIndex}
             />
           ))}
+          </div>
+          <button type="button" className={styles.arrow} aria-label="Next product image" onClick={() => moveImage(1)}><ChevronRight size={19} strokeWidth={1.6} aria-hidden="true" /></button>
         </div>
       )}
     </div>

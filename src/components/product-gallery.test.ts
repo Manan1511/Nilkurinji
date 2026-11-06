@@ -9,6 +9,9 @@ it("identifies selected gallery thumbnails and handles missing images", async ()
   vi.stubGlobal("IS_REACT_ACT_ENVIRONMENT", true); const host = document.createElement("div"); const root = createRoot(host);
   await act(async () => root.render(createElement(ProductGallery, { images: [{ url: "/images/category-tea.png", altText: "Tea", width: 100, height: 100 }, { url: "/images/category-tea-bags.png", altText: "Tea bags", width: 100, height: 100 }], title: "Tea" })));
   const dots = host.querySelectorAll<HTMLButtonElement>('[aria-label^="Show product photo"]');
+  const imageFrame = host.querySelector("img")?.parentElement;
+  expect(imageFrame?.contains(host.querySelector('[aria-label="Previous product image"]') ?? null)).toBe(false);
+  expect(imageFrame?.contains(host.querySelector('[aria-label="Next product image"]') ?? null)).toBe(false);
   await act(async () => dots[1].click()); expect(dots[1].getAttribute("aria-pressed")).toBe("true"); expect(dots[0].getAttribute("aria-pressed")).toBe("false");
   await act(async () => host.querySelector<HTMLButtonElement>('[aria-label="Next product image"]')?.click()); expect(dots[0].getAttribute("aria-pressed")).toBe("true");
   await act(async () => host.querySelector<HTMLButtonElement>('[aria-label="Previous product image"]')?.click()); expect(dots[1].getAttribute("aria-pressed")).toBe("true");
@@ -75,4 +78,26 @@ it("keeps the previous image in place until the next image loads", async () => {
   await act(async () => { active?.dispatchEvent(new Event("load")); await Promise.resolve(); });
   expect(active?.className).toContain("imageEntering");
   await act(async () => root.unmount()); host.remove(); vi.unstubAllGlobals();
+});
+
+it("displays the requested Classic Tea sequence after changing packs", async () => {
+  vi.stubGlobal("IS_REACT_ACT_ENVIRONMENT", true);
+  const variants = { nodes: ["500 g", "1 kg"].map((value) => ({ id: value, title: value, availableForSale: true, price: { amount: "240", currencyCode: "INR" }, selectedOptions: [{ name: "Pack size", value }] })) };
+  const product = normalizeProduct({ id: "1", handle: "premium-tea", title: "Classic Tea", description: "", variants });
+  function Switcher() {
+    const { setVariantId, setImageUrl } = useProductVariantImage();
+    return createElement("button", { onClick: () => { setVariantId(product.variants[1].id); setImageUrl(product.variants[1].image?.url ?? null); } }, "Select 1 kg");
+  }
+  const host = document.createElement("div"); const root = createRoot(host);
+  await act(async () => root.render(createElement(ProductVariantImageProvider, null, createElement(Switcher), createElement(ProductGallery, { images: product.images, variants: product.variants, handle: product.handle, title: product.title }))));
+  expect(decodeURIComponent(host.querySelector('img:not([aria-hidden="true"])')?.getAttribute("src") ?? "")).toContain("img-0309.webp");
+  await act(async () => host.querySelector("button")?.click());
+  const dots = host.querySelectorAll<HTMLButtonElement>('[aria-label^="Show product photo"]');
+  const expected = "0286 0287 0299 0289 0290 0291 0292 0293 0294".split(" ");
+  expect(dots).toHaveLength(expected.length);
+  for (let i = 0; i < dots.length; i++) {
+    await act(async () => dots[i].click());
+    expect(decodeURIComponent(host.querySelector('img:not([aria-hidden="true"])')?.getAttribute("src") ?? "")).toContain(`img-${expected[i]}.webp`);
+  }
+  await act(async () => root.unmount()); vi.unstubAllGlobals();
 });

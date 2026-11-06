@@ -19,7 +19,7 @@ export function ProductCard({ product, cartEnabled, checkoutEnabled, purchasingE
   const alternateImage = cardAlternateImage(product, image, selectedVariant);
   const imageSizes = variant === "featured"
     ? "(max-width: 359px) 78vw, (max-width: 599px) 280px, (max-width: 899px) 32vw, (max-width: 1199px) 25vw, 20vw"
-    : "(max-width: 359px) 90vw, (max-width: 599px) 46vw, (max-width: 899px) 32vw, (max-width: 1199px) 25vw, 20vw";
+    : "(max-width: 599px) 45vw, (max-width: 899px) 32vw, (max-width: 1199px) 25vw, 20vw";
   const price = product.priceRange?.minVariantPrice;
   const range = product.priceRange && product.priceRange.minVariantPrice.amount !== product.priceRange.maxVariantPrice.amount;
   const available = product.variants.some((item) => item.availableForSale);

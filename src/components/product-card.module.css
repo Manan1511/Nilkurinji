@@ -44,6 +44,15 @@
   .card:hover { box-shadow: none; }
   .comingSoonCard:hover { box-shadow: 0 8px 22px rgb(20 43 28 / 10%); }
 }
+@media (max-width: 599px) {
+  .card:not(.featured) .productLink { display: grid; flex: 0 0 auto; grid-template-columns: minmax(0, 43%) minmax(0, 1fr); align-items: start; }
+  .card:not(.featured) .frame { width: 100%; aspect-ratio: 4/3; border-radius: 7px 0 7px 0; }
+  .card:not(.featured) .details { padding: 12px 14px 10px; }
+  .card:not(.featured) .details h3 { min-height: 0; font-size: 16px; line-height: 1.3; overflow-wrap: normal; }
+  .card:not(.featured) .type { min-height: 0; margin-top: 7px; font-size: 10px; }
+  .card:not(.featured) .pack { display: none; }
+  .card:not(.featured) .price,.card:not(.featured) .comingSoon { min-height: 0; margin-top: 7px; font-size: 14px; }
+}
 @media (prefers-reduced-motion: reduce) {
   .card,.image { transition: none; }
   .productLink.hasAlternate:hover .image,.productLink.hasAlternate:focus-visible .image { transform: none; }
