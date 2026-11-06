@@ -10,7 +10,7 @@
 .heroFade { position: absolute; inset: 0; background: linear-gradient(90deg, rgb(243 239 227 / 94%) 0%, rgb(243 239 227 / 82%) 27%, rgb(243 239 227 / 48%) 43%, rgb(243 239 227 / 8%) 64%, transparent 76%); pointer-events: none; }
 .heroCopy { position: relative; z-index: 2; width: min(1536px,100%); padding: 32px clamp(40px, 10vw, 154px); margin-inline: auto; }
 .heroEyebrow,.eyebrow { color: var(--forest); font: 700 12px/1.5 var(--font-body); letter-spacing: .18em; text-transform: uppercase; }
-.heroCopy h1 { max-width: 12ch; margin-top: 12px; color: var(--ink); font: 400 clamp(2.75rem, 5vw, 5rem)/.99 var(--font-editorial); letter-spacing: -.04em; }
+.heroCopy h1 { max-width: 22ch; margin-top: 12px; color: var(--ink); font: 400 clamp(2.75rem, 4vw, 4rem)/1.02 var(--font-editorial); letter-spacing: -.04em; }
 .heroDescription { max-width: 40ch; margin-top: 14px; color: var(--ash); font: italic 400 clamp(16px,1.25vw,19px)/1.5 var(--font-libre-italic), Georgia, serif; }
 .heroStatus { width: fit-content; margin-top: 8px; color: var(--muted); font-size: 13px; line-height: 1.4; }
 .heroActions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
@@ -65,8 +65,8 @@
   .hero { align-items: flex-start; min-height: min(740px, max(620px, calc(100svh - 96px))); }
   .heroPhoto { object-position: 52% 64%; }
   .heroFade { background: linear-gradient(180deg, rgb(243 239 227 / 76%) 0%, rgb(243 239 227 / 58%) 28%, rgb(243 239 227 / 18%) 51%, transparent 68%); }
-  .heroCopy { padding: clamp(30px,7vh,54px) var(--page-gutter) 26px; }
-  .heroCopy h1 { max-width: 12ch; margin-top: 9px; font-size: clamp(2.45rem,10.5vw,3.35rem); line-height: 1.01; }
+  .heroCopy { padding: 24px var(--page-gutter) 26px; }
+  .heroCopy h1 { max-width: none; margin-top: 12px; font-size: clamp(1.55rem,7.8vw,2.9rem); line-height: 1.06; }
   .heroDescription { max-width: 34ch; margin-top: 11px; font-size: 16px; line-height: 1.5; }
   .heroActions { margin-top: 16px; }
   .heroActions :global(.button) { min-height: 48px; padding-inline: 20px; font-size: 14px; }
@@ -95,7 +95,6 @@
 
 @media (max-width: 359px) {
   .heroCopy { padding-inline: 16px; }
-  .heroCopy h1 { max-width: 12ch; font-size: 2.3rem; }
   .categoryHeading > div { gap: 8px; }
   .categoryHeading h2 { font-size: 1.35rem; }
   .headingRule { width: 28px; }

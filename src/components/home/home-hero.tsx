@@ -42,7 +42,7 @@ export function HomeHero({
     <BotanicalEdges placement="home-hero" />
     <div className={styles.heroCopy}>
       <p className={styles.heroEyebrow}>{eyebrow}</p>
-      <h1>{heading}</h1>
+      <h1>{heading === "A Taste of Nature, Crafted for You" ? <>A Taste of Nature,<br />Crafted for You</> : heading}</h1>
       <p className={styles.heroDescription}>{description}</p>
       {status && <p className={styles.heroStatus} role="status">{status}</p>}
       <div className={styles.heroActions}>
