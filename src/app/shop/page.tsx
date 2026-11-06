@@ -83,10 +83,11 @@ export default async function ShopPage({ searchParams }: ShopProps) {
   const { category, q } = await searchParams;
   const requestedCategory = Array.isArray(category) ? category[0] : category;
   const searchQuery = normalizeSearchQuery(Array.isArray(q) ? q[0] ?? "" : q ?? "");
+  const productsRequest = searchQuery ? searchProducts(searchQuery) : getProducts();
   const enabledCategories = await getEnabledCategoryHandles();
   const initialCategory = requestedCategory && enabledCategories.includes(requestedCategory) ? requestedCategory : "all";
   const [result, bannerResult] = await Promise.all([
-    searchQuery ? searchProducts(searchQuery) : getProducts(),
+    productsRequest,
     getShopCategoryBanner(initialCategory),
   ]);
   const preview = getStorefrontMode().mode === "preview";

@@ -54,7 +54,7 @@ export function SiteHeader({ enabledCategories = DEFAULT_CATEGORY_HANDLES }: { e
   }, []);
 
   return (
-    <header className={styles.header}>
+    <header className={`${styles.header}${pathname === "/" || pathname === "/shop" ? ` ${styles.blendedHeader}` : ""}`}>
       <BotanicalEdges placement="header" />
       <div className={`${styles.topRow} ${panel === "search" ? styles.searchOpen : ""}`}>
         <button

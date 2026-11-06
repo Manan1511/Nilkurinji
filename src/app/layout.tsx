@@ -20,6 +20,7 @@ const displayFont = Libre_Baskerville({
   variable: "--font-libre",
   display: "swap",
 });
+const displayItalicFont = Libre_Baskerville({ subsets: ["latin"], weight: "400", style: "italic", variable: "--font-libre-italic", display: "swap" });
 const bodyFont = Lato({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-lato", display: "swap" });
 const scriptFont = Caveat({ subsets: ["latin"], weight: ["400"], variable: "--font-caveat", display: "swap" });
 const logoFont = Playfair_Display({ subsets: ["latin"], weight: ["400"], variable: "--font-playfair-display", display: "swap" });
@@ -75,7 +76,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const socialLinks = settings.source === "unavailable" ? [] : settings.data.socialLinks;
   const notice = getStorefrontMode().mode !== "live" || !isShopifyCheckoutEnabled();
   return (
-    <html lang="en" className={`${displayFont.variable} ${bodyFont.variable} ${scriptFont.variable} ${logoFont.variable} ${monoFont.variable}`}>
+    <html lang="en" className={`${displayFont.variable} ${displayItalicFont.variable} ${bodyFont.variable} ${scriptFont.variable} ${logoFont.variable} ${monoFont.variable}`}>
       <body data-notice={String(notice)}>
         <CartProvider>
           <a className="skip-link" href="#main-content">Skip to content</a>

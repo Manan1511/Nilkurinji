@@ -3,6 +3,7 @@
 /* The mountain scene is the opening statement; copy sits over its open sky. */
 .hero { position: relative; display: flex; align-items: center; min-height: clamp(480px, 42vw, 660px); isolation: isolate; overflow: hidden; background: var(--paper); }
 .heroMedia { position: absolute; z-index: -1; inset: 0; overflow: hidden; background: var(--paper); }
+.heroMedia::before { position: absolute; z-index: 1; inset: 0 0 auto; height: clamp(52px, 6vw, 90px); background: linear-gradient(to bottom, var(--paper), transparent); pointer-events: none; content: ""; }
 .heroMedia::after { position: absolute; inset: auto 0 0; height: clamp(64px, 7vw, 104px); background: linear-gradient(to bottom, transparent, var(--paper)); pointer-events: none; content: ""; }
 .heroScene { position: absolute; inset: 0; display: block; overflow: hidden; }
 .heroPhoto { object-fit: cover; object-position: center 58%; }
@@ -10,10 +11,10 @@
 .heroCopy { position: relative; z-index: 2; width: min(1536px,100%); padding: 32px clamp(40px, 10vw, 154px); margin-inline: auto; }
 .heroEyebrow,.eyebrow { color: var(--forest); font: 700 12px/1.5 var(--font-body); letter-spacing: .18em; text-transform: uppercase; }
 .heroCopy h1 { max-width: 12ch; margin-top: 12px; color: var(--ink); font: 400 clamp(2.75rem, 5vw, 5rem)/.99 var(--font-editorial); letter-spacing: -.04em; }
-.heroDescription { max-width: 40ch; margin-top: 14px; color: var(--ash); font-size: clamp(16px,1.25vw,19px); line-height: 1.55; }
+.heroDescription { max-width: 40ch; margin-top: 14px; color: var(--ash); font: italic 400 clamp(16px,1.25vw,19px)/1.5 var(--font-libre-italic), Georgia, serif; }
 .heroStatus { width: fit-content; margin-top: 8px; color: var(--muted); font-size: 13px; line-height: 1.4; }
 .heroActions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
-.heroActions :global(.button) { min-height: 50px; padding-inline: 25px; border-radius: 999px; font-weight: 700; }
+.heroActions :global(.button) { min-height: 50px; padding-inline: 25px; border-radius: 999px; font-weight: 400; }
 
 .categories { position: relative; min-height: 240px; padding: 18px var(--page-gutter) 10px; overflow: hidden; isolation: isolate; border-bottom: 1px solid var(--rule); background: var(--paper); }
 .categoryHeading,.categoryRail { position: relative; z-index: 1; }
@@ -22,7 +23,7 @@
 .categoryHeading > div { display: flex; align-items: center; justify-content: center; gap: 14px; }
 .categoryHeading h2 { color: var(--ink); font: 400 clamp(1.55rem,2vw,1.9rem)/1.1 var(--font-editorial); letter-spacing: -.02em; }
 .headingRule { display: block; width: clamp(36px,5vw,64px); height: 1px; background: var(--brass); }
-.categoryHeading p { color: var(--muted); font-size: 13px; line-height: 1.45; }
+.categoryHeading p { color: var(--muted); font: italic 400 13px/1.45 var(--font-libre-italic), Georgia, serif; }
 .categoryRail { display: grid; grid-template-columns: repeat(var(--category-count, 5),minmax(0,1fr)); width: min(var(--category-rail-width, 940px),100%); margin: 12px auto 0; }
 .categoryItem { position: relative; display: flex; flex-direction: column; align-items: center; min-width: 0; min-height: 125px; color: var(--ink); text-decoration: none; }
 .categoryItem:not(:last-child)::after { position: absolute; top: 18px; right: 0; width: 1px; height: 48px; background: var(--rule); content: ""; }
