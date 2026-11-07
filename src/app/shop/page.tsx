@@ -99,19 +99,13 @@ export default async function ShopPage({ searchParams }: ShopProps) {
   const collectionBanner = !searchQuery;
   const teaCollection = initialCategory === "tea" && collectionBanner;
   const teaBannerImage: ShopifyImage = {
-    url: "/images/shop-tea-banner-desktop.webp",
-    altText: "A cup of creamy Indian milk tea with loose tea leaves and blue-violet Nilkurinji flowers.",
-    width: 1536,
-    height: 1024,
-  };
-  const teaMobileBannerImage: ShopifyImage = {
-    url: "/images/shop-tea-banner-mobile.webp",
-    altText: "Creamy Indian milk tea with loose tea and subtle blue-violet Nilkurinji flowers.",
-    width: 1448,
-    height: 1086,
+    url: "/images/shop-tea-banner.jpg",
+    altText: "A cup of Indian milk tea with loose tea leaves and subtle blue-violet Nilkurinji flowers.",
+    width: 1600,
+    height: 900,
   };
   const bannerImage = collectionBanner ? teaBannerImage : configuredBanner ?? productFreeShopBanner;
-  const mobileBannerImage = collectionBanner ? teaMobileBannerImage : configuredBanner ? bannerContent?.mobileImage ?? null : null;
+  const mobileBannerImage = !collectionBanner && configuredBanner ? bannerContent?.mobileImage ?? null : null;
 
   return <>
     <ShopBanner category={initialCategory} image={bannerImage} mobileImage={mobileBannerImage} copy={teaCollection ? null : bannerContent} preview={preview} productFreeFallback={!collectionBanner && !configuredBanner} searchQuery={searchQuery} collectionBanner={collectionBanner} teaCollection={teaCollection} />

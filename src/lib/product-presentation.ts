@@ -29,8 +29,19 @@ export function moveComingSoonTeaLast<T extends ProductIdentity>(products: T[]):
 
 export function featuredProductsFirst<T extends ProductIdentity>(products: T[]): T[] {
   const ordered = moveComingSoonTeaLast(products);
-  const classic = ordered.filter((product) => product.handle === "premium-tea" && !isComingSoonTea(product));
-  return [...classic, ...ordered.filter((product) => !classic.includes(product))];
+  const teaOrder = (product: ProductIdentity): number => {
+    const text = identityText(product);
+    if (isComingSoonTea(product)) return 4;
+    if (product.handle === "premium-tea" || /\bclassic\b/.test(text)) return 0;
+    if (product.handle === "rose-tea" || /\brose\b/.test(text)) return 1;
+    if (product.handle === "elaichi-tea" || /\belaichi\b|\bcardamom\b/.test(text)) return 2;
+    return 3;
+  };
+
+  return ordered
+    .map((product, index) => ({ product, index }))
+    .sort((a, b) => teaOrder(a.product) - teaOrder(b.product) || a.index - b.index)
+    .map(({ product }) => product);
 }
 
 export function getProductPresentation(product: ProductIdentity): ProductPresentation {

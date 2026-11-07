@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Landmark, Leaf, ShieldCheck, Truck } from "lucide-react";
+import { ArrowRight, Landmark, Leaf, ShieldCheck, Truck } from "lucide-react";
 import { HomeHero } from "@/components/home/home-hero";
 import { HomeReviews } from "@/components/home/home-reviews";
 import { MobileContactCard } from "@/components/site-footer";
@@ -88,6 +88,24 @@ export default async function HomePage() {
     />
 
     <HomeCategories />
+
+    <section className={styles.homeStory} aria-labelledby="home-story-heading">
+      <BotanicalEdges placement="home-story" />
+      <div className={styles.homeStoryContent}>
+        <div className={styles.homeStoryLayout}>
+          <div className={styles.homeStoryIntro}>
+            <h2 id="home-story-heading">Rooted in nature. <span>Growing with purpose.</span></h2>
+            <p className={styles.homeStorySubtitle}>Thoughtfully chosen for everyday living.</p>
+          </div>
+          <div className={styles.homeStoryNarrative}>
+            <p className={styles.homeStoryBody}>At Nilkurinji, we believe that everyday essentials deserve thoughtful attention. Our vision is to bring together products chosen with care, guided by quality, simplicity and a deep appreciation for the little things that make everyday life better.</p>
+            <Link className={`${styles.homeStoryCta} button button--dark`} href="/our-story">
+              DISCOVER OUR STORY <ArrowRight size={17} aria-hidden="true" />
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <HomeReviews />
 

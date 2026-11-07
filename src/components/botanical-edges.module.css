@@ -133,6 +133,17 @@
 .banner .right { right: -62px; bottom: -38px; width: 200px; transform: rotate(12deg); }
 .story .left { top: -22px; left: -65px; width: 216px; transform: rotate(-11deg); }
 .story .right { right: -68px; bottom: -57px; width: 214px; transform: rotate(10deg); }
+.story .depthLeft { top: -18px; left: -18px; width: clamp(148px, 13vw, 196px); opacity: .14; --foliage-origin: 0 12%; --foliage-duration: 15s; animation-delay: -8s; }
+.story .depthRight { right: -18px; bottom: -32px; width: clamp(156px, 14vw, 210px); opacity: .13; --foliage-origin: 100% 88%; --foliage-duration: 16s; animation-delay: -11s; }
+.textOnly.story.edges { top: 0; bottom: 0; height: auto; }
+.textOnly.story .left { top: auto; bottom: -18px; left: 0; width: clamp(168px, 15vw, 228px); opacity: 1; --foliage-origin: 0 90%; }
+.textOnly.story .right { top: -14px; right: -14px; bottom: auto; width: clamp(160px, 15vw, 230px); opacity: 1; --foliage-origin: 100% 10%; }
+.textOnly.story .depthLeft { top: -12px; left: 0; bottom: auto; width: clamp(138px, 12vw, 184px); opacity: .18; }
+.textOnly.story .depthRight { top: auto; right: -14px; bottom: -26px; width: clamp(148px, 13vw, 194px); opacity: .18; }
+.home-story .left { top: auto; bottom: -18px; left: 0; width: clamp(176px, 15vw, 224px); opacity: 1; transform: rotate(-9deg); --foliage-origin: 0 92%; }
+.home-story .right { top: -20px; right: -14px; bottom: auto; width: clamp(184px, 16vw, 236px); opacity: 1; transform: rotate(10deg); --foliage-origin: 100% 8%; }
+.home-story .depthLeft { top: 0; bottom: auto; left: 16px; width: clamp(142px, 12vw, 188px); opacity: .18; --foliage-origin: 0 10%; --foliage-duration: 15s; animation-delay: -8s; }
+.home-story .depthRight { top: auto; right: -14px; bottom: 0; width: clamp(152px, 13vw, 196px); opacity: .16; --foliage-origin: 100% 92%; --foliage-duration: 16s; animation-delay: -11s; }
 
 /* The menu uses separate top and bottom pairs, framing the navigation from its open corners. */
 .menu-top { top: 0; bottom: auto; height: clamp(108px, 19vh, 152px); overflow: hidden; }
@@ -161,6 +172,8 @@
 .featured .right { animation-delay: -3.2s; }
 .banner .left,.story .left { animation-delay: -5.5s; }
 .banner .right,.story .right { animation-delay: -2.1s; }
+.home-story .left { animation-delay: -4.2s; }
+.home-story .right { animation-delay: -1.8s; }
 .menu-top .left { animation-delay: -3.6s; }
 .menu-top .right { animation-delay: -7.4s; }
 
@@ -176,6 +189,8 @@
   .featured .depthRight { right: -78px; bottom: -44px; width: clamp(175px,20vw,240px); }
   .banner .left,.story .left { width: 150px; }
   .banner .right,.story .right { width: 152px; }
+  .home-story .left { left: 0; width: 178px; }
+  .home-story .right { right: -14px; width: 184px; }
 }
 
 @media (max-width: 767px) {
@@ -264,11 +279,21 @@
   .banner .left { top: -8px; left: clamp(-26px, -6vw, -18px); transform: rotate(-9deg); --foliage-origin: 0 78%; }
   .banner .right { top: -4px; right: clamp(12px, 4vw, 18px); bottom: auto; transform: rotate(12deg); --foliage-origin: 100% 20%; }
 
-  /* The story hero stacks copy before its photo, so confine its leaves to that photo frame. */
+  /* The preview story frames its photo; live text-only stories fill the whole hero. */
   .story.edges { z-index: 2; top: auto; bottom: 0; height: calc(75vw - 8px); }
   .story .left,.story .right { top: 0; bottom: auto; width: clamp(104px, 30vw, 120px); opacity: .9; }
   .story .left { top: auto; bottom: -8px; left: -10px; transform: rotate(-11deg); --foliage-origin: 0 80%; }
   .story .right { right: 20px; transform: rotate(10deg); --foliage-origin: 100% 18%; }
+  .textOnly.story.edges { z-index: 0; top: 0; bottom: 0; height: auto; }
+  .textOnly.story .left { top: auto; bottom: -12px; left: 0; width: clamp(124px, 36vw, 144px); opacity: 1; --foliage-origin: 0 82%; }
+  .textOnly.story .right { top: -8px; right: -14px; bottom: auto; width: clamp(128px, 38vw, 152px); opacity: 1; --foliage-origin: 100% 14%; }
+  .textOnly.story .depthLeft { top: 18px; left: 0; bottom: auto; width: clamp(124px, 34vw, 138px); opacity: .18; }
+  .textOnly.story .depthRight { top: auto; right: -14px; bottom: 4px; width: clamp(132px, 36vw, 148px); opacity: .18; }
+
+  .home-story .left { top: auto; bottom: -8px; left: 0; width: clamp(142px, 36vw, 156px); opacity: 1; transform: rotate(-11deg); --foliage-origin: 0 90%; }
+  .home-story .right { top: -4px; right: -14px; bottom: auto; width: clamp(146px, 37vw, 160px); opacity: 1; transform: rotate(12deg); --foliage-origin: 100% 8%; }
+  .home-story .depthLeft { top: 18%; bottom: auto; left: 0; width: clamp(112px, 30vw, 124px); opacity: .18; }
+  .home-story .depthRight { top: auto; right: -14px; bottom: 8%; width: clamp(120px, 32vw, 132px); opacity: .16; }
 
   .menu { height: clamp(118px, 22vh, 170px); }
   .menu .left { bottom: -14px; width: clamp(88px, 29vw, 112px); opacity: .28; }
@@ -299,6 +324,8 @@
   .story .left,.story .right { width: 104px; }
   .story .left { top: auto; bottom: -8px; left: -10px; }
   .story .right { right: 20px; }
+  .home-story .left { left: 0; width: 128px; }
+  .home-story .right { right: -14px; width: 132px; }
   .menu { height: 118px; }
   .menu .left { bottom: -12px; width: 88px; }
   .menu .right { bottom: -8px; width: 98px; }

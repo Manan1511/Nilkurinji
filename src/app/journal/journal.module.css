@@ -1,0 +1,10 @@
+.page { padding-bottom: clamp(48px, 6vw, 88px); }
+.heading { position: relative; width: 100%; padding: clamp(18px, 2.2vw, 30px) max(var(--page-gutter), calc((100vw - 1360px) / 2 + var(--page-gutter))) 0; isolation: isolate; }
+.heading > span img { top: 0; bottom: auto; width: auto; height: 100%; max-height: 100%; transform: none; object-fit: contain; }
+.heading > span img:first-child { left: 0; object-position: left center; }
+.heading > span img:last-child { right: 0; object-position: right center; }
+.heading h1 { position: relative; z-index: 1; color: var(--ink); font: 400 clamp(2.25rem, 4vw, 3.4rem)/1.08 var(--font-editorial); }
+
+@media (max-width: 639px) {
+  .heading { padding-top: 16px; }
+}

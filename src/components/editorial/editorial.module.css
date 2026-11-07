@@ -30,15 +30,19 @@
 .empty,.notice { padding: 28px; border: 1px solid var(--rule); color: var(--ash); text-align: center; }
 .empty a { display: inline-flex; margin-top: 14px; }
 .customerReviews { width: min(1360px, 100%); padding: 20px var(--page-gutter) 0; margin-inline: auto; }
+.customerReviewsCompact { padding-top: 10px; }
 .customerReviewsHeading { display: flex; align-items: center; justify-content: center; gap: 18px; margin-bottom: 22px; }
 .customerReviewsHeading > span { width: min(72px, 12vw); height: 1px; background: var(--rule); }
 .customerReviewsHeading h2 { color: var(--ink); font: 400 clamp(1.6rem, 2.2vw, 2rem)/1.2 var(--font-editorial); text-align: center; }
 .customerReviewGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-.customerReviewCard { display: flex; min-width: 0; min-height: 160px; align-items: stretch; padding: 18px; border: 1px solid var(--rule); border-radius: 10px; background: var(--paper-light); }
+.customerReviewCard { display: flex; min-width: 0; min-height: 160px; align-items: stretch; gap: 14px; padding: 18px; border: 1px solid var(--rule); border-radius: 10px; background: var(--paper-light); }
 .customerReviewCopy { display: flex; min-width: 0; flex: 1; flex-direction: column; justify-content: center; }
 .customerReviewCopy blockquote { color: var(--ash); font-size: 14px; line-height: 1.5; }
 .customerReviewCopy footer { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin-top: 12px; color: var(--ash); font-size: 12px; line-height: 1.4; }
 .customerReviewCopy cite { color: var(--ink); font-style: normal; font-weight: 700; }
+.customerReviewPhoto { position: relative; display: flex; flex: 0 0 clamp(76px, 24%, 100px); align-self: center; aspect-ratio: 3 / 4; overflow: hidden; border-radius: 8px; background: var(--paper); }
+.customerReviewPhoto img { width: 100%; height: 100%; object-fit: cover; }
+.customerReviewPhotoContain img { object-fit: contain; }
 .article { width: min(100%, 960px); padding: 28px var(--page-gutter) clamp(48px, 7vw, 96px); margin-inline: auto; }
 .unavailable { min-height: 340px; text-align: center; }
 .unavailable h1 { color: var(--ink); font: 400 clamp(2rem, 4vw, 3rem)/1.15 var(--font-editorial); }
@@ -73,7 +77,8 @@
   .customerReviewsHeading > span { width: min(34px, 8vw); }
   .customerReviewsHeading h2 { font-size: 1.55rem; }
   .customerReviewGrid { grid-template-columns: 1fr; gap: 12px; }
-  .customerReviewCard { min-height: 142px; padding: 14px; }
+  .customerReviewCard { min-height: 142px; gap: 10px; padding: 14px; }
+  .customerReviewPhoto { flex-basis: clamp(76px, 23vw, 90px); }
   .customerReviewCopy blockquote { font-size: 13px; line-height: 1.45; }
   .customerReviewCopy footer { margin-top: 8px; font-size: 11px; }
   .cardCopy { padding: 14px 16px 16px; }

@@ -7,7 +7,17 @@ import { getStorefrontMode } from "@/lib/shopify/mode";
 import { sanitizeMerchantHtml } from "@/lib/shopify/sanitize";
 import styles from "./our-story.module.css";
 
-export const metadata: Metadata = { title: "Our Story", description: "The Nilkurinji story.", alternates: { canonical: "/our-story" } };
+const STORY_TITLE = "About Nilkurinji Premium";
+const STORY_TAGLINE = "Rooted in Nature. Built with Vision.";
+const STORY_PARAGRAPHS = [
+  "Established in April 2026, Nilkurinji Premium is a growing food brand built around a long-term vision: to bring thoughtfully selected products into everyday life.",
+  "Our name draws inspiration from the Neelakurinji flower, famous for its rare bloom once every twelve years. Found across the majestic hills of Munnar in Kerala’s Western Ghats, these blue-purple flowers transform the mountain slopes into breathtaking carpets of colour. This extraordinary natural spectacle represents patience, rarity and the beauty of growth — values that inspire the identity of Nilkurinji Premium.",
+  "Tea marks the beginning of our journey. As we expand into more food categories, our focus remains on building a consistent brand experience, understanding our customers and earning their trust at every step.",
+  "Founded by Mr. Dhyanu Baweja and Mrs. Tarushi Baweja, Nilkurinji Premium is being built with a shared commitment to quality, continuous growth and lasting value.",
+  "We are at the beginning of our journey, with a vision that reaches beyond a single product.",
+];
+
+export const metadata: Metadata = { title: STORY_TITLE, description: "Established in April 2026, Nilkurinji Premium is a growing food brand inspired by the rare Neelakurinji flower.", alternates: { canonical: "/our-story" } };
 export const revalidate = 60;
 
 export default async function OurStoryPage() {
@@ -16,35 +26,29 @@ export default async function OurStoryPage() {
   const body = page?.body ? sanitizeMerchantHtml(page.body) : "";
   const preview = mode.mode === "preview";
   return <article className={styles.page}>
-    <header className={styles.hero}>
-      <BotanicalEdges placement="story" />
+    <header className={`${styles.hero} ${styles.heroTextOnly}`}>
+      <Image className={styles.heroBackground} src="/images/our-story-mountains.webp" alt="" fill preload sizes="100vw" />
+      <BotanicalEdges placement="story" textOnly />
       <div className={styles.heroCopy}>
         <p className={styles.eyebrow}>NILKURINJI / OUR STORY</p>
-        <h1>{page?.title || "Our Story"}</h1>
-        <p>{body ? "Discover the story and values shared by Nilkurinji." : preview ? "The Nilkurinji story is being prepared for this preview." : "Brand information will appear here once it has been published."}</p>
-        <a className="button button--dark" href="#story">Read our story <span aria-hidden="true">↓</span></a>
+        <h1>{page?.title || STORY_TITLE}</h1>
+        <p className={styles.tagline}>{STORY_TAGLINE}</p>
       </div>
-      <figure className={styles.heroPhoto}>
-        {preview && <Image src="/images/tea-hero-editorial.webp" alt="Illustrative tea and landscape concept imagery" fill quality={85} preload sizes="(max-width: 767px) 100vw, 55vw" />}
-        {preview && <figcaption>Illustrative concept imagery</figcaption>}
-      </figure>
     </header>
-    <section className={styles.story} id="story">
+    <section className={`${styles.story} ${!preview ? styles.storyTextOnly : ""}`} id="story">
       <div className={styles.storyCopy}>
         <p className={styles.eyebrow}>THE NILKURINJI STORY</p>
-        <h2>{page?.title || "A story told by the brand"}</h2>
-        {body ? <div className={styles.body} dangerouslySetInnerHTML={{ __html: body }} /> : <p className={styles.body} role="status">{result.source === "unavailable" ? "Brand information is temporarily unavailable. Please try again later." : preview ? "Approved history, sourcing details and brand values will be added here by the Nilkurinji team." : "The brand story has not been published yet."}</p>}
-        <Link href="/shop" className="text-link">Explore the shop</Link>
+        {body ? <div className={styles.body} dangerouslySetInnerHTML={{ __html: body }} /> : <div className={styles.body}>{STORY_PARAGRAPHS.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div>}
       </div>
-      <div className={styles.collage} aria-label={preview ? "Illustrative Nilkurinji concept imagery" : undefined}>
-        {preview && <Image className={styles.photoOne} src="/images/preview-about-leaves.png" alt="Illustrative tea leaf concept image" width={640} height={800} quality={85} sizes="(max-width: 767px) 48vw, 270px" />}
-        {preview && <Image className={styles.photoTwo} src="/images/tea-hero-editorial.webp" alt="Illustrative tea landscape concept image" width={900} height={650} quality={85} sizes="(max-width: 767px) 48vw, 260px" />}
-        {preview && <span className={styles.collageNote}>Concept imagery</span>}
-      </div>
+      {preview && <div className={styles.collage} aria-label="Illustrative Nilkurinji concept imagery">
+        <Image className={styles.photoOne} src="/images/preview-about-leaves.png" alt="Illustrative tea leaf concept image" width={640} height={800} quality={85} sizes="(max-width: 767px) 48vw, 270px" />
+        <Image className={styles.photoTwo} src="/images/tea-hero-editorial.webp" alt="Illustrative tea landscape concept image" width={900} height={650} quality={85} sizes="(max-width: 767px) 48vw, 260px" />
+        <span className={styles.collageNote}>Concept imagery</span>
+      </div>}
     </section>
     <section className={styles.closing}>
-      <p>Nilkurinji</p>
-      <h2>Tea and pantry, for your table.</h2>
+      <p>Nilkurinji Premium</p>
+      <h2>Rare Taste of Nature.</h2>
       <Link href="/shop" className="button button--outline">Explore the shop <span aria-hidden="true">→</span></Link>
     </section>
   </article>;

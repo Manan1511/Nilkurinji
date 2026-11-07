@@ -33,6 +33,9 @@ export function HomeReviews() {
               <span>{review.location}</span>
             </footer>
           </div>
+          {review.photo && <div className={`${styles.photoFrame} ${review.photo.fit === "contain" ? styles.photoContain : ""}`}>
+            <Image src={review.photo.src} alt={review.photo.alt} width={review.photo.width} height={review.photo.height} quality={80} sizes="(max-width: 599px) 88px, 112px" />
+          </div>}
         </article>)}
       </ReviewRail>
     </div>

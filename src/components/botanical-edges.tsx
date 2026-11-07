@@ -1,7 +1,7 @@
 import Image from "next/image";
 import styles from "./botanical-edges.module.css";
 
-type BotanicalPlacement = "header" | "home-hero" | "categories" | "featured" | "delivery" | "banner" | "story" | "menu-top" | "menu";
+type BotanicalPlacement = "header" | "home-hero" | "home-story" | "categories" | "featured" | "delivery" | "banner" | "story" | "menu-top" | "menu";
 
 type BotanicalAsset = { src: string; width: number; height: number };
 type BotanicalPair = { left: BotanicalAsset; right: BotanicalAsset };
@@ -14,6 +14,10 @@ const assets: Record<BotanicalPlacement, BotanicalPair> = {
   "home-hero": {
     left: { src: "/images/botanical/botanical-home-hero-left-refined.webp", width: 1327, height: 1186 },
     right: { src: "/images/botanical/botanical-home-hero-right-refined.webp", width: 1327, height: 1186 },
+  },
+  "home-story": {
+    left: { src: "/images/botanical/botanical-editorial-left.webp", width: 1024, height: 683 },
+    right: { src: "/images/botanical/botanical-editorial-right-kurinji.webp", width: 1024, height: 683 },
   },
   categories: {
     left: { src: "/images/botanical/botanical-categories-left.webp", width: 683, height: 1024 },
@@ -54,6 +58,10 @@ const depthAssets: Partial<Record<BotanicalPlacement, BotanicalPair>> = {
     left: { src: "/images/botanical/botanical-editorial-left.webp", width: 1024, height: 683 },
     right: { src: "/images/botanical/botanical-editorial-right-kurinji.webp", width: 1024, height: 683 },
   },
+  "home-story": {
+    left: { src: "/images/botanical/botanical-header-left.webp", width: 1024, height: 683 },
+    right: { src: "/images/botanical/botanical-header-right-refined.webp", width: 1350, height: 1165 },
+  },
   categories: {
     left: { src: "/images/botanical/botanical-header-left.webp", width: 1024, height: 683 },
     right: { src: "/images/botanical/botanical-header-right-refined.webp", width: 1350, height: 1165 },
@@ -66,6 +74,10 @@ const depthAssets: Partial<Record<BotanicalPlacement, BotanicalPair>> = {
     left: { src: "/images/botanical/botanical-categories-left.webp", width: 683, height: 1024 },
     right: { src: "/images/botanical/botanical-header-right-refined.webp", width: 1350, height: 1165 },
   },
+  story: {
+    left: { src: "/images/botanical/botanical-header-left.webp", width: 1024, height: 683 },
+    right: { src: "/images/botanical/botanical-header-right-refined.webp", width: 1350, height: 1165 },
+  },
 };
 
 const edgeSizes: Record<BotanicalPlacement, { left: string; right: string }> = {
@@ -76,6 +88,10 @@ const edgeSizes: Record<BotanicalPlacement, { left: string; right: string }> = {
   "home-hero": {
     left: "(max-width: 359px) 112px, (max-width: 767px) clamp(116px, 34vw, 136px), (max-width: 1279px) clamp(88px, 10vw, 124px), clamp(200px, 15vw, 240px)",
     right: "(max-width: 359px) 100px, (max-width: 767px) clamp(112px, 31vw, 124px), (max-width: 1279px) clamp(64px, 9vw, 112px), clamp(72px, 12vw, 184px)",
+  },
+  "home-story": {
+    left: "(max-width: 359px) 128px, (max-width: 767px) 160px, (max-width: 1279px) 190px, 224px",
+    right: "(max-width: 359px) 132px, (max-width: 767px) 164px, (max-width: 1279px) 194px, 236px",
   },
   categories: {
     left: "(max-width: 359px) 120px, (max-width: 767px) 145px, (max-width: 1279px) 190px, 220px",
@@ -114,21 +130,23 @@ export function MenuBackgroundFoliage() {
 }
 
 /** Section-specific transparent foliage; each composition has its own silhouette. */
-export function BotanicalEdges({ placement }: { placement: BotanicalPlacement }) {
+export function BotanicalEdges({ placement, textOnly = false }: { placement: BotanicalPlacement; textOnly?: boolean }) {
   const pair = assets[placement];
   const depthPair = depthAssets[placement];
-  const depthSizes = placement === "home-hero"
+  const depthSizes = placement === "home-hero" || placement === "home-story"
     ? "(max-width: 767px) 160px, (max-width: 1279px) 210px, 300px"
     : placement === "header"
       ? "(max-width: 767px) 112px, (max-width: 1279px) 160px, 190px"
       : placement === "categories"
         ? "(max-width: 767px) 145px, (max-width: 1279px) 210px, 260px"
+          : placement === "story"
+            ? "(max-width: 767px) 132px, (max-width: 1279px) 220px, 260px"
         : placement === "delivery"
           ? "(max-width: 767px) 150px, (max-width: 1279px) 220px, 260px"
           : "(max-width: 767px) 175px, (max-width: 1279px) 240px, 310px";
   const sizes = edgeSizes[placement];
   return (
-    <span className={`${styles.edges} ${styles[placement]}`} aria-hidden="true">
+    <span className={`${styles.edges} ${styles[placement]} ${textOnly ? styles.textOnly : ""}`} aria-hidden="true">
       {depthPair && <>
         <Image className={styles.depthLeft} src={depthPair.left.src} alt="" width={depthPair.left.width} height={depthPair.left.height} quality={75} sizes={depthSizes} />
         {placement !== "home-hero" && <Image className={styles.depthRight} src={depthPair.right.src} alt="" width={depthPair.right.width} height={depthPair.right.height} quality={75} sizes={depthSizes} />}

@@ -1,22 +1,29 @@
 .page { overflow: hidden; }
 .hero { position: relative; display: grid; grid-template-columns: minmax(360px, .88fr) minmax(0, 1.12fr); align-items: center; min-height: 360px; overflow: hidden; isolation: isolate; background: var(--paper); }
+.heroTextOnly { grid-template-columns: minmax(0, 1fr); min-height: 300px; }
+.heroBackground { z-index: 0; object-fit: cover; object-position: center 55%; }
+.hero::after { position: absolute; z-index: 0; inset: 0; content: ""; pointer-events: none; background: linear-gradient(90deg, rgb(243 239 227 / 92%) 0%, rgb(243 239 227 / 74%) 38%, transparent 76%); }
 .heroCopy { position: relative; z-index: 1; max-width: 640px; padding: 50px 40px 50px max(var(--page-gutter), calc((100vw - 1408px) / 2)); }
+.heroTextOnly .heroCopy { max-width: 820px; }
+@media (min-width: 1024px) {
+  .heroTextOnly .heroCopy { max-width: none; }
+}
 .eyebrow { margin-bottom: 14px; color: var(--forest); font: 700 .75rem/1.5 var(--font-body); letter-spacing: .16em; text-transform: uppercase; }
 .heroCopy h1,.storyCopy h2 { color: var(--ink); font: 400 clamp(2.5rem, 4vw, 3.75rem)/1.08 var(--font-editorial); }
 .heroCopy > p:not(.eyebrow) { max-width: 48ch; margin-top: 18px; color: var(--ash); line-height: 1.65; }
-.heroCopy > a { margin-top: 24px; }
-.heroCopy > a span { margin-left: 8px; }
+.heroCopy .tagline { max-width: 36ch; margin-top: 22px; color: var(--forest); font: italic 400 clamp(1.35rem, 2.1vw, 1.75rem)/1.45 var(--font-editorial); text-wrap: balance; }
 .heroPhoto { position: relative; z-index: 1; min-height: 360px; height: 100%; margin: 0; background: var(--parchment); }
 .heroPhoto img { object-fit: cover; object-position: center; }
 .heroPhoto figcaption { position: absolute; right: 18px; bottom: 18px; padding: 6px 10px; background: var(--paper); color: var(--ink); font-size: .75rem; }
-.story { display: grid; grid-template-columns: minmax(260px, .8fr) minmax(0, 1.2fr); align-items: center; gap: clamp(48px, 8vw, 120px); width: min(1280px, 100%); min-height: 430px; padding: 64px var(--page-gutter); margin-inline: auto; }
+.story { display: grid; grid-template-columns: minmax(260px, .8fr) minmax(0, 1.2fr); align-items: center; gap: clamp(40px, 6vw, 88px); width: min(1280px, 100%); min-height: 0; padding: clamp(32px, 4vw, 56px) var(--page-gutter); margin-inline: auto; }
+.storyTextOnly { grid-template-columns: minmax(0, 1fr); min-height: 0; }
 .storyCopy { max-width: 560px; }
+.storyTextOnly .storyCopy { max-width: 760px; }
 .storyCopy h2 { font-size: clamp(2.1rem, 3.3vw, 3rem); }
 .body { margin-top: 24px; color: var(--ash); font-size: 1rem; line-height: 1.75; }
 .body :global(p + p) { margin-top: 18px; }
 .body :global(h2),.body :global(h3) { margin-block: 26px 12px; color: var(--ink); font: 400 1.6rem/1.2 var(--font-editorial); }
 .body :global(a) { color: var(--forest); }
-.storyCopy > a { display: inline-flex; margin-top: 20px; }
 .collage { position: relative; min-height: 300px; aspect-ratio: 1.25; }
 .photoOne { position: absolute; top: 6%; left: 10%; width: 54%; height: 86%; object-fit: cover; padding: 10px 10px 38px; background: #fffdf8; box-shadow: 0 4px 16px rgb(20 43 28 / 13%); transform: rotate(-4deg); }
 .photoTwo { position: absolute; top: 15%; right: 4%; width: 52%; height: 72%; object-fit: cover; padding: 10px 10px 38px; background: #fffdf8; box-shadow: 0 4px 16px rgb(20 43 28 / 13%); transform: rotate(3deg); }
@@ -27,9 +34,14 @@
 .closing a span { margin-left: 8px; }
 @media (max-width: 767px) {
   .hero { grid-template-columns: 1fr; }
+  .heroTextOnly { min-height: 280px; }
+  .heroBackground { object-position: 62% center; }
+  .hero::after { background: linear-gradient(90deg, rgb(243 239 227 / 94%) 0%, rgb(243 239 227 / 75%) 65%, rgb(243 239 227 / 25%) 100%); }
   .heroCopy { padding: 34px var(--page-gutter) 30px; }
+  .heroTextOnly .heroCopy { max-width: 720px; }
+  .heroCopy .tagline { max-width: 30ch; margin-top: 18px; font-size: 1.25rem; }
   .heroPhoto { min-height: 0; aspect-ratio: 4/3; }
-  .story { grid-template-columns: 1fr; gap: 30px; padding-block: 42px; }
+  .story { grid-template-columns: 1fr; gap: 24px; padding-block: 28px; }
   .collage { min-height: 260px; }
   .closing { padding-block: 42px; }
 }

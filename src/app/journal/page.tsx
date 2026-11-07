@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
-import { BlogLanding } from "@/components/editorial/blog-landing";
+import { BotanicalEdges } from "@/components/botanical-edges";
 import { CustomerReviewArchive } from "@/components/editorial/customer-review-archive";
 import { CUSTOMER_REVIEWS } from "@/lib/customer-reviews";
-import { getBlog, getBlogLanding } from "@/lib/shopify/content";
+import styles from "./journal.module.css";
 
-export const metadata: Metadata = { title: "Journal", description: "Stories published by Nilkurinji.", alternates: { canonical: "/journal" } };
-export const revalidate = 60;
+export const metadata: Metadata = { title: "Journal", description: "Customer reviews of Nilkurinji Premium.", alternates: { canonical: "/journal" } };
 
-export default async function JournalPage() {
-  const [blog, landing] = await Promise.all([getBlog("journal"), getBlogLanding("journal")]);
-  return <BlogLanding title="Journal" blog={blog} landing={landing} previewImage="/images/preview-about-leaves.png" compactHero>
-    <CustomerReviewArchive reviews={CUSTOMER_REVIEWS.slice(5)} />
-  </BlogLanding>;
+export default function JournalPage() {
+  return <main className={styles.page}>
+    <header className={styles.heading}>
+      <BotanicalEdges placement="banner" />
+      <h1>Journal</h1>
+    </header>
+    <CustomerReviewArchive reviews={CUSTOMER_REVIEWS} compact />
+  </main>;
 }
