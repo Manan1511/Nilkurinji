@@ -48,15 +48,21 @@
   .comingSoonCard:hover { box-shadow: 0 8px 22px rgb(20 43 28 / 10%); }
 }
 @media (max-width: 599px) {
-  .card:not(.featured) .productLink { display: grid; flex: 0 0 auto; grid-template-columns: minmax(0, 42%) minmax(0, 1fr); align-items: start; }
-  .card:not(.featured) .frame { width: 100%; aspect-ratio: 4/3; border-radius: 7px 0 7px 0; }
-  .card:not(.featured) .details { padding: 12px 10px 10px; }
-  .card:not(.featured) .details h3 { min-height: 0; font-size: 16px; line-height: 1.3; overflow-wrap: normal; text-wrap: pretty; }
-  .card:not(.featured) .type { min-height: 0; margin-top: 7px; font-size: 10px; }
-  .card:not(.featured) .pack { display: none; }
-  .card:not(.featured) .price { min-height: 0; margin-top: 7px; font-size: 14px; }
-  .chooseActions { padding: 2px 14px 14px; }
-  .choosePack { font-size: 13px; }
+  .card:not(.featured) { border-radius: 12px; }
+  .card:not(.featured) .productLink { display: grid; flex: 0 0 auto; grid-template-columns: minmax(0, 48%) minmax(0, 1fr); align-items: stretch; }
+  .card:not(.featured) .frame { width: 100%; aspect-ratio: var(--product-image-ratio, 4 / 3); border-radius: 11px 0 0 0; }
+  .card:not(.featured) .details { justify-content: flex-start; padding: 16px 12px 10px; }
+  .card:not(.featured) .details h3 { min-height: 0; font-size: 17px; line-height: 1.28; overflow-wrap: normal; text-wrap: pretty; }
+  .card:not(.featured) .type { min-height: 0; margin-top: 8px; font-size: 11px; }
+  .card:not(.featured) .pack { display: block; min-height: 0; margin-top: 4px; font-size: 12px; white-space: nowrap; }
+  .card:not(.featured) .price { min-height: 0; margin-top: 12px; font-size: 15px; }
+  .chooseActions { padding: 16px; }
+  .choosePack,.comingSoon { min-height: 48px; font-size: 13px; }
+}
+@media (max-width: 359px) {
+  .card:not(.featured) .productLink { grid-template-columns: minmax(0, 44%) minmax(0, 1fr); }
+  .card:not(.featured) .details { padding-inline: 10px; }
+  .chooseActions { padding: 12px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .card,.image { transition: none; }

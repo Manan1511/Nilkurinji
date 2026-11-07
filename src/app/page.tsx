@@ -1,17 +1,14 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Flower2, Landmark, Leaf, ShieldCheck, Truck } from "lucide-react";
+import { Landmark, Leaf, ShieldCheck, Truck } from "lucide-react";
 import { HomeHero } from "@/components/home/home-hero";
 import { HomeReviews } from "@/components/home/home-reviews";
 import { MobileContactCard } from "@/components/site-footer";
 import { BotanicalEdges } from "@/components/botanical-edges";
 import { BrandMark } from "@/components/brand-mark";
 import { DRAFT_HOMEPAGE_CONTENT } from "@/lib/shopify/content";
-import { CATEGORIES } from "@/lib/site-config";
 import styles from "@/components/home/home.module.css";
 import type { Metadata } from "next";
-import type { CSSProperties } from "react";
-import { getEnabledCategoryHandles } from "@/lib/shopify/shop-category";
 
 export const revalidate = 60;
 export const metadata: Metadata = { alternates: { canonical: "/" } };
@@ -26,36 +23,38 @@ const FALLBACK_HERO = {
   height: 941,
 };
 
-const CATEGORY_CUTOUTS: Record<string, string> = {
-  tea: "/images/category-icon-tea-kurinji.webp",
-  "tea-bags": "/images/category-icon-tea-bags-kurinji.webp",
-  rice: "/images/category-icon-rice.png",
-  snacks: "/images/category-icon-snacks.png",
-  "other-foods": "/images/category-icon-other-foods.png",
-};
+const HOME_TEA_COLLECTION = [
+  { label: "Classic Tea", href: "/products/premium-tea", image: "/images/home-tea-collection/classic.webp" },
+  { label: "Elaichi Tea", href: "/products/elaichi-tea", image: "/images/home-tea-collection/elaichi.webp" },
+  { label: "Rose Tea", href: "/products/rose-tea", image: "/images/home-tea-collection/rose.webp" },
+  { label: "Masala Tea", href: "/products/nilkurinji-premium-masala-tea", image: "/images/home-tea-collection/masala.webp", comingSoon: true },
+];
 
-function HomeCategories({ enabled }: { enabled: string[] }) {
-  const categories = CATEGORIES.filter((category) => enabled.includes(category.handle));
-  if (!categories.length) return null;
+function HomeCategories() {
   return <section className={styles.categories} aria-labelledby="home-categories-heading">
     <BotanicalEdges placement="categories" />
     <div className={styles.categoryHeading}>
       <BrandMark className={styles.categoryMark} />
-      <div><span className={styles.headingRule} /><h2 id="home-categories-heading">Our Categories</h2><span className={styles.headingRule} /></div>
-      <p>Explore the Nilkurinji collection.</p>
+      <div className={styles.categoryTitleRow}><span className={styles.headingRule} /><h2 id="home-categories-heading">Our Categories</h2><span className={styles.headingRule} /></div>
+      <p>Nilkurinji Premium Tea Collection</p>
+      <div className={styles.categoryFlourish} aria-hidden="true"><span /><BrandMark className={styles.categoryFlourishMark} /><span /></div>
     </div>
-    <nav className={styles.categoryRail} aria-label="Shop by category" style={{ "--category-count": categories.length, "--category-rail-width": `${categories.length * 188}px`, "--category-mobile-width": `${categories.length * 128}px` } as CSSProperties}>
-      {categories.map((category) => {
-        const cutout = CATEGORY_CUTOUTS[category.handle];
-        return <Link href={category.href} className={styles.categoryItem} key={category.handle}>
-          {cutout ? <span className={styles.categoryArt}>
-            <span className={styles.categoryMedallion} aria-hidden="true">
-            </span>
-            <Image className={styles.categoryCutout} src={cutout} alt="" width={160} height={160} quality={85} sizes="(max-width: 599px) 112px, 140px" />
-          </span> : <span className={styles.categoryImageFallback}><Flower2 aria-hidden="true" /></span>}
-          <span className={styles.categoryLabel}>{category.label}</span>
-        </Link>;
-      })}
+    <nav className={styles.categoryRail} aria-label="Nilkurinji Premium Tea Collection">
+      {HOME_TEA_COLLECTION.map((tea) => <Link
+        href={tea.href}
+        className={`${styles.categoryItem}${tea.comingSoon ? ` ${styles.categoryItemComingSoon}` : ""}`}
+        key={tea.label}
+        aria-label={tea.comingSoon ? `${tea.label}, coming soon` : tea.label}
+      >
+        <span className={`${styles.categoryArt}${tea.comingSoon ? ` ${styles.categoryArtComingSoon}` : ""}`}>
+          <Image src={tea.image} alt="" fill sizes="(max-width: 599px) 44vw, (max-width: 899px) 44vw, 23vw" quality={84} />
+          {tea.comingSoon && <span className={styles.comingSoonLabel}>Coming Soon!</span>}
+        </span>
+        <span className={styles.categoryLabel}>
+          <BrandMark className={styles.categoryLabelMark} />
+          <span>{tea.label}</span>
+        </span>
+      </Link>)}
     </nav>
   </section>;
 }
@@ -80,8 +79,6 @@ function DeliveryBand() {
 }
 
 export default async function HomePage() {
-  const enabledCategories = await getEnabledCategoryHandles();
-
   return <div className={styles.home} data-homepage="true">
     <HomeHero
       eyebrow={DRAFT_HOMEPAGE_CONTENT.eyebrow}
@@ -90,7 +87,7 @@ export default async function HomePage() {
       image={FALLBACK_HERO}
     />
 
-    <HomeCategories enabled={enabledCategories} />
+    <HomeCategories />
 
     <HomeReviews />
 

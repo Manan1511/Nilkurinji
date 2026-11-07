@@ -17,8 +17,8 @@ export function MobileContactCard({ homepage = false }: { homepage?: boolean } =
     <span className={styles.mobileFeatureScrim} aria-hidden="true" />
     <span className={styles.homeContactMark} aria-hidden="true"><BrandMark /></span>
     <div className={styles.homeContactCopy}>
-      <h2 id={headingId}>Get in touch</h2>
-      <p>Questions about a product or order?</p>
+      <h2 id={headingId}>We’re Here to Help</h2>
+      <p>Questions about our teas or need assistance with your order? We’d love to hear from you.</p>
       <Link href="/contact">Contact Nilkurinji <ArrowUpRight size={16} aria-hidden="true" /></Link>
     </div>
   </section>;

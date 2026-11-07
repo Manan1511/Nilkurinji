@@ -25,6 +25,19 @@
 .eyebrow { color: var(--forest); font: 700 12px/1.5 var(--font-body); letter-spacing: .17em; }
 .copy h1 { max-width: 18ch; margin-top: 10px; color: var(--ink); font: 400 clamp(2rem,3.2vw,3rem)/1.08 var(--font-editorial); letter-spacing: -.03em; }
 .copy > p:not(.eyebrow) { max-width: 52ch; margin-top: 10px; color: var(--muted); font-size: 15px; line-height: 1.55; }
+.collectionBanner { min-height: clamp(340px,28vw,430px); }
+@media (min-width: 901px) {
+  .collectionBanner .picture { left: auto; width: clamp(720px,78vw,1240px); }
+}
+.collectionBanner .media img { object-position: 72% 66%; }
+.collectionBanner .fade { background: linear-gradient(90deg,var(--paper) 0%,rgb(243 239 227 / 98%) 28%,rgb(243 239 227 / 91%) 42%,rgb(243 239 227 / 55%) 54%,rgb(243 239 227 / 8%) 70%,transparent 78%); }
+.collectionCopy { max-width: min(1440px,100%); }
+.collectionCopy h1 { max-width: none; margin-top: 0; font-size: clamp(2.3rem,4.1vw,4rem); line-height: 1.02; letter-spacing: -.035em; }
+.collectionCopy h1 span { display: block; }
+.teaAccent { display: flex; width: min(310px,58%); align-items: center; gap: 12px; margin-top: 16px; }
+.teaAccent > span { height: 1px; flex: 1; background: var(--brass); }
+.teaAccentMark { display: block; width: 28px; height: 24px; flex: none; color: var(--violet); }
+.collectionCopy > p:not(.eyebrow) { max-width: 30ch; margin-top: 12px; font: 400 clamp(1rem,1.25vw,1.2rem)/1.48 var(--font-editorial); color: var(--muted); }
 .disclosure { position: absolute; top: 18px; right: var(--page-gutter); padding: 4px 8px; color: var(--paper); background: rgb(22 49 34 / 78%); font-size: 12px; }
 .notice { width: min(1440px,100%); min-height: 180px; padding: 32px var(--page-gutter) 64px; margin-inline: auto; }
 .notice p { margin-bottom: 18px; color: var(--muted); }
@@ -39,6 +52,14 @@
   .copy { width: 100%; padding-block: 24px; }
   .copy h1 { max-width: 15ch; margin-top: 6px; font-size: clamp(1.7rem,7vw,2rem); line-height: 1.08; }
   .copy > p:not(.eyebrow) { max-width: 32ch; margin-top: 8px; font-size: 14px; line-height: 1.45; }
+  .collectionBanner { min-height: clamp(255px,68vw,330px); }
+  .collectionBanner .media img { object-position: 70% center; }
+  .collectionBanner .fade { background: linear-gradient(90deg,var(--paper) 0%,rgb(243 239 227 / 97%) 35%,rgb(243 239 227 / 88%) 50%,rgb(243 239 227 / 50%) 65%,rgb(243 239 227 / 8%) 100%); }
+  .collectionCopy { padding-block: 24px; }
+  .collectionCopy h1 { max-width: none; margin-top: 0; font-size: clamp(1.45rem,6.4vw,1.65rem); line-height: 1.08; }
+  .teaAccent { width: min(230px,66%); gap: 9px; margin-top: 10px; }
+  .teaAccentMark { width: 23px; height: 20px; }
+  .collectionCopy > p:not(.eyebrow) { max-width: 24ch; margin-top: 8px; font-size: 14px; line-height: 1.42; }
   .disclosure { top: auto; right: 10px; bottom: 8px; max-width: calc(100% - 20px); font-size: 12px; }
 }
 

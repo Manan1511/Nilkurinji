@@ -34,8 +34,8 @@ export function ProductCard({ product, cartEnabled, checkoutEnabled, purchasingE
     <Link href={`/products/${product.handle}`} className={`${styles.productLink} ${alternateImage ? styles.hasAlternate : ""}`} aria-label={`View ${product.title}`}>
       <div className={styles.frame} style={{ "--product-image-ratio": image?.width && image?.height ? `${image.width} / ${image.height}` : "4 / 3" } as CSSProperties}>
         {image ? <>
-          <Image src={image.url} alt={image.altText || product.title} fill quality={85} sizes={imageSizes} loading={priority ? "eager" : "lazy"} fetchPriority={priority ? "high" : "auto"} className={`${styles.image} ${styles.primaryImage}`} />
-          {alternateImage && <Image src={alternateImage.url} alt="" aria-hidden="true" fill quality={85} sizes={imageSizes} loading="lazy" fetchPriority="low" className={`${styles.image} ${styles.alternateImage}`} />}
+          <Image src={image.url} alt={image.altText || product.title} fill quality={95} sizes={imageSizes} loading={priority ? "eager" : "lazy"} fetchPriority={priority ? "high" : "auto"} className={`${styles.image} ${styles.primaryImage}`} />
+          {alternateImage && <Image src={alternateImage.url} alt="" aria-hidden="true" fill quality={95} sizes={imageSizes} loading="lazy" fetchPriority="low" className={`${styles.image} ${styles.alternateImage}`} />}
         </> : hasComingSoonPreview ? <div className={styles.ghostPreview} aria-hidden="true">
           <span className={styles.previewRule} />
           <span className={styles.previewTitle}>{product.title.replace(/^Nilkurinji\s+Premium\s+/i, "")}</span>

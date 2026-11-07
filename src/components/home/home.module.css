@@ -16,26 +16,34 @@
 .heroActions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
 .heroActions :global(.button) { min-height: 50px; padding-inline: 25px; border-radius: 999px; font-weight: 400; }
 
-.categories { position: relative; min-height: 240px; padding: 18px var(--page-gutter) 10px; overflow: hidden; isolation: isolate; border-bottom: 1px solid var(--rule); background: var(--paper); }
+.categories { position: relative; min-height: 0; padding: clamp(28px, 3.4vw, 52px) var(--page-gutter) clamp(32px, 4vw, 58px); overflow: hidden; isolation: isolate; border-bottom: 1px solid var(--rule); background: var(--paper); }
 .categoryHeading,.categoryRail { position: relative; z-index: 1; }
-.categoryHeading { display: grid; justify-items: center; gap: 3px; color: var(--forest); text-align: center; }
-.categoryMark { width: 16px; height: 16px; }
-.categoryHeading > div { display: flex; align-items: center; justify-content: center; gap: 14px; }
-.categoryHeading h2 { color: var(--ink); font: 400 clamp(1.55rem,2vw,1.9rem)/1.1 var(--font-editorial); letter-spacing: -.02em; }
-.headingRule { display: block; width: clamp(36px,5vw,64px); height: 1px; background: var(--brass); }
-.categoryHeading p { color: var(--muted); font: italic 400 13px/1.45 var(--font-libre-italic), Georgia, serif; }
-.categoryRail { display: grid; grid-template-columns: repeat(var(--category-count, 5),minmax(0,1fr)); width: min(var(--category-rail-width, 940px),100%); margin: 12px auto 0; }
-.categoryItem { position: relative; display: flex; flex-direction: column; align-items: center; min-width: 0; min-height: 125px; color: var(--ink); text-decoration: none; }
-.categoryItem:not(:last-child)::after { position: absolute; top: 18px; right: 0; width: 1px; height: 48px; background: var(--rule); content: ""; }
-.categoryArt { position: relative; display: block; width: 118px; height: 108px; }
-.categoryMedallion { position: absolute; top: 0; left: 50%; display: block; width: 104px; height: 104px; overflow: hidden; border: 1px solid rgb(22 49 34 / 15%); border-radius: 50%; background: var(--sage); box-shadow: 0 1px 4px rgb(22 49 34 / 8%); transform: translateX(-50%); }
-.categoryMedallion img { object-fit: cover; transition: transform var(--motion-image) var(--ease-out); }
-.categoryCutout { position: absolute; z-index: 1; top: -13px; left: 50%; display: block; width: 140px; height: 140px; object-fit: contain; pointer-events: none; transform: translateX(-50%); transition: transform var(--motion-image) var(--ease-out); }
-.categoryItem:hover .categoryMedallion img,.categoryItem:focus-visible .categoryMedallion img { transform: scale(1.04); }
-.categoryItem:hover .categoryCutout,.categoryItem:focus-visible .categoryCutout { transform: translateX(-50%) translateY(-2px) scale(1.02); }
-.categoryImageFallback { position: relative; display: grid; place-items: center; width: 104px; height: 104px; overflow: hidden; border: 1px solid rgb(22 49 34 / 12%); border-radius: 50%; background: var(--sage); color: var(--forest); }
-.categoryImageFallback svg { width: 30px; height: 30px; stroke-width: 1.2; }
-.categoryLabel { display: flex; align-items: center; justify-content: center; min-height: 28px; margin-top: 3px; font: 400 15px/1.3 var(--font-editorial); text-align: center; }
+.categoryHeading { display: grid; justify-items: center; gap: 8px; color: var(--forest); text-align: center; }
+.categoryMark { width: 22px; height: 19px; color: var(--violet); }
+.categoryTitleRow { display: flex; align-items: center; justify-content: center; gap: clamp(10px, 1.7vw, 24px); }
+.categoryHeading h2 { color: var(--ink); font: 400 clamp(2rem,3.2vw,3rem)/1.05 var(--font-editorial); letter-spacing: -.025em; }
+.headingRule { display: block; width: clamp(34px,7vw,112px); height: 1px; background: var(--brass); }
+.categoryHeading p { color: var(--muted); font: italic 400 clamp(15px,1.5vw,21px)/1.4 var(--font-libre-italic), Georgia, serif; }
+.categoryFlourish { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 4px; }
+.categoryFlourish > span { display: block; width: clamp(44px,7vw,104px); height: 1px; background: var(--brass); }
+.categoryFlourishMark { width: 24px; height: 21px; color: var(--violet); }
+.categoryRail { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: clamp(14px,2.4vw,36px); width: min(1392px,100%); margin: clamp(22px,3vw,38px) auto 0; }
+.categoryItem { display: flex; flex-direction: column; align-items: center; min-width: 0; color: var(--ink); text-decoration: none; }
+.categoryItem:focus-visible { border-radius: 18px; outline: 2px solid var(--forest); outline-offset: 5px; }
+.categoryArt { position: relative; display: block; width: min(100%, 330px); aspect-ratio: .94; overflow: hidden; border: 1px solid rgb(170 160 123 / 55%); border-radius: 50% 50% 8px 8px / 31% 31% 8px 8px; background: var(--image-ground); }
+.categoryArt > img { object-fit: cover; transition: transform 520ms cubic-bezier(.2,.75,.25,1), filter 420ms ease; }
+.categoryItem:hover .categoryArt > img,.categoryItem:focus-visible .categoryArt > img { transform: scale(1.035); }
+.categoryArtComingSoon > img { filter: blur(4px); transform: scale(1.07); }
+.categoryItem:hover .categoryArtComingSoon > img,.categoryItem:focus-visible .categoryArtComingSoon > img { transform: scale(1.1); }
+.comingSoonLabel { position: absolute; top: 50%; left: 50%; z-index: 1; padding: 11px 20px; border: 1px solid var(--brass); border-radius: 3px 3px 18px 18px; color: var(--paper); background: var(--forest); box-shadow: 0 5px 16px rgb(20 43 28 / 22%); font: 400 clamp(16px,1.6vw,22px)/1.15 var(--font-editorial); white-space: nowrap; transform: translate(-50%,-50%); }
+.categoryLabel { position: relative; z-index: 1; isolation: isolate; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; width: min(96%,320px); min-height: 84px; margin-top: -20px; padding: 16px 14px 12px; color: var(--ink); background: transparent; font: 400 clamp(18px,1.9vw,26px)/1.08 var(--font-editorial); text-align: center; transition: transform 220ms ease; }
+.categoryLabel::before,.categoryLabel::after { position: absolute; inset: 0; z-index: 0; content: ""; clip-path: polygon(4% 20%,10% 9%,42% 9%,50% 0,58% 9%,90% 9%,96% 20%,100% 36%,96% 52%,96% 82%,90% 98%,10% 98%,4% 82%,4% 52%,0 36%); }
+.categoryLabel::before { background: var(--brass); }
+.categoryLabel::after { inset: 1.5px; background: var(--paper-light); transition: background-color 180ms ease; }
+.categoryLabelMark,.categoryLabel > span { position: relative; z-index: 1; }
+.categoryLabelMark { width: 19px; height: 16px; color: var(--violet); }
+.categoryItem:hover .categoryLabel,.categoryItem:focus-visible .categoryLabel { transform: translateY(-2px); }
+.categoryItem:hover .categoryLabel::after,.categoryItem:focus-visible .categoryLabel::after { background: #fbf8ee; }
 
 .deliveryBand { position: relative; isolation: isolate; display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); width: 100%; min-height: 106px; padding: 14px max(var(--page-gutter),calc((100vw - 1280px)/2)); overflow: hidden; color: var(--paper); background: var(--forest); }
 .deliveryItem { position: relative; z-index: 1; display: grid; grid-template-columns: 38px 1fr; grid-template-rows: auto auto; align-content: center; align-items: center; column-gap: 10px; padding: 4px 20px; border-left: 1px solid var(--rule-dark); }
@@ -54,8 +62,10 @@
   .hero { min-height: 500px; }
   .heroCopy h1 { font-size: clamp(2.7rem, 7vw, 4.2rem); }
   .heroFade { background: linear-gradient(90deg,rgb(243 239 227 / 92%) 0%,rgb(243 239 227 / 78%) 38%,rgb(243 239 227 / 32%) 65%,transparent 88%); }
-  .categories { min-height: 0; padding-block: 18px 20px; }
-  .categoryRail { margin-top: 16px; }
+  .categories { min-height: 0; padding-block: 30px 36px; }
+  .categoryRail { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 22px clamp(14px,4vw,36px); width: min(740px,100%); margin-top: 24px; }
+  .categoryArt { width: min(100%,350px); }
+  .categoryLabel { min-height: 76px; }
   .deliveryBand { grid-template-columns: repeat(2,minmax(0,1fr)); padding: 12px var(--page-gutter); }
   .deliveryItem { min-height: 74px; }
   .deliveryItemMobileRowStart { border-left: 0; }
@@ -70,17 +80,21 @@
   .heroDescription { max-width: 34ch; margin-top: 11px; font-size: 16px; line-height: 1.5; }
   .heroActions { margin-top: 16px; }
   .heroActions :global(.button) { min-height: 48px; padding-inline: 20px; font-size: 14px; }
-  .categories { padding-block: 14px 12px; }
-  .categoryHeading h2 { font-size: 1.55rem; }
-  .categoryHeading p { max-width: 38ch; }
-  .categoryRail { grid-template-columns: repeat(var(--category-count, 5),128px); width: min(calc(var(--category-mobile-width, 640px) + var(--page-gutter) * 2), calc(100% + var(--page-gutter) * 2)); padding-inline: var(--page-gutter); margin: 8px auto 0; overflow-x: auto; overscroll-behavior-inline: contain; scroll-snap-type: x mandatory; scrollbar-width: none; }
-  .categoryRail::-webkit-scrollbar { display: none; }
-  .categoryItem { min-height: 0; scroll-snap-align: start; }
-  .categoryItem:not(:last-child)::after { right: 0; }
-  .categoryArt { width: 128px; height: 94px; }
-  .categoryMedallion,.categoryImageFallback { width: 84px; height: 84px; }
-  .categoryCutout { top: -9px; width: 112px; height: 112px; }
-  .categoryLabel { min-height: 28px; margin-top: 2px; font-size: 15px; }
+  .categories { padding-block: 27px 34px; }
+  .categoryHeading { gap: 6px; }
+  .categoryMark { width: 19px; height: 16px; }
+  .categoryTitleRow { gap: 8px; }
+  .categoryHeading h2 { font-size: clamp(1.75rem,7vw,2.35rem); }
+  .headingRule { width: clamp(23px,8vw,42px); }
+  .categoryHeading p { max-width: 32ch; font-size: 15px; }
+  .categoryFlourish { margin-top: 2px; }
+  .categoryFlourish > span { width: clamp(30px,10vw,48px); }
+  .categoryFlourishMark { width: 21px; height: 18px; }
+  .categoryRail { gap: 18px 12px; width: 100%; margin-top: 21px; }
+  .categoryArt { width: 100%; aspect-ratio: .9; border-radius: 50% 50% 7px 7px / 28% 28% 7px 7px; }
+  .categoryLabel { width: 96%; min-height: 70px; margin-top: -15px; padding: 13px 6px 9px; font-size: clamp(15px,4.1vw,18px); }
+  .categoryLabelMark { width: 16px; height: 14px; }
+  .comingSoonLabel { padding: 8px 11px; font-size: clamp(14px,3.8vw,17px); }
   .deliveryItem { grid-template-columns: 30px 1fr; column-gap: 6px; padding: 5px 8px; }
   .deliveryItem > svg { width: 22px; height: 22px; }
   .deliveryItem h3 { font-size: 14px; }
@@ -88,14 +102,15 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .categoryMedallion img,.categoryCutout { transition: none; }
-  .categoryItem:hover .categoryMedallion img,.categoryItem:focus-visible .categoryMedallion img { transform: none; }
-  .categoryItem:hover .categoryCutout,.categoryItem:focus-visible .categoryCutout { transform: translateX(-50%); }
+  .categoryArt > img,.categoryLabel { transition: none; }
+  .categoryItem:hover .categoryArt > img,.categoryItem:focus-visible .categoryArt > img,.categoryItem:hover .categoryLabel,.categoryItem:focus-visible .categoryLabel { transform: none; }
 }
 
 @media (max-width: 359px) {
   .heroCopy { padding-inline: 16px; }
-  .categoryHeading > div { gap: 8px; }
-  .categoryHeading h2 { font-size: 1.35rem; }
-  .headingRule { width: 28px; }
+  .categoryTitleRow { gap: 6px; }
+  .categoryHeading h2 { font-size: 1.6rem; }
+  .headingRule { width: 21px; }
+  .categoryHeading p { font-size: 14px; }
+  .categoryLabel { min-height: 64px; padding-block: 12px 8px; font-size: 14px; }
 }

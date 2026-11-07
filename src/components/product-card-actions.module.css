@@ -45,13 +45,13 @@ button.variantChip[aria-pressed="true"] .variantPrice { color: var(--forest); }
   .buttons button { min-height: 42px; }
 }
 @media (max-width: 599px) {
-  .actions { gap: 8px; padding: 2px 14px 14px; }
+  .actions { gap: 8px; padding: 16px; }
   .variantOptions { grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 8px; }
   .variantOptions:has(.singleOption) { display: flex; }
   .variantChip { gap: 6px; padding-inline: 10px; font-size: 13px; }
   .variantPrice { font-size: 12px; }
   .buttons { gap: 8px; }
-  .buttons button { min-height: 44px; font-size: 13px; }
+  .buttons button { min-height: 48px; font-size: 13px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .buttons button,.variantChip { transition: none; }

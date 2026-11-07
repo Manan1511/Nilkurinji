@@ -5,8 +5,8 @@ type Pack = "500g" | "1kg";
 // Source numbers match the client's originals in Nilkurinji-photos.
 const sequences: Record<string, Record<Pack, readonly string[]>> = {
   "premium-tea": {
-    "1kg": ["0286", "0287", "0288", "0299", "0289", "0291", "0292", "0293", "0294"],
-    "500g": ["0309", "0310", "0311", "0321", "0316", "0313", "0314", "0317", "0294"],
+    "1kg": ["0286", "0287", "0288", "0290", "0289", "0291", "0292", "0293", "0294"],
+    "500g": ["0309", "0310", "0311", "0312", "0316", "0313", "0314", "0317", "0294"],
   },
   "rose-tea": {
     "1kg": ["0479", "0287", "0480", "0484", "0481", "0485", "0482", "0478"],
@@ -23,11 +23,9 @@ const backs = new Set(["0287", "0310"]);
 const sides = new Set(["0288", "0311"]);
 const packCampaigns = new Set(["0289", "0316", "0484", "0489", "0498", "0502"]);
 const packLifestyle = new Set(["0293", "0317", "0482", "0491", "0497", "0501"]);
-const leafImages = new Set(["0299", "0290", "0321", "0312", "0480", "0487", "0495", "0499"]);
+const leafImages = new Set(["0290", "0312", "0480", "0487", "0495", "0499"]);
 const pouringImages = new Set(["0291", "0313", "0481", "0488", "0496", "0500"]);
 const portraits = new Set(["0292", "0314", "0485", "0486"]);
-const wideImages = new Set(["0299", "0321"]);
-
 export function curatedProductGallery(handle: string | undefined, pack: string | null | undefined, title: string): ShopifyImage[] | null {
   const normalized = pack?.toLowerCase().replace(/\s+/g, "");
   const size: Pack | null = normalized === "500g" || normalized === "0.5kg" ? "500g" : normalized === "1kg" || normalized === "1000g" ? "1kg" : null;
@@ -44,6 +42,6 @@ export function curatedProductGallery(handle: string | undefined, pack: string |
               : pouringImages.has(id) ? "Tea being poured into a cup"
                 : portraits.has(id) ? "A woman enjoying a cup of tea"
                   : "Purple flowers on a mountain hillside";
-    return { url: `/images/client-supplied/gallery/img-${id}.webp`, altText: description, width: wideImages.has(id) ? 1600 : 1448, height: wideImages.has(id) ? 900 : 1086 };
+    return { url: `/images/client-supplied/gallery/img-${id}.webp`, altText: description, width: 1448, height: 1086 };
   });
 }
