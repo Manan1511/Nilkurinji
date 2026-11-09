@@ -19,7 +19,7 @@ export const PRIMARY_NAV = [
 
 export const SITE_NAME = "Nilkurinji";
 export const DEFAULT_DESCRIPTION =
-  "Explore tea, tea bags, rice, snacks and other foods from Nilkurinji.";
+  "Discover Nilkurinji Premium teas, thoughtfully crafted for everyday moments. Rare Taste of Nature.";
 
 export function collectionHref(handle: string): string {
   return `/shop?category=${encodeURIComponent(handle)}`;

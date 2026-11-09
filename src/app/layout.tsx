@@ -27,24 +27,17 @@ const logoFont = Playfair_Display({ subsets: ["latin"], weight: ["400"], variabl
 const monoFont = Space_Mono({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-space-mono", display: "swap" });
 
 function metadataBase(): URL | undefined {
-  const configured = process.env.SITE_URL ?? process.env.URL;
-  if (!configured) return undefined;
+  const configured = process.env.SITE_URL ?? process.env.URL ?? "https://nilkurinjitemp.netlify.app";
   try { return new URL(configured); } catch { return undefined; }
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const mode = getStorefrontMode();
   const base = metadataBase();
-  const homepage = await getHomepageContent();
-  const image = mode.mode === "preview"
-    ? "/images/client-supplied/nilkurinji-kurinji-hills-artwork.jpg"
-    : homepage.source === "shopify" ? homepage.data.heroImage?.url : undefined;
-  const imageAlt = mode.mode === "preview"
-    ? "Nilkurinji brand artwork over a hillside with blue-purple flowers."
-    : "Nilkurinji homepage";
+  const image = "/images/nilkurinji-social-preview.jpg";
+  const imageAlt = "Nilkurinji Premium, Rare Taste of Nature, over a landscape of purple flowers and mountains.";
   return {
     ...(base ? { metadataBase: base } : {}),
-    title: { default: `${SITE_NAME} · Tea, tea bags and pantry`, template: `%s · ${SITE_NAME}` },
+    title: { default: `${SITE_NAME} Premium Tea · Rare Taste of Nature`, template: `%s · ${SITE_NAME}` },
     description: DEFAULT_DESCRIPTION,
     robots: { index: isIndexableSite(), follow: isIndexableSite() },
     applicationName: SITE_NAME,
@@ -52,15 +45,15 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
       locale: "en_IN",
       siteName: SITE_NAME,
-      title: `${SITE_NAME} · Tea, tea bags and pantry`,
+      title: `${SITE_NAME} Premium Tea · Rare Taste of Nature`,
       description: DEFAULT_DESCRIPTION,
-      ...(base && image ? { images: [{ url: image, alt: imageAlt }] } : {}),
+      images: [{ url: image, alt: imageAlt, width: 1200, height: 630 }],
     },
     twitter: {
-      card: image ? "summary_large_image" : "summary",
-      title: `${SITE_NAME} · Tea and tea bags`,
+      card: "summary_large_image",
+      title: `${SITE_NAME} Premium Tea · Rare Taste of Nature`,
       description: DEFAULT_DESCRIPTION,
-      ...(base && image ? { images: [image] } : {}),
+      images: [image],
     },
   };
 }
