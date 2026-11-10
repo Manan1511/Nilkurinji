@@ -3,6 +3,7 @@ import Image from "next/image";
 import { ArrowRight, Landmark, Leaf, ShieldCheck, Truck } from "lucide-react";
 import { HomeHero } from "@/components/home/home-hero";
 import { HomeReviews } from "@/components/home/home-reviews";
+import { ReelVideo } from "@/components/home/reel-video";
 import { MobileContactCard } from "@/components/site-footer";
 import { BotanicalEdges } from "@/components/botanical-edges";
 import { BrandMark } from "@/components/brand-mark";
@@ -104,6 +105,25 @@ export default async function HomePage() {
             </Link>
           </div>
         </div>
+      </div>
+    </section>
+
+    <section className={styles.reels} aria-labelledby="reels-heading">
+      <BotanicalEdges placement="home-story" />
+      <div className={styles.reelsHeading}>
+        <BrandMark className={styles.reelsMark} />
+        <h2 id="reels-heading">Moments with Nilkurinji</h2>
+        <p>A little inspiration for your next cup.</p>
+      </div>
+      <div className={styles.reelsGrid}>
+        <figure className={styles.reel}>
+          <ReelVideo src="/videos/bun-maska-chai.mp4" poster="/videos/bun-maska-chai.webp" label="Bun maska and chai video" />
+          <figcaption>Bun maska and chai</figcaption>
+        </figure>
+        <figure className={styles.reel}>
+          <ReelVideo src="/videos/chai-moments.mp4" poster="/videos/chai-moments.webp" label="Chai and quiet moments video" />
+          <figcaption>Chai and quiet moments</figcaption>
+        </figure>
       </div>
     </section>
 
