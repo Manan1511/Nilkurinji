@@ -3,7 +3,7 @@ import { getProducts } from "@/lib/shopify/catalog";
 import { getBlog } from "@/lib/shopify/content";
 import { isIndexableSite } from "@/lib/shopify/checkout-config";
 
-const EDITORIAL_SECTIONS = ["tea-guide", "recipes", "journal"] as const;
+const EDITORIAL_SECTIONS = ["tea-guide", "recipes"] as const;
 
 function siteBase(): URL | null {
   try {
@@ -27,7 +27,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/shipping-and-returns",
     "/tea-guide",
     "/recipes",
-    "/journal",
     "/pages/privacy-policy",
     "/pages/refund-policy",
     "/pages/shipping-policy",

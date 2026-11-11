@@ -5,23 +5,22 @@ import ShopPage from "@/app/shop/page";
 describe("unified Nilkurinji shop", () => {
   afterEach(() => vi.unstubAllEnvs());
 
-  it("shows the compact category banner and every approved category", async () => {
+  it("defaults to the tea collection without redundant category tabs", async () => {
     vi.stubEnv("SHOPIFY_MODE", "preview");
     const markup = renderToStaticMarkup(await ShopPage({ searchParams: Promise.resolve({}) }));
 
-    expect(markup).toContain("Explore the Nilkurinji pantry");
-    expect(markup).toContain('aria-label="Shop categories"');
-    for (const category of ["All", "Tea", "Tea Bags", "Rice", "Snacks", "Other Foods"]) expect(markup).toContain(category);
-    expect(markup).toContain('href="/shop?category=rice"');
+    expect(markup).toContain("Premium Teas");
+    expect(markup).toContain("Discover the rich taste, aroma and warmth");
+    expect(markup).not.toContain('aria-label="Shop categories"');
   });
 
-  it("marks the selected category and supports food categories on the same shop page", async () => {
+  it("falls back to tea when an inactive category is requested", async () => {
     vi.stubEnv("SHOPIFY_MODE", "preview");
     const markup = renderToStaticMarkup(await ShopPage({ searchParams: Promise.resolve({ category: "rice" }) }));
 
-    expect(markup).toContain('aria-current="page" href="/shop?category=rice"');
-    expect(markup).toContain("Basmati Rice Preview");
-    expect(markup).not.toContain("tea collection is being prepared");
+    expect(markup).not.toContain('href="/shop?category=rice"');
+    expect(markup).toContain("Premium Teas");
+    expect(markup).not.toContain("Basmati Rice Preview");
   });
 
   it("keeps live catalog failures honest and does not show preview hero assets", async () => {

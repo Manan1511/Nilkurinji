@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 import { makeCart } from "../../../../test/fixtures/storefront";
 import { createCartCookie } from "@/lib/shopify/cart-cookie";
 vi.mock("@/lib/shopify/mode", () => ({ getStorefrontMode: vi.fn() }));
-vi.mock("@/lib/shopify/checkout-config", () => ({ isShopifyCheckoutEnabled: () => true, getCheckoutProvider: () => "shopify", checkoutAllowedHosts: (domain: string) => [domain] }));
+vi.mock("@/lib/shopify/checkout-config", () => ({ isShopifyCartEnabled: () => true, isShopifyCheckoutEnabled: () => true, getCheckoutProvider: () => "shopify", checkoutAllowedHosts: (domain: string) => [domain] }));
 vi.mock("@/lib/shopify/cart", async (original) => ({ ...await original<typeof import("@/lib/shopify/cart")>(), getShopifyCart: vi.fn(), createShopifyCart: vi.fn(), addShopifyCartLine: vi.fn(), updateShopifyCartLine: vi.fn(), removeShopifyCartLine: vi.fn() }));
 import { getStorefrontMode } from "@/lib/shopify/mode";
 import { createShopifyCart, getShopifyCart } from "@/lib/shopify/cart";

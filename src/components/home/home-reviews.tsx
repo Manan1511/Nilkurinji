@@ -4,10 +4,10 @@ import { ReviewRail } from "@/components/home/review-rail";
 import { CUSTOMER_REVIEWS } from "@/lib/customer-reviews";
 import styles from "./home-reviews.module.css";
 
-const HOMEPAGE_REVIEWS = CUSTOMER_REVIEWS.slice(0, 5);
+const HOMEPAGE_REVIEWS = CUSTOMER_REVIEWS;
 
 export function HomeReviews() {
-  return <section className={styles.section} aria-labelledby="home-reviews-heading">
+  return <section id="customer-reviews" className={styles.section} aria-labelledby="home-reviews-heading">
     <span className={styles.foliage} aria-hidden="true">
       <Image className={styles.leafTopLeft} src="/images/botanical/kurinji-branch-horizontal.webp" alt="" width={1200} height={800} quality={85} sizes="(max-width: 599px) clamp(115px, 36vw, 155px), 190px" />
       <Image className={styles.leafTopRight} src="/images/botanical/botanical-editorial-right-kurinji.webp" alt="" width={1024} height={683} quality={85} sizes="(max-width: 599px) clamp(115px, 36vw, 155px), 190px" />

@@ -9,17 +9,19 @@ function renderCard(props: ComponentProps<typeof ProductCard>): string {
 }
 
 describe("preview product prices", () => {
-  it("labels the reference catalog amount as a sample price", () => {
+  it("shows the preview amount without a sample tag", () => {
     const markup = renderCard({ product: PREVIEW_PRODUCTS[0] });
 
-    expect(markup).toContain("Sample price:");
+    expect(markup).not.toContain("Sample price:");
+    expect(markup).toContain("₹");
     expect(markup).not.toContain("wishlist");
   });
 
   it.each(["standard", "featured", "collection"] as const)("does not present a purchase action on a %s preview card", (variant) => {
     const markup = renderCard({ product: PREVIEW_PRODUCTS[0], variant, compactQuickAdd: true });
 
-    expect(markup).toContain("Sample price:");
+    expect(markup).not.toContain("Sample price:");
+    expect(markup).toContain("₹");
     expect(markup).not.toContain("product-card__quick-add");
     expect(markup).toContain(`/products/${PREVIEW_PRODUCTS[0].handle}`);
   });

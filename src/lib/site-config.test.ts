@@ -18,7 +18,6 @@ describe("Nilkurinji storefront navigation", () => {
       "/shop",
       "/tea-guide",
       "/recipes",
-      "/journal",
       "/contact",
     ]);
   });

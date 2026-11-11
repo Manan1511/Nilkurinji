@@ -67,7 +67,6 @@ export function SiteFooter({ socialLinks = [], enabledCategories = DEFAULT_CATEG
           <li><Link href="/our-story">Our story</Link></li>
           <li><Link href="/tea-guide">Tea Guide</Link></li>
           <li><Link href="/recipes">Recipes</Link></li>
-          <li><Link href="/journal">Journal</Link></li>
         </ul>
       </nav>
       <nav aria-label="Help and policies">

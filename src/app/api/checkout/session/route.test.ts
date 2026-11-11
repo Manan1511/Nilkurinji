@@ -5,9 +5,9 @@ import { createCartCookie } from "@/lib/shopify/cart-cookie";
 
 vi.mock("@/lib/shopify/mode", () => ({ getStorefrontMode: () => ({ mode: "live", storeDomain: "example.myshopify.com", apiVersion: "2026-10", privateToken: "test-fixture-only" }) }));
 vi.mock("@/lib/shopify/checkout-config", () => ({ isShopifyCheckoutEnabled: () => true, getCheckoutProvider: () => "razorpay", checkoutAllowedHosts: (domain: string) => [domain] }));
-vi.mock("@/lib/shopify/cart", () => ({ createShopifyCart: vi.fn(), getShopifyCart: vi.fn() }));
+vi.mock("@/lib/shopify/cart", async (original) => ({ ...await original<typeof import("@/lib/shopify/cart")>(), createShopifyCart: vi.fn(), getShopifyCart: vi.fn() }));
 vi.mock("@/lib/shopify/server", () => ({ getBuyerIp: () => undefined }));
-vi.mock("@/lib/checkout/razorpay-magic", () => ({ createRazorpayMagicSession: vi.fn(), getRazorpayOrderState: vi.fn() }));
+vi.mock("@/lib/checkout/razorpay-magic", async (original) => ({ ...await original<typeof import("@/lib/checkout/razorpay-magic")>(), createRazorpayMagicSession: vi.fn(), getRazorpayOrderState: vi.fn() }));
 import { getShopifyCart } from "@/lib/shopify/cart";
 import { createRazorpayMagicSession } from "@/lib/checkout/razorpay-magic";
 import { POST } from "./route";

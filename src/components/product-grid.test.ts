@@ -18,7 +18,8 @@ describe("shared collection browsing", () => {
     }));
     expect(html).toContain('aria-label="Products"');
     expect(html).toContain('aria-label="Shop categories"');
-    expect(html).toContain('href="/shop?category=other-foods"');
+    expect(html).toContain('href="/shop?category=tea"');
+    expect(html).not.toContain('href="/shop?category=other-foods"');
   });
 
   it("uses the selected tea type tag without requiring a duplicate facet", () => {

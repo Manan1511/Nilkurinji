@@ -5,8 +5,8 @@ type Pack = "500g" | "1kg";
 // Source numbers match the client's originals in Nilkurinji-photos.
 const sequences: Record<string, Record<Pack, readonly string[]>> = {
   "premium-tea": {
-    "1kg": ["0286", "0287", "0288", "0290", "0289", "0291", "0292", "0293", "0294"],
-    "500g": ["0309", "0310", "0311", "0312", "0316", "0313", "0314", "0317", "0294"],
+    "1kg": ["0286", "0287", "0288", "0289", "0290", "0291", "0292", "0293", "0294"],
+    "500g": ["0309", "0310", "0311", "0316", "0312", "0313", "0314", "0317", "0294"],
   },
   "rose-tea": {
     "1kg": ["0479", "0287", "0480", "0484", "0481", "0485", "0482", "0478"],
@@ -32,16 +32,35 @@ export function curatedProductGallery(handle: string | undefined, pack: string |
   const ids = handle && size ? sequences[handle]?.[size] : undefined;
   if (!ids || !size) return null;
   const label = `${title}, ${size === "500g" ? "500 g" : "1 kg"}`;
-  return ids.map((id) => {
+  const flavor = handle === "rose-tea" ? "rose" : handle === "elaichi-tea" ? "elaichi" : null;
+  const images = ids.map((id) => {
     const description = fronts.has(id) ? `Front of ${label} pack`
-      : backs.has(id) ? `Back of Nilkurinji Premium Classic Tea, ${size === "500g" ? "500 g" : "1 kg"} pack`
+      : backs.has(id) ? `Back label, ${size === "500g" ? "500 g" : "1 kg"} pack`
         : sides.has(id) ? `Side of ${label} pack`
         : packCampaigns.has(id) ? `${label} pack with a cup of tea`
+          : id === "0299" ? "Nilkurinji tea being prepared, with Farms of Assam campaign artwork"
           : packLifestyle.has(id) ? `${label} pack beside a cup of tea`
             : leafImages.has(id) ? "Tea leaves being added to a pan"
               : pouringImages.has(id) ? "Tea being poured into a cup"
                 : portraits.has(id) ? "A woman enjoying a cup of tea"
                   : "Purple flowers on a mountain hillside";
-    return { url: `/images/client-supplied/gallery/img-${id}.webp`, altText: description, width: 1448, height: 1086 };
+    const folder = fronts.has(id) || (handle === "premium-tea" && (backs.has(id) || sides.has(id))) ? "refined" : "gallery";
+    const url = flavor && backs.has(id)
+      ? `/images/client-supplied/refined/${flavor}-${size}-back.webp`
+      : flavor && sides.has(id)
+        ? `/images/client-supplied/refined/${flavor}-${size}-side.webp`
+        : handle === "premium-tea" && backs.has(id)
+          ? `/images/client-supplied/refined/classic-${size}-back.webp`
+          : handle === "premium-tea" && sides.has(id)
+            ? `/images/client-supplied/refined/classic-${size}-side${size === "500g" ? "-centered" : ""}.webp`
+            : `/images/client-supplied/${folder}/img-${id}.webp`;
+    return { url, altText: description, width: 1448, height: 1086 };
   });
+  if (flavor) images.splice(2, 0, {
+    url: `/images/client-supplied/refined/${flavor}-${size}-side.webp`,
+    altText: `Illustrative side view of ${label} pack`,
+    width: 1448,
+    height: 1086,
+  });
+  return images;
 }

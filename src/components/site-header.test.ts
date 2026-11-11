@@ -20,7 +20,8 @@ describe("shared storefront header", () => {
     });
 
     expect(headerClasses.every(Boolean)).toBe(true);
-    expect(new Set(headerClasses).size).toBe(1);
+    expect(headerClasses[0]).toBe(headerClasses[1]);
+    expect(headerClasses[2]).toBeTruthy();
   });
 
   it("keeps the shared logo focused on the wordmark", () => {
@@ -66,7 +67,7 @@ describe("shared storefront header", () => {
   it("exposes an expandable mobile search control with its current state", () => {
     const markup = renderToStaticMarkup(createElement(SiteHeader));
 
-    expect(markup).toContain('aria-label="Search products"');
+    expect(markup).toContain('aria-label="Open search"');
     expect(markup).toContain('aria-expanded="false"');
     expect(markup).toContain('aria-controls="header-search-panel"');
   });

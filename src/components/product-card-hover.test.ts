@@ -13,7 +13,7 @@ it("shows the default pack artwork and directs multi-pack shoppers to choose a p
   const host = document.createElement("div"); const root = createRoot(host);
   await act(async () => root.render(createElement(ProductCard, { product })));
   const imageSources = () => [...host.querySelectorAll("img")].map((image) => decodeURIComponent(image.getAttribute("src") ?? ""));
-  expect(imageSources()[0]).toContain("elaichi-500g-front.webp");
+  expect(imageSources()[0]).toContain("img-0503.webp");
   expect(imageSources()[1]).toContain("elaichi-500g-card-alt.webp");
   expect(host.querySelector('button[aria-label^="1 kg,"]')).toBeNull();
   const choosePack = [...host.querySelectorAll("a")].find((link) => link.textContent === "Choose pack");

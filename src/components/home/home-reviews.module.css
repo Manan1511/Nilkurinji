@@ -16,7 +16,8 @@
 .track[data-loop="false"] { animation: none; }
 .group { display: flex; flex: 0 0 auto; align-items: stretch; gap: 16px; width: max-content; padding-right: 16px; }
 .duplicate { pointer-events: none; }
-.grid:hover .track,.grid:focus-within .track { animation-play-state: paused; }
+.grid[data-touching="true"] .track,.grid:focus-visible .track { animation-play-state: paused; }
+@media (hover: hover) and (pointer: fine) { .grid:hover .track { animation-play-state: paused; } }
 @keyframes reviewGlide { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 .review { display: flex; box-sizing: border-box; flex: 0 0 clamp(330px, 30vw, 420px); min-width: 0; min-height: clamp(166px, 14vw, 204px); flex-direction: row; align-items: stretch; gap: 14px; padding: clamp(18px, 1.7vw, 24px); border: 1px solid var(--rule); border-radius: 14px; background: var(--paper-light); }
 .photoFrame { position: relative; display: flex; flex: 0 0 clamp(82px, 24%, 112px); align-self: center; aspect-ratio: 3 / 4; overflow: hidden; border-radius: 9px; background: var(--paper); }

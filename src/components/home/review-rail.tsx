@@ -1,11 +1,12 @@
 "use client";
 
-import { Children, useEffect, useRef, type ReactNode } from "react";
+import { Children, useEffect, useRef, useState, type ReactNode } from "react";
 import styles from "./home-reviews.module.css";
 
 export function ReviewRail({ children, count }: { children: ReactNode; count: number }) {
   const groupRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const [touching, setTouching] = useState(false);
   const reviews = Children.toArray(children);
 
   useEffect(() => {
@@ -30,6 +31,10 @@ export function ReviewRail({ children, count }: { children: ReactNode; count: nu
     aria-label="Customer reviews"
     aria-roledescription="carousel"
     tabIndex={0}
+    data-touching={touching}
+    onTouchStart={() => setTouching(true)}
+    onTouchEnd={(event) => { if (event.touches.length === 0) setTouching(false); }}
+    onTouchCancel={(event) => { if (event.touches.length === 0) setTouching(false); }}
   >
     <div ref={trackRef} className={styles.track} data-loop={count > 1}>
       <div ref={groupRef} className={styles.group}>

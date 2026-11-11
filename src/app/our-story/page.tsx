@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { BotanicalEdges } from "@/components/botanical-edges";
+import { BrandMark } from "@/components/brand-mark";
 import { getPublishedPage } from "@/lib/shopify/content";
 import { getStorefrontMode } from "@/lib/shopify/mode";
 import { sanitizeMerchantHtml } from "@/lib/shopify/sanitize";
@@ -36,7 +37,9 @@ export default async function OurStoryPage() {
       </div>
     </header>
     <section className={`${styles.story} ${!preview ? styles.storyTextOnly : ""}`} id="story">
+      <span className={styles.storyLowerFoliage} aria-hidden="true"><span /><span /></span>
       <div className={styles.storyCopy}>
+        <span className={styles.storyOrnament} aria-hidden="true"><BrandMark /></span>
         <p className={styles.eyebrow}>THE NILKURINJI STORY</p>
         {body ? <div className={styles.body} dangerouslySetInnerHTML={{ __html: body }} /> : <div className={styles.body}>{STORY_PARAGRAPHS.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div>}
       </div>
@@ -47,6 +50,7 @@ export default async function OurStoryPage() {
       </div>}
     </section>
     <section className={styles.closing}>
+      <span className={styles.closingOrnament} aria-hidden="true"><BrandMark /></span>
       <p>Nilkurinji Premium</p>
       <h2>Rare Taste of Nature.</h2>
       <Link href="/shop" className="button button--outline">Explore the shop <span aria-hidden="true">→</span></Link>

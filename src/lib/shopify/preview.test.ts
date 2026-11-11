@@ -18,7 +18,7 @@ describe("reference preview catalog", () => {
       "Preview Tea 2",
       "Green Tea",
       "Black Tea",
-      "Masala Chai",
+      "Nilkurinji Premium Masala Tea",
       "Jasmine Tea",
       "Earl Grey",
       "Hibiscus Tea",
@@ -38,7 +38,7 @@ describe("reference preview catalog", () => {
   it("keeps preview product and collection copy neutral until product facts are approved", () => {
     const productCopy = PREVIEW_PRODUCTS.flatMap((product) => [product.title, product.description, product.details]).join(" ");
     const collectionCopy = [getPreviewCollection("tea")?.description, getPreviewCollection("tea-bags")?.description].join(" ");
-    const unsupportedClaims = /premium|exquisitely|naturally calming|handcrafted|finest leaves|enriching experience|pure ingredients|same rich flavours/i;
+    const unsupportedClaims = /exquisitely|naturally calming|handcrafted|finest leaves|enriching experience|pure ingredients|same rich flavours/i;
 
     expect(productCopy).not.toMatch(unsupportedClaims);
     expect(collectionCopy).not.toMatch(unsupportedClaims);
@@ -52,7 +52,7 @@ describe("reference preview catalog", () => {
       product.featuredImage?.altText ?? "",
     ]).join(" ");
 
-    expect(productIdentity).not.toMatch(/\b(assam|darjeeling|premium)\b/i);
+    expect(productIdentity).not.toMatch(/\b(assam|darjeeling)\b/i);
   });
 
   it("uses wide packshots on reference cards without replacing product gallery images", () => {

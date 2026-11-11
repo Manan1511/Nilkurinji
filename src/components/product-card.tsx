@@ -9,13 +9,16 @@ import type { StorefrontProduct } from "@/lib/shopify/types";
 import styles from "./product-card.module.css";
 import { cardAlternateImage } from "@/lib/catalog/card-image";
 import { defaultVariant } from "@/lib/catalog/default-variant";
+import { curatedProductGallery } from "@/lib/catalog/product-gallery";
 
 type CardVariant = "standard" | "featured" | "collection";
 
 export function ProductCard({ product, cartEnabled, checkoutEnabled, purchasingEnabled = false, variant = "standard", priority = false }: { product: StorefrontProduct; cartEnabled?: boolean; checkoutEnabled?: boolean; purchasingEnabled?: boolean; variant?: CardVariant; compactQuickAdd?: boolean; revealDelayMs?: number; priority?: boolean }) {
   const initialVariant = defaultVariant(product.variants);
   const selectedVariant = initialVariant;
-  const image = selectedVariant?.image ?? product.cardImage ?? product.featuredImage;
+  const pack = selectedVariant?.selectedOptions.find((option) => /pack|size|weight/i.test(option.name))?.value;
+  const refinedFront = !product.isPreview ? curatedProductGallery(product.handle, pack, product.title)?.[0] : undefined;
+  const image = refinedFront ?? selectedVariant?.image ?? product.cardImage ?? product.featuredImage;
   const alternateImage = cardAlternateImage(product, image, selectedVariant);
   const imageSizes = variant === "featured"
     ? "(max-width: 359px) 78vw, (max-width: 599px) 280px, (max-width: 899px) 32vw, (max-width: 1199px) 25vw, 20vw"

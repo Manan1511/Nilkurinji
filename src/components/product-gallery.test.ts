@@ -5,48 +5,40 @@ import { expect, it, vi } from "vitest";
 import { ProductGallery } from "./product-gallery";
 import { ProductVariantImageProvider, useProductVariantImage } from "./product-variant-image";
 import { normalizeProduct } from "@/lib/shopify/normalize";
-it("identifies selected gallery thumbnails and handles missing images", async () => {
+it("navigates the counter and handles missing images", async () => {
   vi.stubGlobal("IS_REACT_ACT_ENVIRONMENT", true); const host = document.createElement("div"); const root = createRoot(host);
   await act(async () => root.render(createElement(ProductGallery, { images: [{ url: "/images/category-tea.png", altText: "Tea", width: 100, height: 100 }, { url: "/images/category-tea-bags.png", altText: "Tea bags", width: 100, height: 100 }], title: "Tea" })));
-  const dots = host.querySelectorAll<HTMLButtonElement>('[aria-label^="Show product photo"]');
-  const imageFrame = host.querySelector("img")?.parentElement;
-  expect(imageFrame?.contains(host.querySelector('[aria-label="Previous product image"]') ?? null)).toBe(false);
-  expect(imageFrame?.contains(host.querySelector('[aria-label="Next product image"]') ?? null)).toBe(false);
-  await act(async () => dots[1].click()); expect(dots[1].getAttribute("aria-pressed")).toBe("true"); expect(dots[0].getAttribute("aria-pressed")).toBe("false");
-  await act(async () => host.querySelector<HTMLButtonElement>('[aria-label="Next product image"]')?.click()); expect(dots[0].getAttribute("aria-pressed")).toBe("true");
-  await act(async () => host.querySelector<HTMLButtonElement>('[aria-label="Previous product image"]')?.click()); expect(dots[1].getAttribute("aria-pressed")).toBe("true");
-  await act(async () => root.render(createElement(ProductGallery, { images: [], title: "Tea" }))); expect(host.textContent).toContain("Product image coming soon"); await act(async () => root.unmount()); vi.unstubAllGlobals();
+  const counter = () => host.querySelector('[role="status"]')?.textContent;
+  expect(counter()).toBe("1/2");
+  await act(async () => host.querySelector<HTMLButtonElement>('[aria-label="Next product image"]')!.click());
+  expect(counter()).toBe("2/2");
+  expect(host.querySelector('img:not([aria-hidden="true"])')?.getAttribute("alt")).toBe("Tea bags");
+  await act(async () => host.querySelector<HTMLButtonElement>('[aria-label="Next product image"]')!.click());
+  expect(counter()).toBe("1/2");
+  await act(async () => root.render(createElement(ProductGallery, { images: [], title: "Tea" })));
+  expect(host.textContent).toContain("Product image coming soon");
+  await act(async () => root.unmount()); vi.unstubAllGlobals();
 });
 
-it("shows the selected pack and shared images without the other pack", async () => {
+it("shows only the selected pack's curated images", async () => {
   vi.stubGlobal("IS_REACT_ACT_ENVIRONMENT", true);
   const variants = { nodes: ["500 g", "1 kg"].map((value) => ({ id: value, title: value, availableForSale: true, price: { amount: "240", currencyCode: "INR" }, selectedOptions: [{ name: "Pack size", value }] })) };
   const product = normalizeProduct({ id: "1", handle: "elaichi-tea", title: "Elaichi Tea", description: "", variants });
   function Switcher() {
-    const { setVariantId, setImageUrl } = useProductVariantImage();
-    return createElement("button", { onClick: () => { setVariantId(product.variants[1].id); setImageUrl(product.variants[1].image?.url ?? null); } }, "Select 1 kg");
+    const { setVariantId } = useProductVariantImage();
+    return createElement("button", { onClick: () => setVariantId(product.variants[1].id) }, "Select 1 kg");
   }
   const host = document.createElement("div"); const root = createRoot(host);
-  await act(async () => root.render(createElement(ProductVariantImageProvider, null, createElement(Switcher), createElement(ProductGallery, { images: product.images, variants: product.variants, title: product.title }))));
-  expect(host.querySelector('img:not([aria-hidden="true"])')?.getAttribute("alt")).toContain("500 g");
-  expect(host.querySelectorAll('[aria-label^="Show product photo"]')).toHaveLength(5);
-  const shown500: string[] = [];
-  for (const dot of host.querySelectorAll<HTMLButtonElement>('[aria-label^="Show product photo"]')) {
-    await act(async () => dot.click());
-    expect(host.querySelector('img:not([aria-hidden="true"])')?.getAttribute("alt")).not.toContain("1 kg");
-    shown500.push(decodeURIComponent(host.querySelector('img:not([aria-hidden="true"])')?.getAttribute("src") ?? ""));
-  }
-  expect(shown500.some((src) => src.includes("elaichi-500g-card-alt.webp"))).toBe(true);
-  await act(async () => host.querySelector("button")?.click());
-  expect(host.querySelector('img:not([aria-hidden="true"])')?.getAttribute("alt")).toContain("1 kg");
-  expect(host.querySelectorAll('[aria-label^="Show product photo"]')).toHaveLength(5);
-  const shown1kg: string[] = [];
-  for (const dot of host.querySelectorAll<HTMLButtonElement>('[aria-label^="Show product photo"]')) {
-    await act(async () => dot.click());
-    expect(host.querySelector('img:not([aria-hidden="true"])')?.getAttribute("alt")).not.toContain("500 g");
-    shown1kg.push(decodeURIComponent(host.querySelector('img:not([aria-hidden="true"])')?.getAttribute("src") ?? ""));
-  }
-  expect(shown1kg.some((src) => src.includes("elaichi-1kg-card-alt.webp"))).toBe(true);
+  await act(async () => root.render(createElement(ProductVariantImageProvider, null, createElement(Switcher), createElement(ProductGallery, { images: product.images, variants: product.variants, handle: product.handle, title: product.title }))));
+  const active = () => decodeURIComponent(host.querySelector('img:not([aria-hidden="true"])')?.getAttribute("src") ?? "");
+  const next = () => host.querySelector<HTMLButtonElement>('[aria-label="Next product image"]')!.click();
+  expect(active()).toContain("img-0503.webp");
+  await act(async () => next()); expect(active()).toContain("elaichi-500g-back.webp");
+  await act(async () => next()); expect(active()).toContain("elaichi-500g-side.webp");
+  await act(async () => host.querySelector("button")!.click());
+  expect(active()).toContain("img-0494.webp");
+  await act(async () => next()); expect(active()).toContain("elaichi-1kg-back.webp");
+  await act(async () => next()); expect(active()).toContain("elaichi-1kg-side.webp");
   await act(async () => root.unmount()); vi.unstubAllGlobals();
 });
 
@@ -94,12 +86,11 @@ it("displays the requested Classic Tea sequence after changing packs", async () 
   await act(async () => root.render(createElement(ProductVariantImageProvider, null, createElement(Switcher), createElement(ProductGallery, { images: product.images, variants: product.variants, handle: product.handle, title: product.title }))));
   expect(decodeURIComponent(host.querySelector('img:not([aria-hidden="true"])')?.getAttribute("src") ?? "")).toContain("img-0309.webp");
   await act(async () => host.querySelector("button")?.click());
-  const dots = host.querySelectorAll<HTMLButtonElement>('[aria-label^="Show product photo"]');
-  const expected = "0286 0287 0288 0299 0289 0291 0292 0293 0294".split(" ");
-  expect(dots).toHaveLength(expected.length);
-  for (let i = 0; i < dots.length; i++) {
-    await act(async () => dots[i].click());
-    expect(decodeURIComponent(host.querySelector('img:not([aria-hidden="true"])')?.getAttribute("src") ?? "")).toContain(`img-${expected[i]}.webp`);
+  const expected = ["img-0286.webp", "classic-1kg-back.webp", "classic-1kg-side.webp", "img-0289.webp", "img-0290.webp", "img-0291.webp", "img-0292.webp", "img-0293.webp", "img-0294.webp"];
+  expect(host.querySelector('[role="status"]')?.textContent).toBe("1/9");
+  for (let i = 0; i < expected.length; i++) {
+    expect(decodeURIComponent(host.querySelector('img:not([aria-hidden="true"])')?.getAttribute("src") ?? "")).toContain(expected[i]);
+    if (i < expected.length - 1) await act(async () => host.querySelector<HTMLButtonElement>('[aria-label="Next product image"]')!.click());
   }
   await act(async () => root.unmount()); vi.unstubAllGlobals();
 });

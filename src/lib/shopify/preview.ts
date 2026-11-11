@@ -200,7 +200,7 @@ export const PREVIEW_PRODUCTS: StorefrontProduct[] = PREVIEW_SEEDS.map((seed) =>
   return {
     id: `preview-${seed.handle}`,
     handle: seed.handle,
-    title: presentation.title,
+    title: presentation.comingSoon ? presentation.title : seed.title,
     description: previewCopy,
     productType: seed.category,
     vendor: "",

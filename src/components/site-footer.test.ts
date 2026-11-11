@@ -8,7 +8,7 @@ describe("Nilkurinji global footer", () => {
 
   it("links every approved category and editorial destination through the shared shell", () => {
     vi.stubEnv("SHOPIFY_MODE", "preview");
-    const markup = renderToStaticMarkup(createElement(SiteFooter));
+    const markup = renderToStaticMarkup(createElement(SiteFooter, { enabledCategories: ["tea", "tea-bags", "rice", "snacks", "other-foods"] }));
 
     expect(markup).toContain('href="/shop?category=tea"');
     expect(markup).toContain('href="/shop?category=tea-bags"');
@@ -18,7 +18,7 @@ describe("Nilkurinji global footer", () => {
     expect(markup).toContain('href="/our-story"');
     expect(markup).toContain('href="/tea-guide"');
     expect(markup).toContain('href="/recipes"');
-    expect(markup).toContain('href="/journal"');
+    expect(markup).not.toContain('href="/journal"');
     expect(markup).toContain('href="/shipping-and-returns"');
     expect(markup).toContain("Contact");
     expect(markup).not.toContain("For slow starts, busy middles, and second cups.");

@@ -34,11 +34,11 @@ describe("store sitemap", () => {
     expect(urls).toContain("https://nilkurinji.example/our-story");
     expect(urls).toContain("https://nilkurinji.example/tea-guide");
     expect(urls).toContain("https://nilkurinji.example/recipes");
-    expect(urls).toContain("https://nilkurinji.example/journal");
+    expect(urls).not.toContain("https://nilkurinji.example/journal");
     expect(urls).toContain("https://nilkurinji.example/products/assam-gold");
     expect(urls).toContain("https://nilkurinji.example/tea-guide/tea-guide-article");
     expect(urls).toContain("https://nilkurinji.example/recipes/recipes-article");
-    expect(urls).toContain("https://nilkurinji.example/journal/journal-article");
+    expect(urls).not.toContain("https://nilkurinji.example/journal/journal-article");
     expect(urls).not.toContain("https://nilkurinji.example/about");
     expect(urls).not.toContain("https://nilkurinji.example/cart");
   });

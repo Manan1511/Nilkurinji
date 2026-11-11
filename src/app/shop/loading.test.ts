@@ -22,5 +22,5 @@ it("starts loading products while category settings are still loading", async ()
   expect(mocks.banner).not.toHaveBeenCalled();
   mocks.releaseCategories(["tea"]);
   await page;
-  expect(mocks.banner).toHaveBeenCalledWith("all");
+  expect(mocks.banner).toHaveBeenCalledWith("tea");
 });
