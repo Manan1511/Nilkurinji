@@ -114,9 +114,10 @@
   .reelsGrid { display: flex; width: auto; margin: 0 calc(-1 * var(--page-gutter)); padding: 42px max(var(--page-gutter), 32px) 42px; gap: 24px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: max(var(--page-gutter), 32px); }
   .reel { flex: 0 0 min(68vw, 250px); scroll-snap-align: start; }
   .hero { align-items: flex-start; min-height: min(740px, max(620px, calc(100svh - 96px))); }
-  .heroPhoto { object-position: 52% 64%; }
-  .heroFade { background: linear-gradient(180deg, rgb(243 239 227 / 76%) 0%, rgb(243 239 227 / 58%) 28%, rgb(243 239 227 / 18%) 51%, transparent 68%); }
-  .heroCopy { padding: 24px var(--page-gutter) 26px; }
+  .heroPhoto { object-position: 50% 50%; }
+  .heroMedia::before { height: 28px; }
+  .heroFade { background: linear-gradient(180deg, rgb(243 239 227 / 18%) 0%, rgb(243 239 227 / 10%) 32%, transparent 58%); }
+  .heroCopy { padding: 36px var(--page-gutter) 26px; }
   .heroCopy h1 { max-width: none; margin-top: 12px; font-size: clamp(1.55rem,7.8vw,2.9rem); line-height: 1.06; }
   .heroDescription { max-width: 34ch; margin-top: 11px; font-size: 16px; line-height: 1.5; }
   .heroActions { margin-top: 16px; }

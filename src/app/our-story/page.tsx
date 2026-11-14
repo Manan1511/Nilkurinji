@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { BotanicalEdges } from "@/components/botanical-edges";
 import { BrandMark } from "@/components/brand-mark";
 import { getPublishedPage } from "@/lib/shopify/content";
-import { getStorefrontMode } from "@/lib/shopify/mode";
 import { sanitizeMerchantHtml } from "@/lib/shopify/sanitize";
 import styles from "./our-story.module.css";
 
@@ -22,13 +20,12 @@ export const metadata: Metadata = { title: STORY_TITLE, description: "Establishe
 export const revalidate = 60;
 
 export default async function OurStoryPage() {
-  const [result, mode] = await Promise.all([getPublishedPage("our-story"), Promise.resolve(getStorefrontMode())]);
+  const result = await getPublishedPage("our-story");
   const page = result.source === "unavailable" ? null : result.data;
   const body = page?.body ? sanitizeMerchantHtml(page.body) : "";
-  const preview = mode.mode === "preview";
   return <article className={styles.page}>
+    <div className={styles.scenery}>
     <header className={`${styles.hero} ${styles.heroTextOnly}`}>
-      <Image className={styles.heroBackground} src="/images/our-story-mountains.webp" alt="" fill preload sizes="100vw" />
       <BotanicalEdges placement="story" textOnly />
       <div className={styles.heroCopy}>
         <p className={styles.eyebrow}>NILKURINJI / OUR STORY</p>
@@ -36,19 +33,14 @@ export default async function OurStoryPage() {
         <p className={styles.tagline}>{STORY_TAGLINE}</p>
       </div>
     </header>
-    <section className={`${styles.story} ${!preview ? styles.storyTextOnly : ""}`} id="story">
-      <span className={styles.storyLowerFoliage} aria-hidden="true"><span /><span /></span>
+    <section className={`${styles.story} ${styles.storyTextOnly}`} id="story">
       <div className={styles.storyCopy}>
         <span className={styles.storyOrnament} aria-hidden="true"><BrandMark /></span>
         <p className={styles.eyebrow}>THE NILKURINJI STORY</p>
         {body ? <div className={styles.body} dangerouslySetInnerHTML={{ __html: body }} /> : <div className={styles.body}>{STORY_PARAGRAPHS.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div>}
       </div>
-      {preview && <div className={styles.collage} aria-label="Illustrative Nilkurinji concept imagery">
-        <Image className={styles.photoOne} src="/images/preview-about-leaves.png" alt="Illustrative tea leaf concept image" width={640} height={800} quality={85} sizes="(max-width: 767px) 48vw, 270px" />
-        <Image className={styles.photoTwo} src="/images/tea-hero-editorial.webp" alt="Illustrative tea landscape concept image" width={900} height={650} quality={85} sizes="(max-width: 767px) 48vw, 260px" />
-        <span className={styles.collageNote}>Concept imagery</span>
-      </div>}
     </section>
+    </div>
     <section className={styles.closing}>
       <span className={styles.closingOrnament} aria-hidden="true"><BrandMark /></span>
       <p>Nilkurinji Premium</p>

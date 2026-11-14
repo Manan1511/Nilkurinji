@@ -136,3 +136,23 @@
 @media (prefers-reduced-motion: reduce) {
   .storyLowerFoliage span { animation: none; }
 }
+
+/* The story sits within a continuous forest landscape, inspired by the supplied artwork. */
+.story { width: 100%; display: block; padding: clamp(48px, 7vw, 100px) var(--page-gutter); background: linear-gradient(180deg, #163a29 0%, rgb(8 38 23 / 10%) 20%, rgb(5 30 18 / 8%) 80%, #163a29 100%), url('/images/our-story-floral-landscape.webp') center / cover no-repeat; }
+.storyCopy, .storyTextOnly .storyCopy { width: min(100%, 820px); max-width: 820px; margin-inline: auto; padding: clamp(30px, 5vw, 64px); border: 1px solid rgb(212 187 123 / 65%); background: rgb(4 28 16 / 76%); }
+.storyCopy .eyebrow { color: #dec994; }
+.storyCopy .body { color: #f2eddf; }
+.storyCopy .body :global(h2), .storyCopy .body :global(h3), .storyCopy .body :global(a) { color: #fff8e6; }
+.storyCopy .body :global(a) { text-decoration: underline; text-underline-offset: 4px; }
+.storyOrnament { justify-content: center; margin-bottom: 28px; }
+.storyOrnament::before { width: 58px; height: 1px; content: ""; background: #b6a678; }
+.story::before, .story::after { content: none; }
+@media (max-width: 767px) {
+  .story { padding: 38px var(--page-gutter) 54px; background-position: center, 60% center; }
+  .storyCopy, .storyTextOnly .storyCopy { padding: 30px 24px; }
+}
+
+/* One uninterrupted landscape runs behind the heading and the story. */
+.scenery { background: linear-gradient(to bottom, var(--paper) 0, rgb(243 239 227 / 50%) 55px, transparent 150px, transparent 85%, #163a29 100%), linear-gradient(90deg, rgb(4 27 15 / 66%), rgb(4 27 15 / 18%) 70%), url('/images/our-story-floral-landscape.webp') center / cover no-repeat; }
+.scenery .hero, .scenery .story { background: transparent; }
+.scenery .hero::before, .scenery .hero::after { content: none; }

@@ -137,7 +137,7 @@
 .story .depthRight { right: -18px; bottom: -32px; width: clamp(156px, 14vw, 210px); opacity: .13; --foliage-origin: 100% 88%; --foliage-duration: 16s; animation-delay: -11s; }
 .textOnly.story.edges { top: 0; bottom: 0; height: auto; }
 .textOnly.story .left { top: auto; bottom: -18px; left: 0; width: clamp(168px, 15vw, 228px); opacity: 1; --foliage-origin: 0 90%; }
-.textOnly.story .right { top: -14px; right: -14px; bottom: auto; width: clamp(160px, 15vw, 230px); opacity: 1; --foliage-origin: 100% 10%; }
+.textOnly.story .right { top: 12px; right: -14px; bottom: auto; width: clamp(160px, 15vw, 230px); opacity: 1; --foliage-origin: 100% 10%; }
 .textOnly.story .depthLeft { top: -12px; left: 0; bottom: auto; width: clamp(138px, 12vw, 184px); opacity: .18; }
 .textOnly.story .depthRight { top: auto; right: -14px; bottom: -26px; width: clamp(148px, 13vw, 194px); opacity: .18; }
 .home-story .left { top: auto; bottom: -18px; left: 0; width: clamp(176px, 15vw, 224px); opacity: 1; transform: rotate(-9deg); --foliage-origin: 0 92%; }
@@ -286,7 +286,7 @@
   .story .right { right: 20px; transform: rotate(10deg); --foliage-origin: 100% 18%; }
   .textOnly.story.edges { z-index: 0; top: 0; bottom: 0; height: auto; }
   .textOnly.story .left { top: auto; bottom: -12px; left: 0; width: clamp(124px, 36vw, 144px); opacity: 1; --foliage-origin: 0 82%; }
-  .textOnly.story .right { top: -8px; right: -14px; bottom: auto; width: clamp(128px, 38vw, 152px); opacity: 1; --foliage-origin: 100% 14%; }
+  .textOnly.story .right { top: 12px; right: -14px; bottom: auto; width: clamp(128px, 38vw, 152px); opacity: 1; --foliage-origin: 100% 14%; }
   .textOnly.story .depthLeft { top: 18px; left: 0; bottom: auto; width: clamp(124px, 34vw, 138px); opacity: .18; }
   .textOnly.story .depthRight { top: auto; right: -14px; bottom: 4px; width: clamp(132px, 36vw, 148px); opacity: .18; }
 
