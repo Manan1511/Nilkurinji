@@ -1,0 +1,99 @@
+.page { --forest: #062416; --gold: #d8bd7b; --cream: #f5eedc; color: var(--cream); background: var(--forest); overflow: hidden; }
+.page h1, .page h2, .page h3, .page p { margin: 0; }
+.hero { min-height: 440px; display: grid; place-items: center; padding: 95px 24px 62px; text-align: center; background: linear-gradient(180deg, rgba(4, 27, 17, .28), rgba(4, 27, 17, .32)), url('/images/our-story-floral-landscape.webp') center top / cover; }
+.heroCopy { max-width: 900px; text-shadow: 0 2px 18px #00190e; }
+.eyebrow { color: var(--gold); font-size: .78rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; }
+.hero h1 { margin: 18px 0; color: #f6e6be; font-family: Georgia, serif; font-size: clamp(2.8rem, 5.2vw, 5.8rem); font-style: italic; line-height: 1.02; }
+.heroSubtitle { font-family: Georgia, serif; font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-style: italic; }
+.ornament { display: flex; align-items: center; justify-content: center; gap: 14px; width: 150px; margin: 22px auto 0; color: #b998ce; }
+.ornament::before, .ornament::after { content: ''; height: 1px; flex: 1; background: var(--gold); }
+.ornament svg { width: 24px; height: 24px; }
+.inspiration { min-height: 460px; display: flex; align-items: center; background: linear-gradient(90deg, #062416 0%, rgba(6,36,22,.96) 33%, rgba(6,36,22,.15) 73%), url('/images/our-story-flower.webp') center / cover; }
+.inspirationCopy { width: min(47%, 650px); margin-left: max(6%, calc((100% - 1360px) / 2)); padding: 66px 0; }
+.inspiration h2, .sectionHeading h2 { font-family: Georgia, serif; font-size: clamp(2.1rem, 3.4vw, 3.8rem); line-height: 1.08; font-weight: 400; }
+.inspiration h2 { margin: 15px 0 22px; color: #f2dcac; }
+.inspirationCopy > p:last-child, .timeline p, .foundersContent > p, .merchantStory { font-size: clamp(1rem, 1.1vw, 1.16rem); line-height: 1.65; }
+.journey { border-top: 1px solid rgba(216,189,123,.45); }
+.sectionHeading { display: flex; align-items: center; justify-content: center; gap: 22px; text-align: center; }
+.sectionHeading > span { width: min(10vw, 110px); height: 1px; flex-shrink: 0; background: linear-gradient(90deg, transparent, var(--gold)); }
+.sectionHeading > span:last-child { transform: scaleX(-1); }
+.journey > .sectionHeading { padding: 50px 20px 22px; }
+.journeyContent { display: grid; grid-template-columns: 1fr 1fr; max-width: 1600px; margin: auto; }
+.teaImage { min-height: 470px; background: linear-gradient(to bottom, var(--forest) 0%, transparent 24%, transparent 78%, var(--forest) 100%), linear-gradient(90deg, var(--forest) 0%, transparent 18%, transparent 50%, var(--forest) 100%), url('/images/home-tea-collection/classic.webp') center / cover; }
+.timeline { list-style: none; padding: 32px 8% 50px 35px; margin: 0; }
+.timeline li { display: grid; grid-template-columns: 54px 1fr; gap: 24px; position: relative; padding-bottom: 34px; }
+.timeline li:not(:last-child)::before { content: ''; position: absolute; left: 26px; top: 50px; bottom: 0; width: 1px; background: var(--gold); }
+.timeline li:last-child { padding-bottom: 0; }
+.timelineIcon { width: 53px; height: 53px; display: grid; place-items: center; border: 1px solid var(--gold); border-radius: 50%; color: var(--gold); font-size: 1.6rem; }
+.timeline h3 { margin: 2px 0 6px; color: #eddaaa; font-family: Georgia, serif; font-size: 1.45rem; font-weight: 400; }
+.founders { position: relative; padding: 65px 24px 80px; border-top: 1px solid rgba(216,189,123,.45); background: #08291b; }
+.founders::before { content: ''; position: absolute; inset: 0 auto 0 0; width: min(25%, 280px); background: url('/images/botanical/kurinji-branch-tall.webp') left bottom / contain no-repeat; opacity: .12; pointer-events: none; }
+.foundersContent { position: relative; display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 55px; max-width: 1040px; margin: 38px auto 0; }
+.founderNames { display: grid; grid-template-columns: 1fr 1fr; text-align: center; }
+.founderNames > div + div { border-left: 1px solid rgba(216,189,123,.5); }
+.founderNames h3 { color: #f2dcac; font: italic 2rem/1.08 Georgia, serif; }
+.founderNames p { margin-top: 10px; }
+.foundersContent > p { border-left: 1px solid rgba(216,189,123,.5); padding-left: 50px; }
+.merchantStory { max-width: 850px; margin: 50px auto 0; padding-top: 30px; border-top: 1px solid rgba(216,189,123,.4); }
+.merchantStory p + p { margin-top: 1em; }
+.closing { min-height: 470px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 65px 24px 110px; text-align: center; background: linear-gradient(to bottom, rgba(5,32,19,.2) 0%, rgba(5,32,19,.25) 55%, rgba(12,43,27,.42) 69%, rgba(59,85,64,.6) 80%, rgba(170,181,157,.83) 92%, var(--paper) 100%), url('/images/our-story-floral-landscape.webp') center 58% / cover; }
+.closingLine { color: #fff5df; font: italic clamp(1.5rem, 2.4vw, 2.4rem)/1.25 Georgia, serif; text-shadow: 0 2px 12px #00190e; }
+.closing h2 { margin: 18px 0 5px; font: 400 clamp(2.2rem, 4vw, 3.6rem)/1 Georgia, serif; text-shadow: 0 2px 12px #00190e; }
+.closingTagline { color: #f6e6be; font: italic 1.2rem Georgia, serif; }
+.shopLink { display: inline-flex; gap: 24px; align-items: center; margin-top: 25px; padding: 12px 22px; border: 1px solid #f5eedc; border-radius: 999px; color: #fff9e9; background: rgba(3,31,18,.7); text-decoration: none; }
+.shopLink:hover { color: var(--forest); background: var(--cream); }
+.shopLink:focus-visible { outline: 2px solid var(--cream); outline-offset: 4px; }
+@media (min-width: 1024px) {
+  .hero { min-height: 350px; padding: 62px 24px 45px; }
+  .hero h1 { font-size: clamp(2.8rem, 4vw, 4.5rem); margin: 12px 0; }
+  .heroSubtitle { font-size: 1.15rem; }
+  .ornament { margin-top: 16px; }
+  .inspiration { min-height: 350px; }
+  .inspirationCopy { width: min(47%, 580px); padding: 42px 0; }
+  .inspiration h2, .sectionHeading h2 { font-size: clamp(2.1rem, 2.7vw, 3rem); }
+  .inspiration h2 { margin: 10px 0 15px; }
+  .inspirationCopy > p:last-child, .timeline p, .foundersContent > p, .merchantStory { font-size: 1rem; line-height: 1.55; }
+  .journey > .sectionHeading { padding: 34px 20px 12px; }
+  .journeyContent { max-width: none; }
+  .teaImage { min-height: 360px; background-color: var(--forest); background-repeat: no-repeat; background-image: linear-gradient(to bottom, var(--forest), transparent 22%, transparent 76%, var(--forest) 96%), linear-gradient(to right, rgba(6,36,22,.38), transparent 14%, transparent 55%, var(--forest) 95%), url('/images/home-tea-collection/classic.webp'); }
+  .timeline { max-width: 650px; padding: 18px 5% 32px 25px; }
+  .timeline li { grid-template-columns: 44px 1fr; gap: 18px; padding-bottom: 22px; }
+  .timeline li:not(:last-child)::before { left: 21px; top: 44px; }
+  .timelineIcon { width: 44px; height: 44px; font-size: 1.35rem; }
+  .timeline h3 { font-size: 1.25rem; }
+  .founders { padding: 42px 24px 50px; }
+  .foundersContent { max-width: 900px; margin-top: 26px; gap: 40px; }
+  .founderNames h3 { font-size: 1.65rem; }
+  .closing { min-height: 380px; padding: 42px 24px 85px; }
+  .closingLine { font-size: 1.65rem; }
+  .closing h2 { font-size: 3rem; margin-top: 12px; }
+  .shopLink { margin-top: 18px; }
+}
+@media (max-width: 767px) {
+  .hero { min-height: 310px; padding: 54px 20px 36px; background-position: center; }
+  .hero h1 { font-size: clamp(1.8rem, 8vw, 3.5rem); margin: 13px 0; }
+  .heroSubtitle { font-size: 1rem; }
+  .ornament { margin-top: 15px; }
+  .inspiration { min-height: 340px; align-items: flex-start; background-position: 61% center; background-image: linear-gradient(90deg, #062416 0%, rgba(6,36,22,.96) 48%, rgba(6,36,22,.48) 82%), url('/images/our-story-flower.webp'); }
+  .inspirationCopy { width: min(78%, 410px); margin-left: 0; padding: 35px 0 38px 22px; }
+  .inspiration h2 { margin: 10px 0 14px; font-size: clamp(1.7rem, 7vw, 2.3rem); }
+  .inspirationCopy > p:last-child, .timeline p, .foundersContent > p, .merchantStory { font-size: 1rem; line-height: 1.6; }
+  .sectionHeading { gap: 12px; }
+  .sectionHeading h2 { font-size: clamp(1.7rem, 6.6vw, 2.4rem); }
+  .sectionHeading > span { width: 8vw; }
+  .journey > .sectionHeading { padding: 32px 15px 18px; }
+  .journeyContent { grid-template-columns: 1fr; }
+  .teaImage { min-height: clamp(250px, 72vw, 360px); background-color: var(--forest); background-position: center, center 58%; background-size: 100% 100%, cover; background-repeat: no-repeat; background-image: linear-gradient(to bottom, var(--forest), transparent 24%, transparent 55%, var(--forest) 90%), url('/images/home-tea-collection/classic.webp'); }
+  .timeline { position: relative; width: min(100%, 560px); margin: -2px auto 0; padding: 2px 24px 42px; background: var(--forest); }
+  .timeline li { grid-template-columns: 42px 1fr; gap: 16px; padding-bottom: 28px; }
+  .timeline li:not(:last-child)::before { left: 20px; top: 42px; }
+  .timelineIcon { width: 42px; height: 42px; font-size: 1.2rem; }
+  .timeline h3 { font-size: 1.25rem; }
+  .founders { padding: 35px 20px 45px; }
+  .foundersContent { grid-template-columns: 1fr; gap: 24px; margin: 26px auto 0; max-width: 480px; }
+  .founderNames h3 { font-size: clamp(1.05rem, 4vw, 1.45rem); }
+  .founderNames p { font-size: .8rem; }
+  .foundersContent > p { border-left: 0; padding: 0; text-align: center; }
+  .closing { min-height: 340px; padding: 44px 20px 95px; }
+  .closingLine { font-size: clamp(1.15rem, 5.6vw, 1.4rem); }
+}
