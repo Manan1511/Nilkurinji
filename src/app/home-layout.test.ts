@@ -9,7 +9,8 @@ it("shows the mountain hero and the four tea collection links", async () => {
   expect(html).toContain('href="/shop?category=tea"');
   expect(html).toContain('aria-label="Nilkurinji Premium Tea Collection"');
   for (const name of ["Classic Tea", "Elaichi Tea", "Rose Tea", "Masala Tea"]) expect(html).toContain(name);
-  expect(html).toContain("Coming Soon!");
+  expect(html).toContain('aria-label="Masala Tea, coming soon"');
+  for (const image of ["classic-category.webp", "elaichi-category.webp", "rose-category.webp", "masala-category.webp"]) expect(html).toContain(image);
   expect(html).not.toContain('aria-labelledby="home-featured-heading"');
 });
 

@@ -25,10 +25,10 @@ const FALLBACK_HERO = {
 };
 
 const HOME_TEA_COLLECTION = [
-  { label: "Classic Tea", href: "/products/premium-tea", image: "/images/home-tea-collection/classic.webp" },
-  { label: "Elaichi Tea", href: "/products/elaichi-tea", image: "/images/home-tea-collection/elaichi.webp" },
-  { label: "Rose Tea", href: "/products/rose-tea", image: "/images/home-tea-collection/rose.webp" },
-  { label: "Masala Tea", href: "/products/nilkurinji-premium-masala-tea", image: "/images/home-tea-collection/masala.webp", comingSoon: true },
+  { label: "Classic Tea", href: "/products/premium-tea", image: "/images/home-tea-collection/classic-category.webp" },
+  { label: "Elaichi Tea", href: "/products/elaichi-tea", image: "/images/home-tea-collection/elaichi-category.webp" },
+  { label: "Rose Tea", href: "/products/rose-tea", image: "/images/home-tea-collection/rose-category.webp" },
+  { label: "Masala Tea", href: "/products/nilkurinji-premium-masala-tea", image: "/images/home-tea-collection/masala-category.webp", comingSoon: true },
 ];
 
 function HomeCategories() {
@@ -47,9 +47,8 @@ function HomeCategories() {
         key={tea.label}
         aria-label={tea.comingSoon ? `${tea.label}, coming soon` : tea.label}
       >
-        <span className={`${styles.categoryArt}${tea.comingSoon ? ` ${styles.categoryArtComingSoon}` : ""}`}>
+        <span className={styles.categoryArt}>
           <Image src={tea.image} alt="" fill sizes="(max-width: 599px) 44vw, (max-width: 899px) 44vw, 23vw" quality={84} />
-          {tea.comingSoon && <span className={styles.comingSoonLabel}>Coming Soon!</span>}
         </span>
         <span className={styles.categoryLabel}>
           <BrandMark className={styles.categoryLabelMark} />

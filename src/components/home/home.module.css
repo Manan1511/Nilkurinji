@@ -33,9 +33,6 @@
 .categoryArt { position: relative; display: block; width: min(100%, 330px); aspect-ratio: .94; overflow: hidden; border: 1px solid rgb(170 160 123 / 55%); border-radius: 50% 50% 8px 8px / 31% 31% 8px 8px; background: var(--image-ground); }
 .categoryArt > img { object-fit: cover; transition: transform 520ms cubic-bezier(.2,.75,.25,1), filter 420ms ease; }
 .categoryItem:hover .categoryArt > img,.categoryItem:focus-visible .categoryArt > img { transform: scale(1.035); }
-.categoryArtComingSoon > img { filter: blur(4px); transform: scale(1.07); }
-.categoryItem:hover .categoryArtComingSoon > img,.categoryItem:focus-visible .categoryArtComingSoon > img { transform: scale(1.1); }
-.comingSoonLabel { position: absolute; top: 50%; left: 50%; z-index: 1; padding: 11px 20px; border: 1px solid var(--brass); border-radius: 3px 3px 18px 18px; color: var(--paper); background: var(--forest); box-shadow: 0 5px 16px rgb(20 43 28 / 22%); font: 400 clamp(16px,1.6vw,22px)/1.15 var(--font-editorial); white-space: nowrap; transform: translate(-50%,-50%); }
 .categoryLabel { position: relative; z-index: 1; isolation: isolate; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; width: min(96%,320px); min-height: 84px; margin-top: -20px; padding: 16px 14px 12px; color: var(--ink); background: transparent; font: 400 clamp(18px,1.9vw,26px)/1.08 var(--font-editorial); text-align: center; transition: transform 220ms ease; }
 .categoryLabel::before,.categoryLabel::after { position: absolute; inset: 0; z-index: 0; content: ""; clip-path: polygon(4% 20%,10% 9%,42% 9%,50% 0,58% 9%,90% 9%,96% 20%,100% 36%,96% 52%,96% 82%,90% 98%,10% 98%,4% 82%,4% 52%,0 36%); }
 .categoryLabel::before { background: var(--brass); }
@@ -146,7 +143,6 @@
   .categoryArt { width: 100%; aspect-ratio: .9; border-radius: 50% 50% 7px 7px / 28% 28% 7px 7px; }
   .categoryLabel { width: 96%; min-height: 70px; margin-top: -15px; padding: 13px 6px 9px; font-size: clamp(15px,4.1vw,18px); }
   .categoryLabelMark { width: 16px; height: 14px; }
-  .comingSoonLabel { padding: 8px 11px; font-size: clamp(14px,3.8vw,17px); }
   .deliveryItem { grid-template-columns: 30px 1fr; column-gap: 6px; padding: 5px 8px; }
   .deliveryItem > svg { width: 22px; height: 22px; }
   .deliveryItem h3 { font-size: 14px; }
