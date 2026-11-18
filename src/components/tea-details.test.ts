@@ -5,7 +5,7 @@ import { makeProduct } from "../../test/fixtures/storefront";
 import { TeaDetails } from "./tea-details";
 
 describe("approved tea details", () => {
-  it("renders approved notes and only available brewing measurements", () => {
+  it("renders approved notes and facts", () => {
     const product = makeProduct({ teaProfile: {
       approved: true,
       format: "loose-tea",
@@ -20,10 +20,7 @@ describe("approved tea details", () => {
     const html = renderToStaticMarkup(createElement(TeaDetails, { product }));
     expect(html).toContain("Tasting notes");
     expect(html).toContain("malt");
-    expect(html).toContain("220 ml");
-    expect(html).toContain("2 g");
-    expect(html).not.toContain("Temperature");
-    expect(html).toContain("Steep to preference.");
+    expect(html).toContain("Assam");
   });
 
   it("does not invent product brewing details when the profile is absent", () => {

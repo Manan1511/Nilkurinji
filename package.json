@@ -16,7 +16,7 @@
     "clsx": "latest",
     "jose": "^6.2.13",
     "lucide-react": "latest",
-    "next": "^16.4.3",
+    "next": "16.4.5",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "sanitize-html": "^2.18.1",
