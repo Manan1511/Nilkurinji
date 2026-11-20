@@ -1,0 +1,26 @@
+.accordion { margin-top: 12px; border: 1px solid var(--rule); border-radius: 12px; background: var(--paper); overflow: hidden; transition: border-color var(--motion-panel) ease, background-color var(--motion-panel) ease, box-shadow var(--motion-panel) ease; }
+.accordion[open] { border-color: var(--control); background: color-mix(in srgb, var(--brass) 6%, var(--paper)); box-shadow: 0 6px 18px rgb(22 49 34 / 7%); }
+.accordion summary { display: flex; align-items: center; gap: 14px; min-height: 52px; padding: 10px 16px; cursor: pointer; list-style: none; color: var(--forest); font: 700 17px/1.25 var(--font-editorial), Georgia, serif; transition: background-color var(--motion-fast) ease; -webkit-tap-highlight-color: transparent; }
+.accordion summary::-webkit-details-marker { display: none; }
+.accordion summary:hover { background: color-mix(in srgb, var(--forest) 4%, transparent); }
+.accordion summary:active { background: color-mix(in srgb, var(--forest) 8%, transparent); }
+.accordion summary > svg:first-child { width: 22px; height: 22px; flex: none; stroke-width: 1.5; transition: transform var(--motion-panel) var(--ease-out); }
+.accordion summary:hover > svg:first-child { transform: scale(1.08) rotate(-4deg); }
+.accordion summary > .toggle { position: relative; width: 18px; height: 18px; flex: none; margin-left: auto; transition: transform var(--motion-fast) var(--ease-out); }
+.toggle svg { position: absolute; inset: 0; width: 100%; height: 100%; transition: transform var(--motion-panel) var(--ease-out), opacity var(--motion-panel) ease; }
+.minus { opacity: 0; transform: rotate(-90deg); }
+.accordion[open] .plus { opacity: 0; transform: rotate(90deg); }
+.accordion[open] .minus { opacity: 1; transform: none; }
+.accordion summary:hover > .toggle { transform: scale(1.12); }
+.accordion summary:focus-visible { outline: 2px solid var(--forest); outline-offset: -4px; }
+
+@supports (interpolate-size: allow-keywords) {
+  .accordion { interpolate-size: allow-keywords; }
+  .accordion::details-content { height: 0; opacity: 0; overflow: clip; transition: height var(--motion-panel) var(--ease-out), opacity var(--motion-panel) ease, content-visibility var(--motion-panel) allow-discrete; }
+  .accordion[open]::details-content { height: auto; opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .accordion, .accordion summary, .accordion summary > svg, .accordion summary > .toggle, .toggle svg, .accordion::details-content { transition: none; }
+  .accordion summary:hover > svg:first-child, .accordion summary:hover > .toggle { transform: none; }
+}

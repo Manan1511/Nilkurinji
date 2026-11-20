@@ -1,5 +1,6 @@
 "use client";
 
+import { Truck } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import styles from "./delivery-checker.module.css";
 
@@ -52,13 +53,19 @@ export function DeliveryChecker({ preview = false }: { preview?: boolean }) {
   }
 
   return <section className={styles.checker} aria-labelledby="delivery-check-title">
-    <h2 id="delivery-check-title">Check delivery</h2>
-    {preview ? <p>Delivery availability is confirmed at checkout. PIN checking is not enabled in this preview.</p> : <>
+    <div className={styles.heading}>
+      <Truck aria-hidden="true" />
+      <div>
+        <h2 id="delivery-check-title">Check Delivery</h2>
+        <p>{preview ? "Delivery availability is confirmed at checkout. PIN checking is not enabled in this preview." : "Enter your PIN code to check delivery availability."}</p>
+      </div>
+    </div>
+    {!preview && <>
       <form onSubmit={(event) => void check(event)}>
         <label htmlFor="delivery-pincode">Enter your PIN code</label>
         <div className={styles.controls}>
-          <input id="delivery-pincode" name="pincode" type="text" inputMode="numeric" autoComplete="postal-code" pattern="[0-9]{6}" maxLength={6} value={pincode} onChange={(event) => { setPincode(event.target.value.replace(/\D/g, "").slice(0, 6)); setMessage(""); setResult(null); }} aria-describedby="delivery-check-message" />
-          <button type="submit" className="button button--outline" disabled={busy || pincode.length !== 6}>{busy ? "Checking…" : "Check"}</button>
+          <input id="delivery-pincode" name="pincode" type="text" inputMode="numeric" autoComplete="postal-code" pattern="[0-9]{6}" maxLength={6} placeholder="Enter your PIN code" value={pincode} onChange={(event) => { setPincode(event.target.value.replace(/\D/g, "").slice(0, 6)); setMessage(""); setResult(null); }} aria-describedby="delivery-check-message" />
+          <button type="submit" className="button button--dark" disabled={busy || pincode.length !== 6}>{busy ? "Checking…" : "Check"}</button>
         </div>
       </form>
       <p id="delivery-check-message" className={styles.message} role="status" aria-live="polite">{message}</p>

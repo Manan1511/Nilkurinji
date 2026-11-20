@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight, Star } from "lucide-react";
+import { ChevronRight, Package, Star } from "lucide-react";
 import { ProductCard } from "@/components/product-card";
 import { ProductGallery } from "@/components/product-gallery";
 import { ProductVariantImageProvider } from "@/components/product-variant-image";
 import { ProductPurchasePanel } from "@/components/product-purchase-panel";
 import { TeaDetails } from "@/components/tea-details";
+import { DeliveryChecker } from "@/components/delivery-checker";
+import { ProductAccordion } from "@/components/product-accordion";
 import { ProductTeaGuide } from "@/components/product-tea-guide";
 import { isShopifyCartEnabled, isShopifyCheckoutEnabled } from "@/lib/shopify/checkout-config";
 import { getProduct, getRecommendations } from "@/lib/shopify/catalog";
@@ -130,13 +132,12 @@ export default async function ProductPage({ params, searchParams }: PageProps) {
   return <div className={styles.page}>
     <nav className={styles.breadcrumb} aria-label="Breadcrumb"><Link href="/shop">Shop</Link><ChevronRight size={14} aria-hidden="true" />{category && <><Link href={category.href}>{category.label}</Link><ChevronRight size={14} aria-hidden="true" /></>}<span>{product.title}</span></nav>
     <ProductVariantImageProvider key={product.id} initialVariantId={initialVariantId}><div className={styles.layout}><ProductGallery images={product.images} variants={product.variants} handle={product.handle} title={product.title} /><ProductDetails className={styles.detail}><h1 id="product-title">{product.title}</h1>{product.comingSoon ? <p className={styles.comingSoon} role="status">Coming Soon!</p> : <ProductPurchasePanel product={product} initialVariantId={initialVariantId} cartEnabled={isShopifyCartEnabled()} checkoutEnabled={isShopifyCheckoutEnabled()} purchasingEnabled={isShopifyCheckoutEnabled()} />}{product.description && <p className={styles.description}>{product.description}</p>}{!product.comingSoon && <TeaDetails product={product} />}</ProductDetails></div></ProductVariantImageProvider>
-    <div className={styles.productInformation}><ProductTeaGuide product={product} description={product.handle === "premium-tea" ? CLASSIC_DESCRIPTION.map((paragraph) => <p key={paragraph}>{paragraph}</p>) : product.description ? <p>{product.description}</p> : undefined} /></div>
+    <div className={styles.productInformation}><ProductTeaGuide product={product} description={product.handle === "premium-tea" ? CLASSIC_DESCRIPTION.map((paragraph) => <p key={paragraph}>{paragraph}</p>) : product.description ? <p>{product.description}</p> : undefined} />{(teaDetails || product.details) && <ProductAccordion title="Product Details" Icon={Package}><div className={styles.detailsPanel}>{teaDetails && <table className={styles.detailsTable}><thead><tr><th scope="col">Detail</th><th scope="col">Information</th></tr></thead><tbody>{teaDetails.map(([label, value]) => <tr key={label}><th scope="row">{label}</th><td>{value}</td></tr>)}</tbody></table>}{product.details && <p>{product.details}</p>}</div></ProductAccordion>}{!product.comingSoon && <DeliveryChecker preview={product.isPreview} />}</div>
     {(product.howItsMade || product.isPreview) && <section className={styles.howItsMade} aria-labelledby="how-its-made-heading">
       <h2 id="how-its-made-heading">How it’s made</h2>
       <p>{product.howItsMade ?? "Production details for this product will appear here once Nilkurinji confirms them."}</p>
     </section>}
-    {(teaDetails || product.details || product.faqs.length > 0 || product.approvedReviews.length > 0) && <div className={styles.content}>
-      {(teaDetails || product.details) && <section><h2>Product details</h2>{teaDetails && <table className={styles.detailsTable}><thead><tr><th scope="col">Detail</th><th scope="col">Information</th></tr></thead><tbody>{teaDetails.map(([label, value]) => <tr key={label}><th scope="row">{label}</th><td>{value}</td></tr>)}</tbody></table>}{product.details && <p>{product.details}</p>}</section>}
+    {(product.faqs.length > 0 || product.approvedReviews.length > 0) && <div className={styles.content}>
       {product.faqs.length > 0 && <section><h2>Frequently asked questions</h2>{product.faqs.map((faq) => <details key={faq.question}><summary>{faq.question}</summary><p>{faq.answer}</p></details>)}</section>}
       {product.approvedReviews.length > 0 && <section><h2>Customer reviews</h2>{product.approvedReviews.map((review,index) => <article key={`${review.name}-${index}`}><div className={styles.stars} aria-label={`${review.rating} out of 5 stars`}>{Array.from({ length: review.rating }, (_, i) => <Star key={i} size={16} fill="currentColor" aria-hidden="true" />)}</div>{review.title && <h3>{review.title}</h3>}<p>{review.body}</p><p className={styles.byline}>{review.name}{review.date && <> · <time dateTime={review.date}>{new Intl.DateTimeFormat("en-IN", { dateStyle: "medium" }).format(new Date(`${review.date}T00:00:00`))}</time></>}</p></article>)}</section>}
     </div>}

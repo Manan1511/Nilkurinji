@@ -1,6 +1,7 @@
-import { ChevronDown, Coffee, Droplets, Leaf, Mountain, Sparkles, Utensils, Timer, Wind } from "lucide-react";
+import { BadgeCheck, Coffee, Droplets, Leaf, Mountain, Sparkles, Utensils, Timer } from "lucide-react";
 import type { ReactNode } from "react";
 import type { StorefrontProduct } from "@/lib/shopify/types";
+import { ProductAccordion } from "./product-accordion";
 import styles from "./product-tea-guide.module.css";
 
 function formatTime(seconds: number) {
@@ -31,8 +32,8 @@ export function ProductTeaGuide({ product, description }: { product: StorefrontP
 
   const features = [
     { label: "Rich Flavour", Icon: Leaf },
-    { label: "Aromatic & Fresh", Icon: Wind },
-    { label: "Carefully Blended", Icon: Sparkles },
+    { label: "Aromatic & Fresh", Icon: Coffee },
+    { label: "Carefully Blended", Icon: BadgeCheck },
     { label: "Inspired by Nature", Icon: Mountain },
   ];
 
@@ -40,12 +41,10 @@ export function ProductTeaGuide({ product, description }: { product: StorefrontP
     <ul className={styles.features} aria-label="Tea features">
       {features.map(({ label, Icon }) => <li key={label}><Icon aria-hidden="true" strokeWidth={1.5} /><span>{label}</span></li>)}
     </ul>
-    {description && <details className={styles.guide}>
-      <summary><Leaf aria-hidden="true" /><span>Description</span><ChevronDown className={styles.chevron} aria-hidden="true" /></summary>
+    {description && <ProductAccordion title="Description" Icon={Leaf}>
       <div className={styles.description}>{description}</div>
-    </details>}
-    {(steps.length > 0 || brew?.instructions || isRose) && <details className={styles.guide}>
-      <summary><Coffee aria-hidden="true" /><span>Tea Guide</span><ChevronDown className={styles.chevron} aria-hidden="true" /></summary>
+    </ProductAccordion>}
+    {(steps.length > 0 || brew?.instructions || isRose) && <ProductAccordion title="Tea Guide" Icon={Coffee}>
       {steps.length > 0 && <ol className={styles.steps}>
         {steps.map(({ label, value, Icon }) => <li key={label}><Icon aria-hidden="true" strokeWidth={1.5} /><span className={styles.stepLabel}>{label}</span><strong>{value}</strong></li>)}
       </ol>}
@@ -57,6 +56,6 @@ export function ProductTeaGuide({ product, description }: { product: StorefrontP
           <li><strong>Use less sugar.</strong> Rose Tea already has a naturally sweet floral character, so there’s no need to add too much sugar. Adjust it according to your preference.</li>
         </ul>
       </div>}
-    </details>}
+    </ProductAccordion>}
   </div>;
 }

@@ -1,10 +1,21 @@
-.checker { display: grid; grid-template-columns: minmax(0, 1fr); min-width: 0; gap: 12px; padding-block: 18px; border-top: 1px solid var(--rule); }
-.checker h2 { font: 400 20px/1.3 var(--font-editorial); }
-.checker form { display: grid; gap: 8px; }
-.checker label { font-size: 14px; }
+.checker { transition: border-color var(--motion-panel) ease, box-shadow var(--motion-panel) ease; display: grid; grid-template-columns: minmax(0, 1fr); min-width: 0; gap: 14px; margin-top: 12px; padding: 16px; border: 1px solid var(--rule); border-radius: 14px; background: color-mix(in srgb, var(--forest) 7%, var(--paper)); }
+.heading { display: flex; align-items: center; gap: 14px; }
+.checker:hover, .checker:focus-within { border-color: var(--control); box-shadow: 0 6px 18px rgb(22 49 34 / 7%); }
+.heading svg { transition: transform 500ms var(--ease-out); width: 30px; height: 30px; flex: none; color: var(--forest); stroke-width: 1.5; }
+.heading h2 { margin: 0; color: var(--forest); font: 700 17px/1.25 var(--font-editorial), Georgia, serif; }
+.heading p { margin: 2px 0 0; color: var(--ink-secondary); font-size: 13px; line-height: 1.4; }
+.checker:hover .heading svg, .checker:focus-within .heading svg { transform: translateX(3px); }
+.checker form { min-width: 0; }
+.checker label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .controls { display: flex; gap: 8px; }
-.controls input { min-width: 0; flex: 1; min-height: 48px; padding: 10px 12px; border: 1px solid var(--control); border-radius: 2px; background: var(--surface); color: var(--ink); font: 400 16px/1.4 var(--font-body); }
-.controls button { min-width: 92px; }
+.controls input { min-width: 0; flex: 1; min-height: 44px; padding: 8px 14px; border: 1px solid var(--rule); border-radius: 999px; background: var(--paper); color: var(--ink); font: 400 14px/1.4 var(--font-body); transition: border-color var(--motion-control) ease, box-shadow var(--motion-control) ease; }
+.controls input:focus { outline: none; border-color: var(--forest); box-shadow: 0 0 0 3px rgb(22 49 34 / 14%); }
+.controls button { transition: transform 120ms ease, background-color var(--motion-fast) ease, opacity var(--motion-fast) ease; min-width: 84px; min-height: 44px; padding-block: 8px; border-radius: 999px; font-size: 14px; }
+.controls button:active:not(:disabled) { transform: scale(.96); }
 .message:empty { display: none; }
-.message, .footnote, .checker > p { color: var(--ink-secondary); font-size: 14px; line-height: 1.5; }
+.message, .footnote { animation: fadeIn 300ms var(--ease-out); }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+.message, .footnote { margin: 0; color: var(--ink-secondary); font-size: 13px; line-height: 1.5; }
 .footnote { margin-top: -6px; }
+@media (min-width: 640px) { .checker { grid-template-columns: minmax(0, 1fr) minmax(240px, 320px); align-items: center; } .message, .footnote { grid-column: 1 / -1; } }
+@media (prefers-reduced-motion: reduce) { .checker, .heading svg, .controls input, .controls button, .message, .footnote { transition: none; animation: none; } .checker:hover .heading svg, .checker:focus-within .heading svg { transform: none; } }

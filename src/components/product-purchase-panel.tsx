@@ -7,7 +7,6 @@ import type { StorefrontProduct, StorefrontVariant } from "@/lib/shopify/types";
 import styles from "./product-purchase-panel.module.css";
 import { postCartAction, postCheckoutSession } from "@/lib/cart-client";
 import { useStorefrontCart } from "@/components/cart-provider";
-import { DeliveryChecker } from "@/components/delivery-checker";
 import { useProductVariantImage } from "@/components/product-variant-image";
 import { defaultVariant } from "@/lib/catalog/default-variant";
 
@@ -193,7 +192,6 @@ export function ProductPurchasePanel({
         </button>
       </div>
       <p className="purchase-panel__fine">{product.isPreview ? "Sample prices are shown for layout review only." : "Prices, options and availability are confirmed by Shopify."}</p>
-      <DeliveryChecker preview={product.isPreview} />
       <p className="purchase-panel__message" role="status" aria-live="polite">{message}</p>
     </div>
     {showStickyPurchase && <aside className={styles.stickyPurchase} aria-label="Quick purchase options">
