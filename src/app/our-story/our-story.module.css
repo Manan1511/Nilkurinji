@@ -156,3 +156,9 @@
 .scenery { background: linear-gradient(to bottom, var(--paper) 0, rgb(243 239 227 / 50%) 55px, transparent 150px, transparent 85%, #163a29 100%), linear-gradient(90deg, rgb(4 27 15 / 66%), rgb(4 27 15 / 18%) 70%), url('/images/our-story-floral-landscape.webp') center / cover no-repeat; }
 .scenery .hero, .scenery .story { background: transparent; }
 .scenery .hero::before, .scenery .hero::after { content: none; }
+
+/* Blend the closing section into the cream footer surface. */
+.closing { padding-bottom: 100px; border-bottom: 0; background: linear-gradient(to bottom, #163a29 calc(100% - 72px), var(--paper) 100%); }
+@media (max-width: 767px) {
+  .closing { padding-bottom: 80px; }
+}
